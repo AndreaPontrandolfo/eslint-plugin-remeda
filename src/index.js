@@ -8,7 +8,6 @@ const rules = fs
 const recommended = {
   plugins: ["remeda"],
   rules: {
-    // "remeda/callback-binding": 1,
     // "remeda/chain-style": [1, "as-needed"],
     // "remeda/chaining": 1,
     // "remeda/collection-method-value": 1,
@@ -20,10 +19,8 @@ const recommended = {
     // "remeda/matches-shorthand": [1, "always", 3],
     // "remeda/no-commit": 1,
     // "remeda/no-double-unwrap": 1,
-    // "remeda/no-extra-args": 1,
     // "remeda/no-unbound-this": 1,
     // "remeda/path-style": [1, "string"],
-    // "remeda/prefer-compact": 1,
     // "remeda/prefer-constant": 1,
     // "remeda/prefer-filter": [2, 3],
     // "remeda/prefer-find": 1,
@@ -32,7 +29,7 @@ const recommended = {
     // "remeda/prefer-immutable-method": 1,
     // "remeda/prefer-includes": [1, { includeNative: true }],
     // "remeda/prefer-invoke-map": 1,
-    // "remeda/prefer-is-empty": 1,
+    "remeda/prefer-is-empty": 1,
     // "remeda/prefer-is-nil": 1,
     // "remeda/prefer-lodash-chain": 1,
     // "remeda/prefer-lodash-method": 1,
@@ -42,7 +39,6 @@ const recommended = {
     // "remeda/prefer-nullish-coalescing": 1,
     // "remeda/prefer-noop": 1,
     // "remeda/prefer-over-quantifier": 1,
-    // "remeda/prefer-reject": [2, 3],
     // "remeda/prefer-some": [1, { includeNative: true }],
     // "remeda/prefer-startswith": 1,
     // "remeda/prefer-thru": 1,
@@ -56,7 +52,7 @@ const recommended = {
 module.exports = {
   rules: _.zipObject(
     rules,
-    rules.map((rule) => require(`./rules/${rule}`))
+    rules.map((rule) => require(`./rules/${rule}`)),
   ),
   configs: {
     recommended,

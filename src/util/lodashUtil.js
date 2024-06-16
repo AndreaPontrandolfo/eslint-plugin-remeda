@@ -5,52 +5,40 @@ const astUtil = require("./astUtil");
 const LodashContext = require("./LodashContext");
 
 /**
- * Returns whether or not a node is a chainable method call in the specified version
+ * Returns whether or not a node is a chainable method call.
  * @param {Object} node
- * @param {number} version
  * @returns {boolean}
  */
-function isChainable(node, version) {
-  return methodDataUtil.isChainable(version, astUtil.getMethodName(node));
+function isChainable(node) {
+  return methodDataUtil.isChainable(astUtil.getMethodName(node));
 }
 
 /**
- * Returns whether the node is a chain breaker method in the specified version
+ * Returns whether the node is a chain breaker method
  * @param {Object} node
- * @param {number} version
  * @returns {boolean}
  */
-function isChainBreaker(node, version) {
-  return methodDataUtil.isAliasOfMethod(
-    version,
-    "value",
-    astUtil.getMethodName(node),
-  );
+function isChainBreaker(node) {
+  return methodDataUtil.isAliasOfMethod("value", astUtil.getMethodName(node));
 }
 
 /**
- * Returns whether the node is a call to the specified method or one of its aliases in the version
+ * Returns whether the node is a call to the specified method or one of its aliases.
  * @param {Object} node
- * @param {number} version
  * @param {string} method
  * @returns {boolean}
  */
-function isCallToMethod(node, version, method) {
-  return methodDataUtil.isAliasOfMethod(
-    version,
-    method,
-    astUtil.getMethodName(node),
-  );
+function isCallToMethod(node, method) {
+  return methodDataUtil.isAliasOfMethod(method, astUtil.getMethodName(node));
 }
 
 /**
  * Returns whether or not the node is a call to a lodash wrapper method
  * @param {Object} node
- * @param {number} version
  * @returns {boolean}
  */
-function isLodashWrapperMethod(node, version) {
-  return methodDataUtil.isWrapperMethod(version, astUtil.getMethodName(node));
+function isLodashWrapperMethod(node) {
+  return methodDataUtil.isWrapperMethod(astUtil.getMethodName(node));
 }
 
 /**
@@ -115,10 +103,10 @@ function getLodashMethodCallExpVisitor(lodashContext, reporter) {
       while (
         astUtil.getCaller(node) === prevNode &&
         astUtil.isMethodCall(node) &&
-        !isChainBreaker(node, version)
+        !isChainBreaker(node)
       ) {
         const method = astUtil.getMethodName(node);
-        iterateeIndex = methodDataUtil.getIterateeIndex(version, method);
+        iterateeIndex = methodDataUtil.getIterateeIndex(method);
         reporter(node, node.arguments[iterateeIndex - 1], {
           callType: "chained",
           method,
@@ -130,7 +118,7 @@ function getLodashMethodCallExpVisitor(lodashContext, reporter) {
       }
     } else if (lodashContext.isLodashCall(node)) {
       const method = astUtil.getMethodName(node);
-      iterateeIndex = methodDataUtil.getIterateeIndex(version, method);
+      iterateeIndex = methodDataUtil.getIterateeIndex(method);
       reporter(node, node.arguments[iterateeIndex], {
         callType: "method",
         method,
@@ -189,13 +177,9 @@ function getShorthandVisitors(context, checks, messages, shorthandType) {
   visitors.CallExpression = getLodashMethodCallExpVisitor(
     lodashContext,
     {
-      always(node, iteratee, { method, version }) {
+      always(node, iteratee, { method }) {
         if (
-          methodDataUtil.methodSupportsShorthand(
-            version,
-            method,
-            shorthandType,
-          ) &&
+          methodDataUtil.methodSupportsShorthand(method, shorthandType) &&
           checks.canUseShorthand(iteratee, lodashContext)
         ) {
           context.report(iteratee, messages.always);

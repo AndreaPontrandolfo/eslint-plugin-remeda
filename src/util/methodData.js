@@ -189,14 +189,6 @@ module.exports = {
     chainable: true,
     iteratee: false,
   },
-  compact: {
-    aliases: [],
-    wrapper: false,
-    shorthand: false,
-    chainable: true,
-    iteratee: false,
-    args: 1,
-  },
   concat: {
     aliases: [],
     wrapper: true,

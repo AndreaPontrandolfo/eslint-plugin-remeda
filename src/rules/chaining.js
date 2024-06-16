@@ -41,7 +41,6 @@ module.exports = {
     const { isChainable } = require("../util/methodDataUtil");
     const DEFAULT_LENGTH = 3;
     const lodashContext = getLodashContext(context);
-    const { version } = lodashContext;
     const negate = require("lodash/negate");
 
     const mode = context.options[0] || "never";
@@ -50,7 +49,7 @@ module.exports = {
     const isEndOfChain = negate(isObjectOfMethodCall);
 
     function isBeforeChainBreaker(node) {
-      return isChainBreaker(node.parent.parent, version);
+      return isChainBreaker(node.parent.parent);
     }
 
     function isNestedNLevelsInner(node, n, includeUnchainable) {
@@ -59,14 +58,14 @@ module.exports = {
       }
       if (
         lodashContext.isLodashCall(node) &&
-        (includeUnchainable || isChainable(version, getMethodName(node)))
+        (includeUnchainable || isChainable(getMethodName(node)))
       ) {
         return isNestedNLevelsInner(node.arguments[0], n - 1);
       }
       const importedLodashMethod = lodashContext.getImportedRemedaMethod(node);
       if (
         importedLodashMethod &&
-        (includeUnchainable || isChainable(version, importedLodashMethod))
+        (includeUnchainable || isChainable(importedLodashMethod))
       ) {
         return isNestedNLevelsInner(node.arguments[0], n - 1);
       }

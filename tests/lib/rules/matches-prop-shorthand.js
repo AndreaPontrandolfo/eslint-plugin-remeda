@@ -26,14 +26,14 @@ const errors = {
 
 const methodsThatSupportShorthand = _([3, 4])
   .map((version) =>
-    _(getMethodData(version))
+    _(getMethodData())
       .map((data, method) => ({
         method,
         version,
         iterateeIndex: getIterateeIndex(version, method),
       }))
       .filter(({ method }) => methodSupportsShorthand(version, method))
-      .value()
+      .value(),
   )
   .flatten()
   .value();

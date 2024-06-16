@@ -5,72 +5,63 @@ const _ = require("lodash");
 const getMethodData = _.memoize(() => require(`./methodData`));
 
 /**
- * Gets a major version number and method name and returns all its aliases including itself.
- * @param {Number} version
+ * Gets a method name and returns all its aliases including itself.
  * @param {string} method
  * @returns {string[]}
  */
-const expandAlias = (version, method) => {
-  const methodAliases = _.get(getMethodData(version), [method, "aliases"], []);
+const expandAlias = (method) => {
+  const methodAliases = _.get(getMethodData(), [method, "aliases"], []);
   return [method, ...methodAliases];
 };
 
 /**
- * Gets a major version number and a list of methods and returns a list of methods and all their aliases
- * @param version
+ * Gets a list of methods and returns a list of methods and all their aliases
  * @param methods
  * @returns {string[]}
  */
-function expandAliases(version, methods) {
-  return _.flatMap(methods, (method) => expandAlias(version, method));
+function expandAliases(methods) {
+  return _.flatMap(methods, (method) => expandAlias(method));
 }
 
 /**
  * Returns whether the method is the main alias
- * @param version
  * @param method
  * @returns {Boolean}
  */
-function isMainAlias(version, method) {
-  return Boolean(getMethodData(version)[method]);
+function isMainAlias(method) {
+  return Boolean(getMethodData()[method]);
 }
 
 /**
- * Gets a list of all chainable methods and their aliases for a given version
- * @param {Number} version
+ * Gets a list of all chainable methods and their aliases.
  * @param {string} method
  * @returns {boolean}
  */
-function isChainable(version, method) {
-  const data = getMethodData(version);
-  return _.get(data, [getMainAlias(version, method), "chainable"], false);
+function isChainable(method) {
+  const data = getMethodData();
+  return _.get(data, [getMainAlias(method), "chainable"], false);
 }
 
 /**
  * Gets whether the method is a collection method
- * @param {Number} version
  * @param {string} method
  * @returns {Boolean}
  */
-function isCollectionMethod(version, method) {
+function isCollectionMethod(method) {
   return (
-    methodSupportsShorthand(version, method) ||
-    _.includes(expandAliases(version, ["reduce", "reduceRight"]), method)
+    methodSupportsShorthand(method) ||
+    _.includes(expandAliases(["reduce", "reduceRight"]), method)
   );
 }
 
 /**
- * Returns whether the node's method call supports using shorthands in the specified version
- * @param {Number} version
+ * Returns whether the node's method call supports using shorthands.
  * @param {string} method
  * @returns {boolean}
  */
-function methodSupportsShorthand(version, method, shorthandType) {
-  const mainAlias = getMainAlias(version, method);
-  const methodShorthandData = _.get(getMethodData(version), [
-    mainAlias,
-    "shorthand",
-  ]);
+function methodSupportsShorthand(method, shorthandType) {
+  const mainAlias = getMainAlias(method);
+  const methodShorthandData = _.get(getMethodData(), [mainAlias, "shorthand"]);
   return _.isObject(methodShorthandData)
     ? Boolean(shorthandType && methodShorthandData[shorthandType])
     : Boolean(methodShorthandData);
@@ -78,35 +69,32 @@ function methodSupportsShorthand(version, method, shorthandType) {
 
 /**
  * Gets whether the method is a wrapper method
- * @param {Number} version
  * @param {string} method
  * @returns {boolean}
  */
-function isWrapperMethod(version, method) {
-  return _.get(getMethodData(version), [method, "wrapper"], false);
+function isWrapperMethod(method) {
+  return _.get(getMethodData(), [method, "wrapper"], false);
 }
 /**
- * Gets whether the suspect is an alias of the method in a given version
- * @param {Number} version
+ * Gets whether the suspect is an alias of the method
  * @param {string} method
  * @param {string} suspect
  * @returns {boolean}
  */
-function isAliasOfMethod(version, method, suspect) {
+function isAliasOfMethod(method, suspect) {
   return (
     method === suspect ||
-    _.includes(_.get(getMethodData(version), [method, "aliases"]), suspect)
+    _.includes(_.get(getMethodData(), [method, "aliases"]), suspect)
   );
 }
 
 /**
- * Returns the main alias for the method in the specified version.
- * @param {number} version
+ * Returns the main alias for the method.
  * @param {string} method
  * @returns {string}
  */
-function getMainAlias(version, method) {
-  const data = getMethodData(version);
+function getMainAlias(method) {
+  const data = getMethodData();
   return data[method]
     ? method
     : _.findKey(data, (methodData) => _.includes(methodData.aliases, method));
@@ -114,13 +102,12 @@ function getMainAlias(version, method) {
 
 /**
  * Gets the index of the iteratee of a method when it isn't chained, or -1 if it doesn't have one.
- * @param {number} version
  * @param {string} method
  * @returns {number}
  */
-function getIterateeIndex(version, method) {
-  const mainAlias = getMainAlias(version, method);
-  const methodData = getMethodData(version)[mainAlias];
+function getIterateeIndex(method) {
+  const mainAlias = getMainAlias(method);
+  const methodData = getMethodData()[mainAlias];
   if (_.has(methodData, "iterateeIndex")) {
     return methodData.iterateeIndex;
   }
@@ -131,13 +118,12 @@ function getIterateeIndex(version, method) {
 }
 
 /**
- * Gets the maximum number of arguments to be given to the function in the specified version
- * @param {number} version
+ * Gets the maximum number of arguments to be given to the function.
  * @param {string} name
  * @returns {number}
  */
-function getFunctionMaxArity(version, name) {
-  return _.get(getMethodData(version), [name, "args"], Infinity);
+function getFunctionMaxArity(name) {
+  return _.get(getMethodData(), [name, "args"], Infinity);
 }
 
 const sideEffectIterationMethods = [
@@ -150,22 +136,20 @@ const sideEffectIterationMethods = [
 ];
 
 /**
- * Gets a list of side effect iteration methods by version
- * @param {number} version
+ * Gets a list of side effect iteration methods
  * @returns {string[]}
  */
-function getSideEffectIterationMethods(version) {
-  return expandAliases(version, sideEffectIterationMethods);
+function getSideEffectIterationMethods() {
+  return expandAliases(sideEffectIterationMethods);
 }
 
 /**
- * Returns whether the method exists in the specified version
- * @param {number} version
+ * Returns whether the method exists.
  * @param {string} method
  * @returns {boolean}
  */
-function methodExists(version, method) {
-  return Boolean(getMethodData(version)[method]);
+function methodExists(method) {
+  return Boolean(getMethodData()[method]);
 }
 
 module.exports = {

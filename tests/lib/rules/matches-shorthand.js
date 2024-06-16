@@ -26,14 +26,14 @@ const messages = {
 
 const methodsThatSupportShorthand = _([3, 4])
   .map((version) =>
-    _(getMethodData(version))
+    _(getMethodData())
       .map((data, method) => ({
         method,
         version,
         iterateeIndex: getIterateeIndex(version, method),
       }))
       .filter(({ method }) => methodSupportsShorthand(version, method))
-      .value()
+      .value(),
   )
   .flatten()
   .value();
@@ -69,13 +69,10 @@ ruleTester.run("matches-shorthand", rule, {
     },
   ].map(withDefaultPragma),
   invalid: methodsThatSupportShorthand
-    .map(({ version, method, iterateeIndex }) => ({
+    .map(({ method, iterateeIndex }) => ({
       code: getExampleCodeWithShorthand({ method, iterateeIndex }),
       options: ["never"],
       errors: [{ message: messages.never }],
-      settings: {
-        lodash: { version },
-      },
     }))
     .concat([
       {
