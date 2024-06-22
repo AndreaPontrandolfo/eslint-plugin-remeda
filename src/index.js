@@ -14,26 +14,23 @@ const recommended = {
     "remeda/prefer-constant": 2,
     "remeda/prefer-lodash-typecheck": 2,
     "remeda/prefer-nullish-coalescing": 2,
-    // "remeda/prefer-flat-map": 2, // some tests are failing
-    // "remeda/prefer-find": 2, // some tests are failing
+    "remeda/prefer-filter": [2, 3],
+    // "remeda/prefer-noop": 2, //TODO: needs adaptation from https://remedajs.com/migrate/lodash/#noop
+    // "remeda/prefer-flat-map": 2, //FIXME: some tests are failing
+    // "remeda/prefer-find": 2, //FIXME: some tests are failing
 
     // "remeda/prefer-map": 1,
-    // "remeda/prefer-filter": [2, 3],
     // "remeda/prefer-some": [1, { includeNative: true }],
-    // "remeda/prefer-noop": 1,
     // "remeda/chain-style": [1, "as-needed"],
     // "remeda/chaining": 1,
     // "remeda/collection-method-value": 1,
-    // "remeda/collection-ordering": 1,
     // "remeda/collection-return": 1,
     // "remeda/consistent-compose": [1, "flow"],
-    // "remeda/identity-shorthand": [1, "always"],
     // "remeda/matches-prop-shorthand": [1, "always"],
     // "remeda/matches-shorthand": [1, "always", 3],
     // "remeda/no-commit": 1,
     // "remeda/no-double-unwrap": 1,
     // "remeda/no-unbound-this": 1,
-    // "remeda/path-style": [1, "string"],
     // "remeda/prefer-get": [2, 3],
     // "remeda/prefer-includes": [1, { includeNative: true }],
     // "remeda/prefer-lodash-chain": 1,
