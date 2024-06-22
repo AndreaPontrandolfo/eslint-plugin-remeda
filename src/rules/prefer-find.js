@@ -30,21 +30,20 @@ module.exports = {
       return node.type === "MemberExpression" && node.property.value === 0;
     }
 
-    function isChainedBeforeMethod(callType, node, version, method) {
+    function isChainedBeforeMethod(callType, node, method) {
       return (
-        callType === "chained" &&
-        isCallToMethod(node.parent.parent, version, method)
+        callType === "chained" && isCallToMethod(node.parent.parent, method)
       );
     }
 
     return getLodashMethodVisitors(
       context,
-      (node, iteratee, { method, version, callType, lodashContext }) => {
+      (node, iteratee, { method, callType, lodashContext }) => {
         if (isAliasOfMethod("filter", method)) {
           if (
             isZeroIndexAccess(node.parent) ||
             isCallToLodashMethod(node.parent, "head", lodashContext) ||
-            isChainedBeforeMethod(callType, node, version, "head")
+            isChainedBeforeMethod(callType, node, "head")
           ) {
             context.report({
               node,
@@ -54,7 +53,7 @@ module.exports = {
           }
           if (
             isCallToLodashMethod(node.parent, "last", lodashContext) ||
-            isChainedBeforeMethod(callType, node, version, "last")
+            isChainedBeforeMethod(callType, node, "last")
           ) {
             context.report({
               node,

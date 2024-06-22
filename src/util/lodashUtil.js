@@ -53,12 +53,12 @@ function getIsTypeMethod(name) {
     "function",
     "Function",
     "string",
-    "object",
-    "undefined",
+    // "object",
+    // "undefined",
     "Date",
     "Array",
     "Error",
-    "Element",
+    // "Element",
   ];
   return _.includes(types, name) ? `is${_.capitalize(name)}` : null;
 }

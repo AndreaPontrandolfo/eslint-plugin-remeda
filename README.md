@@ -1,6 +1,6 @@
 # 🚧 UNDER CONSTRUCTION 🚧
 
-This library is still under construction. Don't use this in production yet. If you want to contribute, look at the open issues. 
+This library is still under construction. Don't use this in production yet. If you want to contribute, look at the open issues.
 
 # ESLint Plugin Remeda
 
@@ -72,7 +72,6 @@ These rules are purely matters of style and are quite subjective.
 - [prefer-nullish-coalescing](docs/rules/prefer-nullish-coalescing.md): Prefer `??` when doing a comparison with a non-nil value as test.
 - [prefer-thru](docs/rules/prefer-thru.md): Prefer using `_.prototype.thru` in the chain and not call functions in the initial value, e.g. `_(x).thru(f).map(g)...`
 - [prefer-wrapper-method](docs/rules/prefer-wrapper-method.md): Prefer using array and string methods in the chain and not the initial value, e.g. `_(str).split(' ')...`
-- [preferred-alias](docs/rules/preferred-alias.md): Prefer using main method names instead of aliases. (fixable)
 - [prop-shorthand](docs/rules/prop-shorthand.md): Use/forbid property shorthand syntax.
 
 #### Preference over native

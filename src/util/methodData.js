@@ -502,7 +502,7 @@ module.exports = {
     args: 3,
   },
   flatten: {
-    aliases: [],
+    aliases: ["flat"],
     wrapper: false,
     shorthand: false,
     chainable: true,
