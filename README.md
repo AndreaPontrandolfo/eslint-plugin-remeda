@@ -36,18 +36,6 @@ These are settings that can be shared by all of the rules. All settings are unde
 
 Finally, enable all of the rules that you would like to use.
 
-## Recommended configuration
-
-This plugin exports a `recommended` configuration that enforces all the rules.
-You can configure the plugin as follows:
-
-```json
-{
-  "plugins": ["lodash"],
-  "extends": ["plugin:lodash/recommended"]
-}
-```
-
 # List of provided rules
 
 Rules are divided into categories for your convenience. All rules are off by default, unless you use one of the plugin's configurations which turn all relevant rules on.
