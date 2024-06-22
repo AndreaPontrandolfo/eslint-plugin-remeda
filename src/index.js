@@ -30,7 +30,7 @@ const recommended = {
     // "remeda/prefer-includes": [1, { includeNative: true }],
     // "remeda/prefer-invoke-map": 1,
     "remeda/prefer-is-empty": 1,
-    // "remeda/prefer-is-nil": 1,
+    "remeda/prefer-is-nil": 1,
     // "remeda/prefer-lodash-chain": 1,
     // "remeda/prefer-lodash-method": 1,
     // "remeda/prefer-lodash-typecheck": 1,

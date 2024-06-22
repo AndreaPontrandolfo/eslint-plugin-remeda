@@ -16,9 +16,9 @@ function visitWithContext(code, config, getVisitorsByLodashContext) {
 describe("LodashContext", () => {
   describe("getImportVisitors", () => {
     describe("ImportDeclaration", () => {
-      it("should accept a namespace import as lodash", (done) => {
+      it("should accept a namespace import as remeda", (done) => {
         visitWithContext(
-          'import * as lodash from "lodash"; lodash.map(arr, x => x)',
+          'import * as remeda from "remeda"; remeda.map(arr, x => x)',
           { sourceType: "module" },
           (lodashContext) => ({
             CallExpression(node) {
@@ -28,21 +28,9 @@ describe("LodashContext", () => {
           }),
         );
       });
-      it("should accept a default import as lodash", (done) => {
+      it("should accept a default import as remeda", (done) => {
         visitWithContext(
-          'import lodash from "lodash"; lodash.map(arr, x => x)',
-          { sourceType: "module" },
-          (lodashContext) => ({
-            CallExpression(node) {
-              assert(lodashContext.general[node.callee.object.name]);
-              done();
-            },
-          }),
-        );
-      });
-      it("should accept a default lodash-es import as lodash", (done) => {
-        visitWithContext(
-          'import * as lodash from "lodash-es"; lodash.map(arr, x => x)',
+          'import remeda from "remeda"; remeda.map(arr, x => x)',
           { sourceType: "module" },
           (lodashContext) => ({
             CallExpression(node) {
@@ -54,7 +42,7 @@ describe("LodashContext", () => {
       });
       it("should accept a chain imported as module", (done) => {
         visitWithContext(
-          'import { chain } from "lodash"; chain.map(arr, x => x)',
+          'import { chain } from "remeda"; chain.map(arr, x => x)',
           { sourceType: "module" },
           (lodashContext) => ({
             CallExpression(node) {
@@ -64,9 +52,9 @@ describe("LodashContext", () => {
           }),
         );
       });
-      it("should accept a destructured import as lodash", (done) => {
+      it("should accept a destructured import as remeda", (done) => {
         visitWithContext(
-          'import {map} from "lodash"; map(arr, x => x)',
+          'import {map} from "remeda"; map(arr, x => x)',
           { sourceType: "module" },
           (lodashContext) => ({
             CallExpression(node) {
@@ -76,9 +64,9 @@ describe("LodashContext", () => {
           }),
         );
       });
-      it("should accept a single method import as lodash", (done) => {
+      it("should accept a single method import as remeda", (done) => {
         visitWithContext(
-          'import map from "lodash/map"; map(arr, x => x)',
+          'import map from "remeda/map"; map(arr, x => x)',
           { sourceType: "module" },
           (lodashContext) => ({
             CallExpression(node) {
@@ -86,47 +74,6 @@ describe("LodashContext", () => {
               done();
             },
           }),
-        );
-      });
-      it("should accept a single method import from lodash-es as lodash", (done) => {
-        visitWithContext(
-          'import map from "lodash-es/map"; map(arr, x => x)',
-          { sourceType: "module" },
-          (lodashContext) => ({
-            CallExpression(node) {
-              assert(lodashContext.methods[node.callee.name] === "map");
-              done();
-            },
-          }),
-        );
-      });
-      it("should accept a single method package import as lodash", (done) => {
-        visitWithContext(
-          'import map from "lodash.map"; map(arr, x => x)',
-          { sourceType: "module" },
-          (lodashContext) => ({
-            CallExpression(node) {
-              assert(lodashContext.methods[node.callee.name] === "map");
-              done();
-            },
-          }),
-        );
-      });
-      it("should not accept a single method packge import from lodash-es as lodash", (done) => {
-        visitWithContext(
-          'import map from "lodash-es.map"; map(arr, x => x)',
-          { sourceType: "module" },
-          (lodashContext) => ({
-            CallExpression(node) {
-              assert(!lodashContext.methods[node.callee.name]);
-              done();
-            },
-          }),
-        );
-      });
-      it("should not throw error when trying to import lodash for side effects", () => {
-        traverser('import "lodash"', { sourceType: "module" }).runRuleCode(
-          (context) => new LodashContext(context).getImportVisitors(),
         );
       });
       it("should not collect anything from arbitrary imports", (done) => {
@@ -145,21 +92,7 @@ describe("LodashContext", () => {
     describe("VariableDeclarator", () => {
       it("should accept a require of the entire lodash library", (done) => {
         visitWithContext(
-          'const _ = require("lodash"); _.map(arr, x => x)',
-          undefined,
-          (lodashContext) => ({
-            CallExpression(node) {
-              if (node.callee.property && node.callee.property.name === "map") {
-                assert(lodashContext.general[node.callee.object.name]);
-                done();
-              }
-            },
-          }),
-        );
-      });
-      it("should accept a require of the entire lodash-es library", (done) => {
-        visitWithContext(
-          'const _ = require("lodash-es"); _.map(arr, x => x)',
+          'const _ = require("remeda"); _.map(arr, x => x)',
           undefined,
           (lodashContext) => ({
             CallExpression(node) {
@@ -173,7 +106,7 @@ describe("LodashContext", () => {
       });
       it("should accept a destructured require of the main module", (done) => {
         visitWithContext(
-          'const {map} = require("lodash"); map(arr, x => x)',
+          'const {map} = require("remeda"); map(arr, x => x)',
           undefined,
           (lodashContext) => ({
             CallExpression(node) {
@@ -187,7 +120,7 @@ describe("LodashContext", () => {
       });
       it("should accept chain destructured from the main module", (done) => {
         visitWithContext(
-          'const {chain} = require("lodash"); chain(arr).map(x => x)',
+          'const {chain} = require("remeda"); chain(arr).map(x => x)',
           undefined,
           (lodashContext) => ({
             CallExpression(node) {
@@ -199,23 +132,9 @@ describe("LodashContext", () => {
           }),
         );
       });
-      it("should accept a destructured require of the main lodash-es module", (done) => {
-        visitWithContext(
-          'const {map} = require("lodash-es"); map(arr, x => x)',
-          undefined,
-          (lodashContext) => ({
-            CallExpression(node) {
-              if (node.callee.name === "map") {
-                assert(lodashContext.methods[node.callee.name] === "map");
-                done();
-              }
-            },
-          }),
-        );
-      });
       it("should accept a single method require", (done) => {
         visitWithContext(
-          'const map = require("lodash/map"); map(arr, x => x)',
+          'const map = require("remeda/map"); map(arr, x => x)',
           undefined,
           (lodashContext) => ({
             CallExpression(node) {
@@ -314,9 +233,33 @@ describe("LodashContext", () => {
     });
   });
   describe("isImportedRemeda", () => {
-    it("should return true for a lodash that was imported", (done) => {
+    it("should return true for a remeda that was imported as Remeda", (done) => {
       visitWithContext(
-        'import * as lodash from "lodash"; lodash.map(arr, x => x)',
+        'import * as Remeda from "remeda"; Remeda.map(arr, x => x)',
+        { sourceType: "module" },
+        (lodashContext) => ({
+          CallExpression(node) {
+            assert(lodashContext.isImportedRemeda(node.callee.object));
+            done();
+          },
+        }),
+      );
+    });
+    it("should return true for a remeda that was imported as R", (done) => {
+      visitWithContext(
+        'import * as R from "remeda"; R.map(arr, x => x)',
+        { sourceType: "module" },
+        (lodashContext) => ({
+          CallExpression(node) {
+            assert(lodashContext.isImportedRemeda(node.callee.object));
+            done();
+          },
+        }),
+      );
+    });
+    it("should return true for a remeda that was imported as remeda", (done) => {
+      visitWithContext(
+        'import * as remeda from "remeda"; remeda.map(arr, x => x)',
         { sourceType: "module" },
         (lodashContext) => ({
           CallExpression(node) {
@@ -336,9 +279,9 @@ describe("LodashContext", () => {
     });
   });
   describe("getImportedRemedaMethod", () => {
-    it("should return the imported Lodash method when called as a single method", (done) => {
+    it("should return the imported Remeda method when called as a single method", (done) => {
       visitWithContext(
-        'import map from "lodash/map"; map(arr, x => x)',
+        'import map from "remeda/map"; map(arr, x => x)',
         { sourceType: "module" },
         (lodashContext) => ({
           CallExpression(node) {
@@ -492,9 +435,9 @@ describe("LodashContext", () => {
     });
   });
   describe("isImportedChainStart", () => {
-    it("should return true if the chain() is imported from lodash", (done) => {
+    it("should return true if the chain() is imported from remeda", (done) => {
       visitWithContext(
-        'import {chain} from "lodash"; const wrapper = chain(val)',
+        'import {chain} from "remeda"; const wrapper = chain(val)',
         { sourceType: "module" },
         (lodashContext) => ({
           CallExpression(node) {

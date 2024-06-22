@@ -9,14 +9,14 @@ const {
 } = require("./astUtil");
 const {
   getNameFromCjsRequire,
-  isFullLodashImport,
+  isFullRemedaImport,
   getMethodImportFromName,
 } = require("./importUtil");
 
-/* Class representing lodash data for a given context */
+/* Class representing remeda data for a given context */
 module.exports = class {
   /**
-   * Create a Lodash context wrapper from a file's RuleContext
+   * Create a Remeda context wrapper from a file's RuleContext
    * @param {RuleContext} context
    */
   constructor(context) {
@@ -26,14 +26,14 @@ module.exports = class {
   }
 
   /**
-   * Gets visitors to collect lodash declarations in the context
-   * @returns {Object} visitors for every where Lodash can be declared
+   * Gets visitors to collect remeda declarations in the context
+   * @returns {Object} visitors for everywhere Remeda can be declared
    */
   getImportVisitors() {
     const self = this;
     return {
       ImportDeclaration({ source, specifiers }) {
-        if (isFullLodashImport(source.value)) {
+        if (isFullRemedaImport(source.value)) {
           specifiers.forEach((spec) => {
             switch (spec.type) {
               case "ImportNamespaceSpecifier":
@@ -58,7 +58,7 @@ module.exports = class {
       },
       VariableDeclarator({ init, id }) {
         const required = getNameFromCjsRequire(init);
-        if (isFullLodashImport(required)) {
+        if (isFullRemedaImport(required)) {
           if (id.type === "Identifier") {
             self.general[id.name] = true;
           } else if (id.type === "ObjectPattern") {

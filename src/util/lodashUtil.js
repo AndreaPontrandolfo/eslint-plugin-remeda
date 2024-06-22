@@ -154,7 +154,6 @@ function isCallToLodashMethod(node, method, lodashContext) {
   return (
     isLodashCallToMethod(node, method, lodashContext) ||
     methodDataUtil.isAliasOfMethod(
-      lodashContext.version,
       method,
       lodashContext.getImportedRemedaMethod(node),
     )

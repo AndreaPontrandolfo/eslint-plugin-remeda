@@ -11,14 +11,14 @@ function getNameFromCjsRequire(init) {
   }
 }
 
-const isFullLodashImport = (str) => /^lodash(-es)?(\/)?$/.test(str);
+const isFullRemedaImport = (str) => /^remeda?(\/)?$/.test(str);
 const getMethodImportFromName = (str) => {
-  const match = /^lodash(-es\/|[./])(?!fp)(\w+)$/.exec(str);
+  const match = /^remeda([./])(\w+)$/.exec(str);
   return match && match[2];
 };
 
 module.exports = {
   getNameFromCjsRequire,
-  isFullLodashImport,
+  isFullRemedaImport,
   getMethodImportFromName,
 };
