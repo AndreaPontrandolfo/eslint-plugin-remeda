@@ -13,13 +13,12 @@ const recommended = {
     "remeda/prefer-times": 2,
     "remeda/prefer-constant": 2,
     "remeda/prefer-lodash-typecheck": 2,
+    "remeda/prefer-nullish-coalescing": 2,
     // "remeda/prefer-flat-map": 2, // some tests are failing
     // "remeda/prefer-find": 2, // some tests are failing
 
     // "remeda/prefer-map": 1,
     // "remeda/prefer-filter": [2, 3],
-    // "remeda/prefer-startswith": 1,
-    // "remeda/prefer-nullish-coalescing": 1,
     // "remeda/prefer-some": [1, { includeNative: true }],
     // "remeda/prefer-noop": 1,
     // "remeda/chain-style": [1, "as-needed"],
@@ -36,14 +35,10 @@ const recommended = {
     // "remeda/no-unbound-this": 1,
     // "remeda/path-style": [1, "string"],
     // "remeda/prefer-get": [2, 3],
-    // "remeda/prefer-immutable-method": 1,
     // "remeda/prefer-includes": [1, { includeNative: true }],
-    // "remeda/prefer-invoke-map": 1,
     // "remeda/prefer-lodash-chain": 1,
     // "remeda/prefer-lodash-method": 1,
-    // "remeda/prefer-over-quantifier": 1,
     // "remeda/prefer-wrapper-method": 1,
-    // "remeda/prop-shorthand": [1, "always"],
     // "remeda/unwrap": 1,
   },
 };
