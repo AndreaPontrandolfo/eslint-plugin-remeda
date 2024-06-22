@@ -22,17 +22,9 @@ npm add eslint-plugin-remeda -D
 
 ## Preamble
 
-This plugin was originally derived from a [eslint-plugin-lodash](https://github.com/eslint-plugins/eslint-plugin-lodash) fork [eslint-plugin-lodash-f](https://github.com/AndreaPontrandolfo/eslint-plugin-lodash) and used that as a base to build upon.
+This plugin was originally derived from a [eslint-plugin-lodash](https://github.com/wix-incubator/eslint-plugin-lodash) fork [eslint-plugin-lodash-f](https://github.com/AndreaPontrandolfo/eslint-plugin-lodash) and used that as a base to build upon.
 
 ## Usage
-
-### Shared Rule Settings
-
-These are settings that can be shared by all of the rules. All settings are under the `lodash` inside the general `settings` object. For more info about shared settings, read the [ESLint Configuration Guide](http://eslint.org/docs/user-guide/configuring#adding-shared-settings).
-
-- **pragma**: specifies the name you use for the Lodash variable in your code. If none is specified, the plugin checks what was `import`ed in ES6 modules or `require`d in commonjs.
-- **version**: specifies the major Lodash Version you are using (default is `4`).
-  If you wish to use this plugin with Lodash v3, this value should be `3`. (on by default in the config `v3`)
 
 Finally, enable all of the rules that you would like to use.
 
@@ -70,7 +62,6 @@ These rules are purely matters of style and are quite subjective.
 - [prefer-invoke-map](docs/rules/prefer-invoke-map.md): Prefer using `_.invoke` over `_.map` with a method call inside.
 - [prefer-map](docs/rules/prefer-map.md): Prefer `_.map` over `_.forEach` with a `push` inside.
 - [prefer-nullish-coalescing](docs/rules/prefer-nullish-coalescing.md): Prefer `??` when doing a comparison with a non-nil value as test.
-- [prefer-thru](docs/rules/prefer-thru.md): Prefer using `_.prototype.thru` in the chain and not call functions in the initial value, e.g. `_(x).thru(f).map(g)...`
 - [prefer-wrapper-method](docs/rules/prefer-wrapper-method.md): Prefer using array and string methods in the chain and not the initial value, e.g. `_(str).split(' ')...`
 - [prop-shorthand](docs/rules/prop-shorthand.md): Use/forbid property shorthand syntax.
 
@@ -87,7 +78,6 @@ For example, Lodash collection methods (e.g. `map`, `forEach`) are generally fas
 - [prefer-lodash-chain](docs/rules/prefer-lodash-chain.md): Prefer using Lodash chains (e.g. `_.map`) over native and mixed chains.
 - [prefer-lodash-method](docs/rules/prefer-lodash-method.md): Prefer using Lodash collection methods (e.g. `_.map`) over native array methods.
 - [prefer-lodash-typecheck](docs/rules/prefer-lodash-typecheck.md): Prefer using `_.is*` methods over `typeof` and `instanceof` checks when applicable.
-- [prefer-matches](docs/rules/prefer-matches.md): Prefer `_.matches` over conditions like `a.foo === 1 && a.bar === 2 && a.baz === 3`.
 - [prefer-noop](docs/rules/prefer-noop.md): Prefer `_.noop` over empty functions.
 - [prefer-over-quantifier](docs/rules/prefer-over-quantifier.md): Prefer `_.overSome` and `_.overEvery` instead of checks with `&&` and `||` for methods that have a boolean check iteratee.
 - [prefer-some](docs/rules/prefer-some.md): Prefer using `_.some` over comparing `findIndex` to -1.
