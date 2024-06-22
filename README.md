@@ -1,3 +1,7 @@
+# 🚧 UNDER CONSTRUCTION 🚧
+
+This library is still under construction. Don't use this in production yet. If you want to contribute, look at the open issues. 
+
 # ESLint Plugin Remeda
 
 ESLint plugin for [Remeda](https://github.com/remeda/remeda).
@@ -15,6 +19,10 @@ Next, install `eslint-plugin-remeda`:
 ```sh
 npm add eslint-plugin-remeda -D
 ```
+
+## Preamble
+
+This plugin was originally derived from a [eslint-plugin-lodash](https://github.com/eslint-plugins/eslint-plugin-lodash) fork [eslint-plugin-lodash-f](https://github.com/AndreaPontrandolfo/eslint-plugin-lodash) and used that as a base to build upon.
 
 ## Usage
 
