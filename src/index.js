@@ -28,15 +28,12 @@ const recommended = {
     // "remeda/consistent-compose": [1, "flow"],
     // "remeda/matches-prop-shorthand": [1, "always"],
     // "remeda/matches-shorthand": [1, "always", 3],
-    // "remeda/no-commit": 1,
-    // "remeda/no-double-unwrap": 1,
     // "remeda/no-unbound-this": 1,
     // "remeda/prefer-get": [2, 3],
     // "remeda/prefer-includes": [1, { includeNative: true }],
     // "remeda/prefer-lodash-chain": 1,
     // "remeda/prefer-lodash-method": 1,
     // "remeda/prefer-wrapper-method": 1,
-    // "remeda/unwrap": 1,
   },
 };
 module.exports = {

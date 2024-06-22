@@ -38,9 +38,7 @@ The following rules point out areas where you might have made mistakes.
 
 - [collection-method-value](docs/rules/collection-method-value.md): Use value returned from collection methods properly.
 - [collection-return](docs/rules/collection-return.md): Always return a value in iteratees of Lodash collection methods that aren't `forEach`.
-- [no-double-unwrap](docs/rules/no-double-unwrap.md): Do not use `.value()` on chains that have already ended (e.g. with `max()` or `reduce()`) (fixable)
 - [no-unbound-this](docs/rules/no-unbound-this.md): Do not use `this` inside callbacks without binding them.
-- [unwrap](docs/rules/unwrap.md): Prevent chaining without evaluation via `value()` or non-chainable methods like `max()`.,
 
 ### Stylistic Issues
 
@@ -51,7 +49,6 @@ These rules are purely matters of style and are quite subjective.
 - [consistent-compose](docs/rules/consistent-compose.md): Enforce a specific function composition direction: `flow` or `flowRight`.
 - [matches-prop-shorthand](docs/rules/matches-prop-shorthand.md): Prefer matches property shorthand syntax
 - [matches-shorthand](docs/rules/matches-shorthand.md): Prefer matches shorthand syntax
-- [no-commit](docs/rules/no-commit.md): Do not use `.commit()` on chains that should end with `.value()`
 - [prefer-filter](docs/rules/prefer-filter.md): Prefer `_.filter` over `_.forEach` with an `if` statement inside.
 - [prefer-find](docs/rules/prefer-find.md): Prefer `_.find` over `_.filter` followed by selecting the first result.
 - [prefer-flat-map](docs/rules/prefer-flat-map.md): Prefer `_.flatMap` over consecutive `map` and `flatten`.
