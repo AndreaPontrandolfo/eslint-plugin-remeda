@@ -24,26 +24,13 @@ npm add eslint-plugin-remeda -D
 
 This plugin was originally derived from a [eslint-plugin-lodash](https://github.com/wix-incubator/eslint-plugin-lodash) fork [eslint-plugin-lodash-f](https://github.com/AndreaPontrandolfo/eslint-plugin-lodash) and used that as a base to build upon.
 
-## Usage
+## Rules
 
-Finally, enable all of the rules that you would like to use.
-
-## List of provided rules
-
-Rules are divided into categories for your convenience. All rules are off by default, unless you use one of the plugin's configurations which turn all relevant rules on.
-
-### Possible Errors
-
-The following rules point out areas where you might have made mistakes.
+Enable all of the rules that you would like to use. All rules are off by default, unless you use one of the plugin's configurations which turn all relevant rules on.
 
 - [collection-method-value](docs/rules/collection-method-value.md): Use value returned from collection methods properly.
 - [collection-return](docs/rules/collection-return.md): Always return a value in iteratees of Lodash collection methods that aren't `forEach`.
 - [no-unbound-this](docs/rules/no-unbound-this.md): Do not use `this` inside callbacks without binding them.
-
-### Stylistic Issues
-
-These rules are purely matters of style and are quite subjective.
-
 - [chain-style](docs/rules/chain-style.md): Enforce a specific chain style: explicit, implicit, or explicit only when necessary.
 - [chaining](docs/rules/chaining.md): Prefer a either a Lodash chain or nested Lodash calls
 - [consistent-compose](docs/rules/consistent-compose.md): Enforce a specific function composition direction: `flow` or `flowRight`.
@@ -55,12 +42,6 @@ These rules are purely matters of style and are quite subjective.
 - [prefer-map](docs/rules/prefer-map.md): Prefer `_.map` over `_.forEach` with a `push` inside.
 - [prefer-nullish-coalescing](docs/rules/prefer-nullish-coalescing.md): Prefer `??` when doing a comparison with a non-nullish value as test.
 - [prefer-wrapper-method](docs/rules/prefer-wrapper-method.md): Prefer using array and string methods in the chain and not the initial value, e.g. `_(str).split(' ')...`
-
-#### Preference over native
-
-These rules are also stylistic choices, but they also recommend using Lodash instead of native functions and constructs.
-For example, Lodash collection methods (e.g. `map`, `forEach`) are generally faster than native collection methods.
-
 - [prefer-constant](docs/rules/prefer-constant.md): Prefer `_.constant` over functions returning literals.
 - [prefer-get](docs/rules/prefer-get.md): Prefer using `_.get` or `_.has` over expression chains like `a && a.b && a.b.c`.
 - [prefer-includes](docs/rules/prefer-includes.md): Prefer `_.includes` over comparing `indexOf` to -1.
