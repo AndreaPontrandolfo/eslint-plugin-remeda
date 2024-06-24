@@ -27,7 +27,6 @@ const recommended = {
     // "remeda/consistent-compose": [1, "flow"],
     // "remeda/prefer-get": [2, 3],
     // "remeda/prefer-lodash-method": 1,
-    // "remeda/prefer-wrapper-method": 1,
   },
 };
 module.exports = {
