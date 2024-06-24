@@ -32,48 +32,44 @@ module.exports = {
     } = require("../util/methodDataUtil");
     const includes = require("lodash/includes");
 
-    function parentUsesValue(node, callType, version) {
+    function parentUsesValue(node, callType) {
       const isBeforeChainBreaker =
-        callType === "chained" && isChainBreaker(node.parent.parent, version);
+        callType === "chained" && isChainBreaker(node.parent.parent);
       return (
         (isBeforeChainBreaker ? node.parent.parent : node).parent.type !==
         "ExpressionStatement"
       );
     }
 
-    function isPureLodashCollectionMethod(method, version) {
-      return (
-        isCollectionMethod(method) &&
-        !isAliasOfMethod(version, "remove", method)
-      );
+    function isPureLodashCollectionMethod(method) {
+      return isCollectionMethod(method) && !isAliasOfMethod("remove", method);
     }
 
-    function isSideEffectIterationMethod(method, version) {
-      return includes(getSideEffectIterationMethods(version), method);
+    function isSideEffectIterationMethod(method) {
+      return includes(getSideEffectIterationMethods(), method);
     }
 
-    function isParentCommit(node, callType, version) {
+    function isParentCommit(node, callType) {
       return (
-        callType === "chained" &&
-        isCallToMethod(node.parent.parent, version, "commit")
+        callType === "chained" && isCallToMethod(node.parent.parent, "commit")
       );
     }
 
     return getLodashMethodVisitors(
       context,
-      (node, iteratee, { method, version, callType }) => {
+      (node, iteratee, { method, callType }) => {
         if (
-          isPureLodashCollectionMethod(method, version) &&
-          !parentUsesValue(node, callType, version)
+          isPureLodashCollectionMethod(method) &&
+          !parentUsesValue(node, callType)
         ) {
           context.report({
             node,
             message: `Use value returned from _.${method}`,
           });
         } else if (
-          isSideEffectIterationMethod(method, version) &&
-          parentUsesValue(node, callType, version) &&
-          !isParentCommit(node, callType, version)
+          isSideEffectIterationMethod(method) &&
+          parentUsesValue(node, callType) &&
+          !isParentCommit(node, callType)
         ) {
           context.report({
             node,

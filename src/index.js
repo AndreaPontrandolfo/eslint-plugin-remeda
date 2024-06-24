@@ -15,17 +15,17 @@ const recommended = {
     "remeda/prefer-lodash-typecheck": 2,
     "remeda/prefer-nullish-coalescing": 2,
     "remeda/prefer-filter": [2, 3],
+    "remeda/collection-method-value": 2,
     // "remeda/prefer-noop": 2, //TODO: needs adaptation from https://remedajs.com/migrate/lodash/#noop
     // "remeda/prefer-flat-map": 2, //FIXME: some tests are failing
     // "remeda/prefer-find": 2, //FIXME: some tests are failing
 
     // "remeda/prefer-map": 1,
     // "remeda/prefer-some": [1, { includeNative: true }],
-    // "remeda/collection-method-value": 1,
+    // "remeda/prefer-includes": [1, { includeNative: true }],
     // "remeda/collection-return": 1,
     // "remeda/consistent-compose": [1, "flow"],
     // "remeda/prefer-get": [2, 3],
-    // "remeda/prefer-includes": [1, { includeNative: true }],
     // "remeda/prefer-lodash-method": 1,
     // "remeda/prefer-wrapper-method": 1,
   },

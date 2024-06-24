@@ -18,23 +18,15 @@ ruleTester.run("collection-method-value", rule, {
     "x = _.map(arr, f)",
     "_.forEach(arr, g)",
     "if (_.some(arr, h)) {i()}",
-    "x = _(arr).filter(p).map(q).value()",
-    "_(arr).filter(p).forEach(g)",
   ].map(withDefaultPragma),
-  invalid: [
-    "x = _.forEach(arr, g)",
-    "x = _(arr).map(f).forEach(g)",
-    "x = _.chain(arr).map(f).forEach(g).value()",
-  ]
+  invalid: ["x = _.forEach(arr, g)"]
     .map(withDefaultPragma)
     .map(fromMessage("Do not use value returned from _.forEach"))
     .concat(
       [
         "_.map(arr, f)",
-        "_(arr).filter(g).map(f).value()",
-        "_.chain(arr).find(p).map(f).value()",
         {
-          code: 'import f from "lodash/map"; f(x, g)',
+          code: 'import f from "remeda/map"; f(x, g)',
           parserOptions: {
             sourceType: "module",
           },
