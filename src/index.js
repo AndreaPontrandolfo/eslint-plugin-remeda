@@ -16,14 +16,14 @@ const recommended = {
     "remeda/prefer-nullish-coalescing": 2,
     "remeda/prefer-filter": [2, 3],
     "remeda/collection-method-value": 2,
-    // "remeda/prefer-noop": 2, //TODO: needs adaptation from https://remedajs.com/migrate/lodash/#noop
-    // "remeda/prefer-flat-map": 2, //FIXME: some tests are failing
+    "remeda/collection-return": 2,
+    "remeda/prefer-map": 2,
     // "remeda/prefer-find": 2, //FIXME: some tests are failing
-
-    // "remeda/prefer-map": 1,
     // "remeda/prefer-some": [1, { includeNative: true }],
+    // "remeda/prefer-flat-map": 2, //FIXME: some tests are failing
     // "remeda/prefer-includes": [1, { includeNative: true }],
-    // "remeda/collection-return": 1,
+    // "remeda/prefer-noop": 2, //TODO: needs adaptation from https://remedajs.com/migrate/lodash/#noop
+
     // "remeda/consistent-compose": [1, "flow"],
     // "remeda/prefer-get": [2, 3],
     // "remeda/prefer-lodash-method": 1,

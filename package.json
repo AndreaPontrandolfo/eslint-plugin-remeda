@@ -7,7 +7,7 @@
   "scripts": {
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "test": "npm run unit-test",
-    "unit-test": "cross-env nyc mocha ./tests/lib/rules/prefer-is-empty.js ./tests/lib/rules/prefer-is-nil.js ./tests/lib/rules/prefer-times.js ./tests/lib/rules/prefer-constant.js ./tests/lib/rules/prefer-lodash-typecheck.js ./tests/lib/rules/prefer-nullish-coalescing.js ./tests/lib/rules/prefer-filter.js ./tests/lib/rules/collection-method-value.js --reporter=dot",
+    "unit-test": "cross-env nyc mocha ./tests/lib/rules/prefer-is-empty.js ./tests/lib/rules/prefer-is-nil.js ./tests/lib/rules/prefer-times.js ./tests/lib/rules/prefer-constant.js ./tests/lib/rules/prefer-lodash-typecheck.js ./tests/lib/rules/prefer-nullish-coalescing.js ./tests/lib/rules/prefer-filter.js ./tests/lib/rules/collection-method-value.js ./tests/lib/rules/collection-return.js ./tests/lib/rules/prefer-map.js --reporter=dot",
     "patch": "npm version patch -m\"update version to %s\" && git push --follow-tags",
     "minor": "npm version minor -m\"update version to %s\" && git push --follow-tags",
     "major": "npm version major -m\"update version to %s\" && git push --follow-tags"
