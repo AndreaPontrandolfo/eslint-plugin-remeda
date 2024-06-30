@@ -22,7 +22,6 @@ const recommended = {
     "remeda/prefer-some": 2,
     "remeda/prefer-flat-map": 2,
     "remeda/prefer-do-nothing": 2,
-    // "remeda/prefer-lodash-method": 1,
   },
 };
 module.exports = {

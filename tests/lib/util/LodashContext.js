@@ -146,34 +146,6 @@ describe("LodashContext", () => {
           }),
         );
       });
-      it("should accept a single method require from lodash-es", (done) => {
-        visitWithContext(
-          'const map = require("lodash-es/map"); map(arr, x => x)',
-          undefined,
-          (lodashContext) => ({
-            CallExpression(node) {
-              if (node.callee.name === "map") {
-                assert(lodashContext.methods[node.callee.name] === "map");
-                done();
-              }
-            },
-          }),
-        );
-      });
-      it("should accept a single method package require", (done) => {
-        visitWithContext(
-          'const map = require("lodash.map"); map(arr, x => x)',
-          undefined,
-          (lodashContext) => ({
-            CallExpression(node) {
-              if (node.callee.name === "map") {
-                assert(lodashContext.methods[node.callee.name] === "map");
-                done();
-              }
-            },
-          }),
-        );
-      });
       it("should not accept a single method package require from lodash-es", (done) => {
         visitWithContext(
           'const map = require("lodash-es.map"); map(arr, x => x)',
@@ -323,23 +295,11 @@ describe("LodashContext", () => {
     });
     it("should return true if no pragma is defined and the call is an imported lodash", (done) => {
       visitWithContext(
-        'import _ from "lodash"; const ids = _.map(users, "id")',
+        'import R from "remeda"; const ids = R.map(users, () => "id")',
         { sourceType: "module" },
         (lodashContext) => ({
           CallExpression(node) {
             assert(lodashContext.isLodashCall(node));
-            done();
-          },
-        }),
-      );
-    });
-    it("should return a falsy value if the call is a single method import", (done) => {
-      visitWithContext(
-        'import map from "lodash/map"; const ids = map(users, "id")',
-        { sourceType: "module" },
-        (lodashContext) => ({
-          CallExpression(node) {
-            assert(!lodashContext.isLodashCall(node));
             done();
           },
         }),
