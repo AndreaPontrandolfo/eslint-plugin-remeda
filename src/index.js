@@ -12,7 +12,7 @@ const recommended = {
     "remeda/prefer-is-nil": 2,
     "remeda/prefer-times": 2,
     "remeda/prefer-constant": 2,
-    "remeda/prefer-lodash-typecheck": 2,
+    "remeda/prefer-remeda-typecheck": 2,
     "remeda/prefer-nullish-coalescing": 2,
     "remeda/prefer-filter": [2, 3],
     "remeda/collection-method-value": 2,
