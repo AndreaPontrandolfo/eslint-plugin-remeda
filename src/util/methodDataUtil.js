@@ -165,13 +165,3 @@ module.exports = {
   getSideEffectIterationMethods,
   methodExists,
 };
-
-/**
- * A JSON object containing method info for a specific lodash major version
- @typedef {Object} VersionInfo
- @property {Aliases} aliases
- @property {[string]} wrapper
- @property {Object.<string, [string]>} wrapperAliases
- @property {[string]} property
- @property {[string]} chainable
- */

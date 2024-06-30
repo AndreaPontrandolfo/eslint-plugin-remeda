@@ -161,26 +161,12 @@ module.exports = class {
 
   /**
    *
-   * @returns {number} the current Lodash version
-   */
-  get version() {
-    if (!this._version) {
-      const { pragma, version } = getSettings(this.context);
-      this._pragma = pragma;
-      this._version = version;
-    }
-    return this._version;
-  }
-
-  /**
-   *
    * @returns {string|undefined} the current Lodash pragma
    */
   get pragma() {
     if (!this._pragma) {
-      const { pragma, version } = getSettings(this.context);
+      const { pragma } = getSettings(this.context);
       this._pragma = pragma;
-      this._version = version;
     }
     return this._pragma;
   }

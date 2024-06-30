@@ -95,7 +95,6 @@ function isNativeCollectionMethodCall(node) {
  */
 function getLodashMethodCallExpVisitor(lodashContext, reporter) {
   return function (node) {
-    const { version } = lodashContext;
     let iterateeIndex;
     if (lodashContext.isLodashChainStart(node)) {
       let prevNode = node;
@@ -110,7 +109,6 @@ function getLodashMethodCallExpVisitor(lodashContext, reporter) {
         reporter(node, node.arguments[iterateeIndex - 1], {
           callType: "chained",
           method,
-          version,
           lodashContext,
         });
         prevNode = node;
@@ -122,17 +120,15 @@ function getLodashMethodCallExpVisitor(lodashContext, reporter) {
       reporter(node, node.arguments[iterateeIndex], {
         callType: "method",
         method,
-        version,
         lodashContext,
       });
-    } else if (version !== 3) {
+    } else {
       const method = lodashContext.getImportedRemedaMethod(node);
       if (method) {
-        iterateeIndex = methodDataUtil.getIterateeIndex(version, method);
+        iterateeIndex = methodDataUtil.getIterateeIndex(method);
         reporter(node, node.arguments[iterateeIndex], {
           method,
           callType: "single",
-          version,
           lodashContext,
         });
       }
@@ -141,10 +137,7 @@ function getLodashMethodCallExpVisitor(lodashContext, reporter) {
 }
 
 function isLodashCallToMethod(node, method, lodashContext) {
-  return (
-    lodashContext.isLodashCall(node) &&
-    isCallToMethod(node, lodashContext.version, method)
-  );
+  return lodashContext.isLodashCall(node) && isCallToMethod(node, method);
 }
 
 function isCallToLodashMethod(node, method, lodashContext) {
