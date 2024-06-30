@@ -21,7 +21,6 @@ const recommended = {
     "remeda/prefer-find": 2,
     "remeda/prefer-some": 2,
     // "remeda/prefer-flat-map": 2, //FIXME: some tests are failing
-    // "remeda/prefer-includes": [1, { includeNative: true }],
     // "remeda/prefer-noop": 2, //TODO: needs adaptation from https://remedajs.com/migrate/lodash/#noop
 
     // "remeda/prefer-get": [2, 3],

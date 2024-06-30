@@ -37,7 +37,6 @@ Enable all of the rules that you would like to use. All rules are off by default
 - [prefer-nullish-coalescing](docs/rules/prefer-nullish-coalescing.md): Prefer `??` when doing a comparison with a non-nullish value as test.
 - [prefer-constant](docs/rules/prefer-constant.md): Prefer `R.constant` over functions returning literals.
 - [prefer-get](docs/rules/prefer-get.md): Prefer using `R.get` or `R.has` over expression chains like `a && a.b && a.b.c`.
-- [prefer-includes](docs/rules/prefer-includes.md): Prefer `R.includes` over comparing `indexOf` to -1.
 - [prefer-is-empty](docs/rules/prefer-is-empty.md): Prefer `R.isEmpty` over manual checking for length value.
 - [prefer-is-nil](docs/rules/prefer-is-nil.md): Prefer `R.isNil` over checks for both null and undefined.
 - [prefer-lodash-method](docs/rules/prefer-lodash-method.md): Prefer using Lodash collection methods (e.g. `R.map`) over native array methods.
