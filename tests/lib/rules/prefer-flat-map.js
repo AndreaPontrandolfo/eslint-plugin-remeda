@@ -17,8 +17,14 @@ const toErrorObject = fromMessage(
   "Prefer _.flatMap over consecutive map and flatten.",
 );
 ruleTester.run("prefer-flat-map", rule, {
-  valid: ["t = _.map(a, f);", "t = _.flatMap(a, f);"].map(withDefaultPragma),
-  invalid: ["_(a).map(f).flat().value", "t = _.flat(_.map(a, f));"]
+  valid: ["t = _.map(a, f);", "t = _.flat(a);", "t = _.flatMap(a, f);"].map(
+    withDefaultPragma,
+  ),
+  invalid: [
+    "t = _.flat(_.map(a, f));",
+    // "t = R.pipe(arr, R.map(f), R.flat(1))", // TODO: make this pass
+    // "t = pipe(arr, map(f), flat(1))", // TODO: make this pass
+  ]
     .map(withDefaultPragma)
     .concat([
       {
