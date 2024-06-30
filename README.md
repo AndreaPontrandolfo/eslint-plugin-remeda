@@ -40,7 +40,7 @@ Enable all of the rules that you would like to use. All rules are off by default
 - [prefer-is-nil](docs/rules/prefer-is-nil.md): Prefer `R.isNil` over checks for both null and undefined.
 - [prefer-lodash-method](docs/rules/prefer-lodash-method.md): Prefer using Lodash collection methods (e.g. `R.map`) over native array methods.
 - [prefer-lodash-typecheck](docs/rules/prefer-lodash-typecheck.md): Prefer using `R.is*` methods over `typeof` and `instanceof` checks when applicable.
-- [prefer-noop](docs/rules/prefer-noop.md): Prefer `R.noop` over empty functions.
+- [prefer-do-nothing](docs/rules/prefer-do-nothing.md): Prefer `R.doNothing` over empty functions.
 - [prefer-some](docs/rules/prefer-some.md): Prefer using `R.some` over comparing `findIndex` to -1.
 - [prefer-times](docs/rules/prefer-times.md): Prefer `R.times` over `R.map` without using the iteratee's arguments.
 

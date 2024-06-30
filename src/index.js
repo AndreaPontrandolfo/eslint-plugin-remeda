@@ -21,7 +21,7 @@ const recommended = {
     "remeda/prefer-find": 2,
     "remeda/prefer-some": 2,
     "remeda/prefer-flat-map": 2,
-    // "remeda/prefer-noop": 2, //TODO: needs adaptation from https://remedajs.com/migrate/lodash/#noop
+    "remeda/prefer-do-nothing": 2,
     // "remeda/prefer-lodash-method": 1,
   },
 };
