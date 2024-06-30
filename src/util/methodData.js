@@ -683,6 +683,14 @@ module.exports = {
     iteratee: false,
     args: 1,
   },
+  first: {
+    aliases: ["head"],
+    wrapper: false,
+    shorthand: false,
+    chainable: false,
+    iteratee: false,
+    args: 1,
+  },
   identity: {
     aliases: [],
     wrapper: false,

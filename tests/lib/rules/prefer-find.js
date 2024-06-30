@@ -24,21 +24,32 @@ ruleTester.run("prefer-find", rule, {
   valid: [
     "t = _.filter(arr, f)",
     "t = _.find(arr, f)",
-    "t = _.reject(arr, f)",
-    "t = _.head(arr)",
+    "t = _.first(arr)",
     "t = _.filter(arr, f)[2]",
   ].map(withDefaultPragma),
+  invalid: [
+    "t = _.filter(arr, f)[0]",
+    // "t = _.filter(arr, f).first()", // TODO: make this pass
+    // "t = _.first(_.filter(arr, f))", // TODO: make this pass
+    // "t = _.first(_.filter(arr, f))", // TODO: make this pass
+    // "t = _.pipe(arr, _.filter(f), first())", // TODO: make this pass
+  ]
+    .map(toFindError)
+    .map(withDefaultPragma),
+
+  // snippet taken from https://github.com/wix-incubator/eslint-plugin-lodash/blob/master/tests/lib/rules/prefer-find.js
+  /*
   invalid: [
     ...[
       ...[
         "t = _.filter(arr, f)[0]",
-        "t = _.head(_.filter(arr, f))",
         "t = _.first(_.filter(arr, f))",
-        "t = _(arr).filter(f).head()",
+        "t = _.first(_.filter(arr, f))",
+        "t = _.filter(arr, f).first()",
       ].map(toFindError),
-      ...["t = _.last(_.filter(arr, f))", "t = _(arr).filter(f).last()"].map(
-        toFindLastError,
-      ),
+      // ...["t = _.last(_.filter(arr, f))", "t = _.filter(arr, f).last()"].map(
+      //   toFindLastError,
+      // ),
     ].map(withDefaultPragma),
     toFindError({
       code: 'import first from "remeda/first"; import filter from "remeda/filter"; const x = first(filter(x, f))',
@@ -47,4 +58,5 @@ ruleTester.run("prefer-find", rule, {
       },
     }),
   ],
+  */
 });

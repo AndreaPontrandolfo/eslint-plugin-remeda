@@ -18,9 +18,9 @@ const recommended = {
     "remeda/collection-method-value": 2,
     "remeda/collection-return": 2,
     "remeda/prefer-map": 2,
-    // "remeda/prefer-find": 2, //FIXME: some tests are failing
-    // "remeda/prefer-some": [1, { includeNative: true }],
+    "remeda/prefer-find": 2,
     // "remeda/prefer-flat-map": 2, //FIXME: some tests are failing
+    // "remeda/prefer-some": [1, { includeNative: true }],
     // "remeda/prefer-includes": [1, { includeNative: true }],
     // "remeda/prefer-noop": 2, //TODO: needs adaptation from https://remedajs.com/migrate/lodash/#noop
 

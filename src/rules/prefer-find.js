@@ -42,8 +42,8 @@ module.exports = {
         if (isAliasOfMethod("filter", method)) {
           if (
             isZeroIndexAccess(node.parent) ||
-            isCallToLodashMethod(node.parent, "head", lodashContext) ||
-            isChainedBeforeMethod(callType, node, "head")
+            isCallToLodashMethod(node.parent, "first", lodashContext) ||
+            isChainedBeforeMethod(callType, node, "first")
           ) {
             context.report({
               node,
