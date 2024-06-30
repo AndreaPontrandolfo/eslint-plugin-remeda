@@ -22,7 +22,6 @@ const recommended = {
     "remeda/prefer-some": 2,
     "remeda/prefer-flat-map": 2,
     // "remeda/prefer-noop": 2, //TODO: needs adaptation from https://remedajs.com/migrate/lodash/#noop
-    // "remeda/prefer-get": [2, 3],
     // "remeda/prefer-lodash-method": 1,
   },
 };
