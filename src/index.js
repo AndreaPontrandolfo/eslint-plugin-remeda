@@ -24,7 +24,6 @@ const recommended = {
     // "remeda/prefer-includes": [1, { includeNative: true }],
     // "remeda/prefer-noop": 2, //TODO: needs adaptation from https://remedajs.com/migrate/lodash/#noop
 
-    // "remeda/consistent-compose": [1, "flow"],
     // "remeda/prefer-get": [2, 3],
     // "remeda/prefer-lodash-method": 1,
   },

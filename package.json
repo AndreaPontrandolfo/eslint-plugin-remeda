@@ -6,6 +6,7 @@
   "main": "src/index.js",
   "scripts": {
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "knip": "knip",
     "test": "npm run unit-test",
     "unit-test": "cross-env nyc mocha ./tests/lib/rules/prefer-is-empty.js ./tests/lib/rules/prefer-is-nil.js ./tests/lib/rules/prefer-times.js ./tests/lib/rules/prefer-constant.js ./tests/lib/rules/prefer-lodash-typecheck.js ./tests/lib/rules/prefer-nullish-coalescing.js ./tests/lib/rules/prefer-filter.js ./tests/lib/rules/collection-method-value.js ./tests/lib/rules/collection-return.js ./tests/lib/rules/prefer-map.js ./tests/lib/rules/prefer-find.js --reporter=dot",
     "patch": "npm version patch -m\"update version to %s\" && git push --follow-tags",
@@ -27,6 +28,7 @@
     "eslint": ">=2"
   },
   "devDependencies": {
+    "@types/node": "^20.14.9",
     "auto-changelog": "^2.4.0",
     "coveralls": "^3.1.1",
     "cross-env": "^7.0.3",
@@ -36,9 +38,11 @@
     "eslint-plugin-eslint-plugin": "^4.2.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-traverser": "^1.5.2",
+    "knip": "^5.23.2",
     "mocha": "^9.2.2",
     "nyc": "^15.1.0",
-    "prettier": "^3.3.2"
+    "prettier": "^3.3.2",
+    "typescript": "^5.5.2"
   },
   "engines": {
     "node": ">=12"
