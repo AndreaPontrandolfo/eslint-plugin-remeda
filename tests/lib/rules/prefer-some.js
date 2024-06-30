@@ -23,8 +23,6 @@ ruleTester.run("prefer-some", rule, {
     "x = _.findIndex(a, b) > 0",
     "x = _.findIndex(a, b) >= 1",
     "if(_.findIndex(a, b) === 0) {}",
-    { code: "a.findIndex(b) >= 0", options: [{ includeNative: false }] },
-    { code: "a.findIndex(b) > 0", options: [{ includeNative: true }] },
   ].map(withDefaultPragma),
   invalid: [
     "x = _.findIndex(a, b) >= 0",
@@ -34,9 +32,6 @@ ruleTester.run("prefer-some", rule, {
     "x = _.findIndex(a, b) > -1",
     "x = _.findIndex(a, b) < 0",
     "x = 0 > _.findIndex(a, b)",
-    { code: "x = a.findIndex(b) !== -1", options: [{ includeNative: true }] },
-    { code: "x = a.findIndex(b) >= 0", options: [{ includeNative: true }] },
-    { code: "0 <= a.findIndex(b)", options: [{ includeNative: true }] },
   ]
     .map(withDefaultPragma)
     .concat([

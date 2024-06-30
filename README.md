@@ -30,21 +30,21 @@ Enable all of the rules that you would like to use. All rules are off by default
 
 - [collection-method-value](docs/rules/collection-method-value.md): Use value returned from collection methods properly.
 - [collection-return](docs/rules/collection-return.md): Always return a value in iteratees of Lodash collection methods that aren't `forEach`.
-- [prefer-filter](docs/rules/prefer-filter.md): Prefer `_.filter` over `_.forEach` with an `if` statement inside.
-- [prefer-find](docs/rules/prefer-find.md): Prefer `_.find` over `_.filter` followed by selecting the first result.
-- [prefer-flat-map](docs/rules/prefer-flat-map.md): Prefer `_.flatMap` over consecutive `map` and `flatten`.
-- [prefer-map](docs/rules/prefer-map.md): Prefer `_.map` over `_.forEach` with a `push` inside.
+- [prefer-filter](docs/rules/prefer-filter.md): Prefer `R.filter` over `R.forEach` with an `if` statement inside.
+- [prefer-find](docs/rules/prefer-find.md): Prefer `R.find` over `R.filter` followed by selecting the first result.
+- [prefer-flat-map](docs/rules/prefer-flat-map.md): Prefer `R.flatMap` over consecutive `map` and `flatten`.
+- [prefer-map](docs/rules/prefer-map.md): Prefer `R.map` over `R.forEach` with a `push` inside.
 - [prefer-nullish-coalescing](docs/rules/prefer-nullish-coalescing.md): Prefer `??` when doing a comparison with a non-nullish value as test.
-- [prefer-constant](docs/rules/prefer-constant.md): Prefer `_.constant` over functions returning literals.
-- [prefer-get](docs/rules/prefer-get.md): Prefer using `_.get` or `_.has` over expression chains like `a && a.b && a.b.c`.
-- [prefer-includes](docs/rules/prefer-includes.md): Prefer `_.includes` over comparing `indexOf` to -1.
-- [prefer-is-empty](docs/rules/prefer-is-empty.md): Prefer `_.isEmpty` over manual checking for length value.
-- [prefer-is-nil](docs/rules/prefer-is-nil.md): Prefer `_.isNil` over checks for both null and undefined.
-- [prefer-lodash-method](docs/rules/prefer-lodash-method.md): Prefer using Lodash collection methods (e.g. `_.map`) over native array methods.
-- [prefer-lodash-typecheck](docs/rules/prefer-lodash-typecheck.md): Prefer using `_.is*` methods over `typeof` and `instanceof` checks when applicable.
-- [prefer-noop](docs/rules/prefer-noop.md): Prefer `_.noop` over empty functions.
-- [prefer-some](docs/rules/prefer-some.md): Prefer using `_.some` over comparing `findIndex` to -1.
-- [prefer-times](docs/rules/prefer-times.md): Prefer `_.times` over `_.map` without using the iteratee's arguments.
+- [prefer-constant](docs/rules/prefer-constant.md): Prefer `R.constant` over functions returning literals.
+- [prefer-get](docs/rules/prefer-get.md): Prefer using `R.get` or `R.has` over expression chains like `a && a.b && a.b.c`.
+- [prefer-includes](docs/rules/prefer-includes.md): Prefer `R.includes` over comparing `indexOf` to -1.
+- [prefer-is-empty](docs/rules/prefer-is-empty.md): Prefer `R.isEmpty` over manual checking for length value.
+- [prefer-is-nil](docs/rules/prefer-is-nil.md): Prefer `R.isNil` over checks for both null and undefined.
+- [prefer-lodash-method](docs/rules/prefer-lodash-method.md): Prefer using Lodash collection methods (e.g. `R.map`) over native array methods.
+- [prefer-lodash-typecheck](docs/rules/prefer-lodash-typecheck.md): Prefer using `R.is*` methods over `typeof` and `instanceof` checks when applicable.
+- [prefer-noop](docs/rules/prefer-noop.md): Prefer `R.noop` over empty functions.
+- [prefer-some](docs/rules/prefer-some.md): Prefer using `R.some` over comparing `findIndex` to -1.
+- [prefer-times](docs/rules/prefer-times.md): Prefer `R.times` over `R.map` without using the iteratee's arguments.
 
 ## Contributing
 
