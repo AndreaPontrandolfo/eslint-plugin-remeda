@@ -29,7 +29,7 @@ This plugin was originally derived from [eslint-plugin-lodash-f](https://github.
 Enable all of the rules that you would like to use. All rules are off by default, unless you use one of the plugin's configurations which turn all relevant rules on.
 
 - [collection-method-value](docs/rules/collection-method-value.md): Use value returned from collection methods properly.
-- [collection-return](docs/rules/collection-return.md): Always return a value in iteratees of Lodash collection methods that aren't `forEach`.
+- [collection-return](docs/rules/collection-return.md): Always return a value in iteratees of Remeda collection methods that aren't `forEach`.
 - [prefer-filter](docs/rules/prefer-filter.md): Prefer `R.filter` over `R.forEach` with an `if` statement inside.
 - [prefer-find](docs/rules/prefer-find.md): Prefer `R.find` over `R.filter` followed by selecting the first result.
 - [prefer-flat-map](docs/rules/prefer-flat-map.md): Prefer `R.flatMap` over consecutive `map` and `flatten`.

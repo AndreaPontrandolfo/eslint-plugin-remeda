@@ -5,15 +5,6 @@ const astUtil = require("./astUtil");
 const LodashContext = require("./LodashContext");
 
 /**
- * Returns whether or not a node is a chainable method call.
- * @param {Object} node
- * @returns {boolean}
- */
-function isChainable(node) {
-  return methodDataUtil.isChainable(astUtil.getMethodName(node));
-}
-
-/**
  * Returns whether the node is a chain breaker method
  * @param {Object} node
  * @returns {boolean}
@@ -30,15 +21,6 @@ function isChainBreaker(node) {
  */
 function isCallToMethod(node, method) {
   return methodDataUtil.isAliasOfMethod(method, astUtil.getMethodName(node));
-}
-
-/**
- * Returns whether or not the node is a call to a lodash wrapper method
- * @param {Object} node
- * @returns {boolean}
- */
-function isLodashWrapperMethod(node) {
-  return methodDataUtil.isWrapperMethod(astUtil.getMethodName(node));
 }
 
 /**
@@ -61,30 +43,6 @@ function getIsTypeMethod(name) {
     // "Element",
   ];
   return _.includes(types, name) ? `is${_.capitalize(name)}` : null;
-}
-
-/**
- * Returns whether or not the node is a call to a native collection method
- * @param {Object} node
- * @returns {boolean}
- */
-function isNativeCollectionMethodCall(node) {
-  return _.includes(
-    [
-      "every",
-      "fill",
-      "filter",
-      "find",
-      "findIndex",
-      "forEach",
-      "includes",
-      "map",
-      "reduce",
-      "reduceRight",
-      "some",
-    ],
-    astUtil.getMethodName(node),
-  );
 }
 
 /**
@@ -163,30 +121,6 @@ function getLodashMethodVisitors(context, lodashCallExpVisitor) {
   return visitors;
 }
 
-function getShorthandVisitors(context, checks, messages, shorthandType) {
-  const lodashContext = new LodashContext(context);
-  const visitors = lodashContext.getImportVisitors();
-  visitors.CallExpression = getLodashMethodCallExpVisitor(
-    lodashContext,
-    {
-      always(node, iteratee, { method }) {
-        if (
-          methodDataUtil.methodSupportsShorthand(method, shorthandType) &&
-          checks.canUseShorthand(iteratee, lodashContext)
-        ) {
-          context.report(iteratee, messages.always);
-        }
-      },
-      never(node, iteratee, { method }) {
-        if (checks.usesShorthand(node, iteratee, method)) {
-          context.report(iteratee || node.callee.property, messages.never);
-        }
-      },
-    }[context.options[0] || "always"],
-  );
-  return visitors;
-}
-
 /**
  *
  * @param context
@@ -197,15 +131,11 @@ function getLodashContext(context) {
 }
 
 module.exports = {
-  isChainable,
   isChainBreaker,
   isCallToMethod,
-  isLodashWrapperMethod,
   getIsTypeMethod,
-  isNativeCollectionMethodCall,
   getLodashMethodCallExpVisitor,
   isCallToLodashMethod,
-  getShorthandVisitors,
   getLodashMethodVisitors,
   getLodashContext,
 };

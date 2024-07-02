@@ -21,5 +21,5 @@ module.exports = {
   fromMessage,
   fromMessageId,
   fromOptions,
-  withDefaultPragma: fromOptions({ settings: { lodash: { pragma: "_" } } }),
+  withDefaultPragma: fromOptions({ settings: { lodash: { pragma: "_" } } }), // FIXME: lodash?
 };
