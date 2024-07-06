@@ -19,7 +19,7 @@ module.exports = {
   },
 
   create(context) {
-    const { getLodashMethodVisitors } = require("../util/lodashUtil");
+    const { getRemedaMethodVisitors } = require("../util/lodashUtil");
     const {
       getFirstFunctionLine,
       hasOnlyOneStatement,
@@ -49,7 +49,7 @@ module.exports = {
       );
     }
 
-    return getLodashMethodVisitors(context, (node, iteratee, { method }) => {
+    return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {
       if (isAliasOfMethod("forEach", method) && onlyHasPush(iteratee)) {
         context.report({
           node,

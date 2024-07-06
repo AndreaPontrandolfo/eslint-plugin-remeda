@@ -51,7 +51,7 @@ function getIsTypeMethod(name) {
  * @param {LodashReporter} reporter
  * @returns {NodeTypeVisitor}
  */
-function getLodashMethodCallExpVisitor(lodashContext, reporter) {
+function getRemedaMethodCallExpVisitor(lodashContext, reporter) {
   return function (node) {
     let iterateeIndex;
     if (lodashContext.isLodashChainStart(node)) {
@@ -111,10 +111,10 @@ function isCallToLodashMethod(node, method, lodashContext) {
   );
 }
 
-function getLodashMethodVisitors(context, lodashCallExpVisitor) {
+function getRemedaMethodVisitors(context, lodashCallExpVisitor) {
   const lodashContext = new LodashContext(context);
   const visitors = lodashContext.getImportVisitors();
-  visitors.CallExpression = getLodashMethodCallExpVisitor(
+  visitors.CallExpression = getRemedaMethodCallExpVisitor(
     lodashContext,
     lodashCallExpVisitor,
   );
@@ -134,9 +134,9 @@ module.exports = {
   isChainBreaker,
   isCallToMethod,
   getIsTypeMethod,
-  getLodashMethodCallExpVisitor,
+  getRemedaMethodCallExpVisitor,
   isCallToLodashMethod,
-  getLodashMethodVisitors,
+  getRemedaMethodVisitors,
   getLodashContext,
 };
 

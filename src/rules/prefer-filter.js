@@ -23,7 +23,7 @@ module.exports = {
   },
 
   create(context) {
-    const { getLodashMethodVisitors } = require("../util/lodashUtil");
+    const { getRemedaMethodVisitors } = require("../util/lodashUtil");
     const {
       isIdentifierWithName,
       isMemberExpOf,
@@ -66,7 +66,7 @@ module.exports = {
       );
     }
 
-    return getLodashMethodVisitors(context, (node, iteratee, { method }) => {
+    return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {
       if (
         isAliasOfMethod("forEach", method) &&
         onlyHasSimplifiableIf(iteratee)

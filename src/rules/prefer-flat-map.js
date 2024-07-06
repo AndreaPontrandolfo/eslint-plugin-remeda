@@ -20,7 +20,7 @@ module.exports = {
 
   create(context) {
     const {
-      getLodashMethodVisitors,
+      getRemedaMethodVisitors,
       isCallToMethod,
       isCallToLodashMethod,
     } = require("../util/lodashUtil");
@@ -31,7 +31,7 @@ module.exports = {
       return callType === "chained" && isCallToMethod(getCaller(node), "map");
     }
 
-    return getLodashMethodVisitors(
+    return getRemedaMethodVisitors(
       context,
       (node, iteratee, { method, callType, lodashContext }) => {
         if (

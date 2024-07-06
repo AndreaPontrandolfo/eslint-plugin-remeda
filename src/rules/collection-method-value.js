@@ -21,7 +21,7 @@ module.exports = {
   create(context) {
     const {
       isChainBreaker,
-      getLodashMethodVisitors,
+      getRemedaMethodVisitors,
       isCallToMethod,
     } = require("../util/lodashUtil");
     const { getMethodName } = require("../util/astUtil");
@@ -55,7 +55,7 @@ module.exports = {
       );
     }
 
-    return getLodashMethodVisitors(
+    return getRemedaMethodVisitors(
       context,
       (node, iteratee, { method, callType }) => {
         if (

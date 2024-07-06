@@ -19,10 +19,10 @@ module.exports = {
   },
 
   create(context) {
-    const { getLodashMethodVisitors } = require("../util/lodashUtil");
+    const { getRemedaMethodVisitors } = require("../util/lodashUtil");
     const { isAliasOfMethod } = require("../util/methodDataUtil");
     const get = require("lodash/get");
-    return getLodashMethodVisitors(context, (node, iteratee, { method }) => {
+    return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {
       if (
         isAliasOfMethod("map", method) &&
         get(iteratee, "params.length") === 0

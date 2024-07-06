@@ -20,7 +20,7 @@ module.exports = {
 
   create(context) {
     const {
-      getLodashMethodCallExpVisitor,
+      getRemedaMethodCallExpVisitor,
       getLodashContext,
     } = require("../util/lodashUtil");
     const { isCollectionMethod } = require("../util/methodDataUtil");
@@ -31,7 +31,7 @@ module.exports = {
     const lodashContext = getLodashContext(context);
     return assign(
       {
-        "CallExpression:exit": getLodashMethodCallExpVisitor(
+        "CallExpression:exit": getRemedaMethodCallExpVisitor(
           lodashContext,
           (node, iteratee, { method }) => {
             if (isCollectionMethod(method) && funcInfos.has(iteratee)) {

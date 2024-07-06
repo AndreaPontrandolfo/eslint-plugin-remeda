@@ -20,10 +20,10 @@ module.exports = {
 
   create(context) {
     const { getExpressionComparedToInt } = require("../util/astUtil");
-    const { getLodashMethodVisitors } = require("../util/lodashUtil");
+    const { getRemedaMethodVisitors } = require("../util/lodashUtil");
     const { isAliasOfMethod } = require("../util/methodDataUtil");
 
-    const visitors = getLodashMethodVisitors(
+    const visitors = getRemedaMethodVisitors(
       context,
       (node, iteratee, { method }) => {
         if (

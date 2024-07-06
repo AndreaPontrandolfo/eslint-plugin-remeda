@@ -20,7 +20,7 @@ module.exports = {
 
   create(context) {
     const {
-      getLodashMethodVisitors,
+      getRemedaMethodVisitors,
       isCallToMethod,
       isCallToLodashMethod,
     } = require("../util/lodashUtil");
@@ -36,7 +36,7 @@ module.exports = {
       );
     }
 
-    return getLodashMethodVisitors(
+    return getRemedaMethodVisitors(
       context,
       (node, iteratee, { method, callType, lodashContext }) => {
         if (isAliasOfMethod("filter", method)) {
