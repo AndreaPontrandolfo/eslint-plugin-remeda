@@ -54,25 +54,7 @@ function getIsTypeMethod(name) {
 function getRemedaMethodCallExpVisitor(lodashContext, reporter) {
   return function (node) {
     let iterateeIndex;
-    if (lodashContext.isLodashChainStart(node)) {
-      let prevNode = node;
-      node = node.parent.parent;
-      while (
-        astUtil.getCaller(node) === prevNode &&
-        astUtil.isMethodCall(node) &&
-        !isChainBreaker(node)
-      ) {
-        const method = astUtil.getMethodName(node);
-        iterateeIndex = methodDataUtil.getIterateeIndex(method);
-        reporter(node, node.arguments[iterateeIndex - 1], {
-          callType: "chained",
-          method,
-          lodashContext,
-        });
-        prevNode = node;
-        node = node.parent.parent;
-      }
-    } else if (lodashContext.isLodashCall(node)) {
+    if (lodashContext.isLodashCall(node)) {
       const method = astUtil.getMethodName(node);
       iterateeIndex = methodDataUtil.getIterateeIndex(method);
       reporter(node, node.arguments[iterateeIndex], {
@@ -94,16 +76,16 @@ function getRemedaMethodCallExpVisitor(lodashContext, reporter) {
   };
 }
 
-function isLodashCallToMethod(node, method, lodashContext) {
+function isRemedaCallToMethod(node, method, lodashContext) {
   return lodashContext.isLodashCall(node) && isCallToMethod(node, method);
 }
 
-function isCallToLodashMethod(node, method, lodashContext) {
+function isCallToRemedaMethod(node, method, lodashContext) {
   if (!node || node.type !== "CallExpression") {
     return false;
   }
   return (
-    isLodashCallToMethod(node, method, lodashContext) ||
+    isRemedaCallToMethod(node, method, lodashContext) ||
     methodDataUtil.isAliasOfMethod(
       method,
       lodashContext.getImportedRemedaMethod(node),
@@ -135,31 +117,7 @@ module.exports = {
   isCallToMethod,
   getIsTypeMethod,
   getRemedaMethodCallExpVisitor,
-  isCallToLodashMethod,
+  isCallToLodashMethod: isCallToRemedaMethod,
   getRemedaMethodVisitors,
   getLodashContext,
 };
-
-/**
- @callback LodashReporter
- @param {Object} node
- @param {Object} iteratee
- @param {Object?} options
- */
-
-/**
- @callback NodeTypeVisitor
- @param {Object} node
- */
-
-/**
- * @typedef {Object} ShorthandChecks
- * @property {function} canUseShorthand
- * @property {function} usesShorthand
- */
-
-/**
- * @typedef {object} ShorthandMessages
- * @property {string} always
- * @property {string} never
- */

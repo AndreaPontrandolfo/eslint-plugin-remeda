@@ -115,51 +115,6 @@ module.exports = class {
   }
 
   /**
-   * Returns whether the node is an implicit chain start, _()...
-   * @param node
-   * @returns {boolean|undefined}
-   */
-  isImplicitChainStart(node) {
-    return (
-      (this.pragma && node.callee.name === this.pragma) ||
-      (this.isImportedRemeda(node.callee) && node.callee.name !== "chain")
-    );
-  }
-
-  /**
-   * Returns whether the node is an explicit chain start, _.chain()...
-   * @param node
-   * @returns {boolean|undefined}
-   */
-  isExplicitChainStart(node) {
-    return this.isLodashCall(node) && getMethodName(node) === "chain";
-  }
-
-  /**
-   * Returns whether the node is chain start imported as member, chain()... import { chain } from 'lodash'
-   * @param node
-   * @returns {boolean|undefined}
-   */
-  isImportedChainStart(node) {
-    return node.callee.name === "chain" && this.isImportedRemeda(node.callee);
-  }
-
-  /**
-   * Returns whether the node is a Lodash chain start, implicit or explicit
-   * @param node
-   * @returns {*|boolean|boolean|undefined}
-   */
-  isLodashChainStart(node) {
-    return (
-      node &&
-      node.type === "CallExpression" &&
-      (this.isImplicitChainStart(node) ||
-        this.isExplicitChainStart(node) ||
-        this.isImportedChainStart(node))
-    );
-  }
-
-  /**
    *
    * @returns {string|undefined} the current Remeda pragma
    */

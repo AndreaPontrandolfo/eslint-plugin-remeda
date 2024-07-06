@@ -41,7 +41,7 @@ module.exports = {
       );
     }
 
-    function isPureLodashCollectionMethod(method) {
+    function isPureRemedaCollectionMethod(method) {
       return isCollectionMethod(method) && !isAliasOfMethod("remove", method);
     }
 
@@ -59,7 +59,7 @@ module.exports = {
       context,
       (node, iteratee, { method, callType }) => {
         if (
-          isPureLodashCollectionMethod(method) &&
+          isPureRemedaCollectionMethod(method) &&
           !parentUsesValue(node, callType)
         ) {
           context.report({

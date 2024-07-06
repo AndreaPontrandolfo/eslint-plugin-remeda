@@ -188,20 +188,6 @@ describe("LodashContext", () => {
           }),
         );
       });
-      it("should not consider Object.prototype methods as Remeda", (done) => {
-        visitWithContext(
-          'const {toString} = require("remeda"); const x = toString(y)',
-          undefined,
-          (lodashContext) => ({
-            CallExpression(node) {
-              if (node.callee.name === "toString") {
-                assert(!lodashContext.isLodashChainStart(node));
-                done();
-              }
-            },
-          }),
-        );
-      });
     });
   });
   describe("isImportedRemeda", () => {
