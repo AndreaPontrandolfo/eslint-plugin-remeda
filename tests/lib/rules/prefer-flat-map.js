@@ -14,14 +14,14 @@ const ruleTesterUtil = require("../testUtil/ruleTesterUtil");
 const ruleTester = ruleTesterUtil.getRuleTester();
 const { fromMessage, withDefaultPragma } = require("../testUtil/optionsUtil");
 const toErrorObject = fromMessage(
-  "Prefer _.flatMap over consecutive map and flatten.",
+  "Prefer R.flatMap over consecutive map and flatten.",
 );
 ruleTester.run("prefer-flat-map", rule, {
-  valid: ["t = _.map(a, f);", "t = _.flat(a);", "t = _.flatMap(a, f);"].map(
+  valid: ["t = R.map(a, f);", "t = R.flat(a);", "t = R.flatMap(a, f);"].map(
     withDefaultPragma,
   ),
   invalid: [
-    "t = _.flat(_.map(a, f));",
+    "t = R.flat(R.map(a, f));",
     // "t = R.pipe(arr, R.map(f), R.flat(1))", // TODO: make this pass
     // "t = pipe(arr, map(f), flat(1))", // TODO: make this pass
   ]

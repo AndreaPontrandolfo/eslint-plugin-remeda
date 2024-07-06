@@ -1,5 +1,5 @@
 /**
- * @fileoverview Rule to check if a call to _.forEach should be a call to _.map
+ * @fileoverview Rule to check if a call to R.forEach should be a call to R.map
  */
 "use strict";
 
@@ -54,7 +54,7 @@ module.exports = {
         context.report({
           node,
           message:
-            "Prefer _.map over a _.forEach with a push to an array inside",
+            "Prefer R.map over a R.forEach with a push to an array inside",
         });
       }
     });

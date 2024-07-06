@@ -64,7 +64,7 @@ module.exports = {
         ) {
           context.report({
             node,
-            message: `Use value returned from _.${method}`,
+            message: `Use value returned from R.${method}`,
           });
         } else if (
           isSideEffectIterationMethod(method) &&
@@ -73,7 +73,7 @@ module.exports = {
         ) {
           context.report({
             node,
-            message: `Do not use value returned from _.${getMethodName(node)}`,
+            message: `Do not use value returned from R.${getMethodName(node)}`,
           });
         }
       },

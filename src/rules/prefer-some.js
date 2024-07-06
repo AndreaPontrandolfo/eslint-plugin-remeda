@@ -1,5 +1,5 @@
 /**
- * @fileoverview Rule to check if a findIndex comparison should be a call to _.some
+ * @fileoverview Rule to check if a findIndex comparison should be a call to R.some
  */
 "use strict";
 
@@ -32,7 +32,7 @@ module.exports = {
         ) {
           context.report({
             node,
-            message: "Prefer _.some over findIndex comparison to -1",
+            message: "Prefer R.some over findIndex comparison to -1",
           });
         }
       },

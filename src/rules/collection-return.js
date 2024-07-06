@@ -44,7 +44,7 @@ module.exports = {
               ) {
                 context.report({
                   node,
-                  message: `Do not use _.${method} without returning a value`,
+                  message: `Do not use R.${method} without returning a value`,
                 });
               }
             }

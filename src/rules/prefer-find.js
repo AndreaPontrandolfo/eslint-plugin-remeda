@@ -1,5 +1,5 @@
 /**
- * @fileoverview Rule to check if a call to `_.filter` should be a call to `_.find`.
+ * @fileoverview Rule to check if a call to `R.filter` should be a call to `R.find`.
  */
 "use strict";
 
@@ -48,7 +48,7 @@ module.exports = {
             context.report({
               node,
               message:
-                "Prefer using `_.find` over selecting the first item of a filtered result",
+                "Prefer using `R.find` over selecting the first item of a filtered result",
             });
           }
           if (
@@ -58,7 +58,7 @@ module.exports = {
             context.report({
               node,
               message:
-                "Prefer using `_.findLast` over selecting the last item of a filtered result",
+                "Prefer using `R.findLast` over selecting the last item of a filtered result",
             });
           }
         }

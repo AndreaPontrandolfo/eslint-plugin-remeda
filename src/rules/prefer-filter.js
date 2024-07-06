@@ -74,7 +74,7 @@ module.exports = {
         context.report({
           node,
           message:
-            "Prefer _.filter or _.some over an if statement inside a _.forEach",
+            "Prefer R.filter or R.some over an if statement inside a R.forEach",
         });
       }
     });

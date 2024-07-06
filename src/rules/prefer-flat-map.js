@@ -1,5 +1,5 @@
 /**
- * @fileoverview Rule to check if a call to map and flatten should be a call to _.flatMap
+ * @fileoverview Rule to check if a call to map and flatten should be a call to R.flatMap
  */
 "use strict";
 
@@ -41,7 +41,7 @@ module.exports = {
         ) {
           context.report({
             node,
-            message: "Prefer _.flatMap over consecutive map and flatten.",
+            message: "Prefer R.flatMap over consecutive map and flatten.",
           });
         }
       },

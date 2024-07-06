@@ -161,7 +161,7 @@ module.exports = class {
 
   /**
    *
-   * @returns {string|undefined} the current Lodash pragma
+   * @returns {string|undefined} the current Remeda pragma
    */
   get pragma() {
     if (!this._pragma) {

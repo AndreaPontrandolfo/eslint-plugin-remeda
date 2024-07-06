@@ -15,16 +15,16 @@ const ruleTester = ruleTesterUtil.getRuleTester();
 const { fromMessage, withDefaultPragma } = require("../testUtil/optionsUtil");
 ruleTester.run("collection-method-value", rule, {
   valid: [
-    "x = _.map(arr, f)",
-    "_.forEach(arr, g)",
-    "if (_.some(arr, h)) {i()}",
+    "x = R.map(arr, f)",
+    "R.forEach(arr, g)",
+    "if (R.some(arr, h)) {i()}",
   ].map(withDefaultPragma),
-  invalid: ["x = _.forEach(arr, g)"]
+  invalid: ["x = R.forEach(arr, g)"]
     .map(withDefaultPragma)
-    .map(fromMessage("Do not use value returned from _.forEach"))
+    .map(fromMessage("Do not use value returned from R.forEach"))
     .concat(
       [
-        "_.map(arr, f)",
+        "R.map(arr, f)",
         {
           code: 'import f from "remeda/map"; f(x, g)',
           parserOptions: {
@@ -33,6 +33,6 @@ ruleTester.run("collection-method-value", rule, {
         },
       ]
         .map(withDefaultPragma)
-        .map(fromMessage("Use value returned from _.map")),
+        .map(fromMessage("Use value returned from R.map")),
     ),
 });

@@ -83,23 +83,6 @@ const sideEffectIterationMethods = [
 ];
 
 /**
- * Gets the index of the iteratee of a method when it isn't chained, or -1 if it doesn't have one.
- * @param {string} method
- * @returns {number}
- */
-function getIterateeIndex(method) {
-  const mainAlias = getMainAlias(method);
-  const methodData = getMethodData()[mainAlias];
-  if (_.has(methodData, "iterateeIndex")) {
-    return methodData.iterateeIndex;
-  }
-  if (methodData && methodData.iteratee) {
-    return 1;
-  }
-  return -1;
-}
-
-/**
  * Gets a list of side effect iteration methods
  * @returns {string[]}
  */
@@ -110,6 +93,5 @@ function getSideEffectIterationMethods() {
 module.exports = {
   isAliasOfMethod,
   isCollectionMethod,
-  getIterateeIndex,
   getSideEffectIterationMethods,
 };

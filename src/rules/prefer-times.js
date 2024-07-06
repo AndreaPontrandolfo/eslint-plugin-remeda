@@ -29,7 +29,7 @@ module.exports = {
       ) {
         context.report({
           node,
-          message: "Prefer _.times over _.map without using arguments",
+          message: "Prefer R.times over R.map without using arguments",
         });
       }
     });

@@ -15,36 +15,36 @@ const ruleTester = ruleTesterUtil.getRuleTester();
 const { withDefaultPragma } = require("../testUtil/optionsUtil");
 ruleTester.run("collection-return", rule, {
   valid: [
-    "_.forEach(arr, function(a) { console.log(a)})",
-    "_.map(arr, function(a) { return a*a})",
-    "_.map(arr, a => a + 1)",
-    "_.map(arr, function(a) {return a.some(function(x) {})})",
+    "R.forEach(arr, function(a) { console.log(a)})",
+    "R.map(arr, function(a) { return a*a})",
+    "R.map(arr, a => a + 1)",
+    "R.map(arr, function(a) {return a.some(function(x) {})})",
     "function x(a) {return a;}",
-    "_.map(a, x => f(x).then(() => {g()}))",
-    { code: "_.map(x, async t => {})", parserOptions: { ecmaVersion: 8 } },
-    { code: "_.map(x, function*(t) {})", parserOptions: { ecmaVersion: 6 } },
+    "R.map(a, x => f(x).then(() => {g()}))",
+    { code: "R.map(x, async t => {})", parserOptions: { ecmaVersion: 8 } },
+    { code: "R.map(x, function*(t) {})", parserOptions: { ecmaVersion: 6 } },
   ].map(withDefaultPragma),
   invalid: [
     {
-      code: "_.map(arr, function(a) {console.log(a)})",
-      errors: [{ message: "Do not use _.map without returning a value" }],
+      code: "R.map(arr, function(a) {console.log(a)})",
+      errors: [{ message: "Do not use R.map without returning a value" }],
     },
     {
-      code: "_.every(arr, function(a){f(a)})",
-      errors: [{ message: "Do not use _.every without returning a value" }],
+      code: "R.every(arr, function(a){f(a)})",
+      errors: [{ message: "Do not use R.every without returning a value" }],
     },
     {
-      code: "_.map(arr, function(a){ a.every(function(b) {return b})})",
-      errors: [{ message: "Do not use _.map without returning a value" }],
+      code: "R.map(arr, function(a){ a.every(function(b) {return b})})",
+      errors: [{ message: "Do not use R.map without returning a value" }],
     },
     {
-      code: "_.reduce(arr, a => {f(a)})",
-      errors: [{ message: "Do not use _.reduce without returning a value" }],
+      code: "R.reduce(arr, a => {f(a)})",
+      errors: [{ message: "Do not use R.reduce without returning a value" }],
       parserOptions: { ecmaVersion: 6 },
     },
     {
-      code: "_.map(arr, function x(a) {arr2.push(a)})",
-      errors: [{ message: "Do not use _.map without returning a value" }],
+      code: "R.map(arr, function x(a) {arr2.push(a)})",
+      errors: [{ message: "Do not use R.map without returning a value" }],
     },
   ].map(withDefaultPragma),
   // .concat([

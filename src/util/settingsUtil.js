@@ -1,5 +1,6 @@
 "use strict";
 const _ = require("lodash");
+
 module.exports = {
   /**
    * Returns the lodash object settings, with default values if missing
@@ -8,7 +9,7 @@ module.exports = {
    */
   getSettings(context) {
     return _.chain(context)
-      .get(["settings", "lodash"])
+      .get(["settings", "remeda"])
       .clone()
       .defaults({
         version: 4,
@@ -28,8 +29,3 @@ module.exports = {
     );
   },
 };
-
-/**
- @typedef {Object} LodashSettings
- @property {String} pragma - The symbol that signifies Lodash (default is '_').
-*/

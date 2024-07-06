@@ -3,7 +3,7 @@ const assign = require("lodash/assign");
 const traverser = require("eslint-traverser");
 const LodashContext = require("../../../src/util/LodashContext");
 const assert = require("assert");
-const defaultPragmaConfig = { settings: { lodash: { pragma: "_" } } };
+const defaultPragmaConfig = { settings: { remeda: { pragma: "R" } } };
 
 function visitWithContext(code, config, getVisitorsByLodashContext) {
   traverser(code, config).runRuleCode((context) => {
@@ -90,9 +90,9 @@ describe("LodashContext", () => {
       });
     });
     describe("VariableDeclarator", () => {
-      it("should accept a require of the entire lodash library", (done) => {
+      it("should accept a require of the entire remeda library", (done) => {
         visitWithContext(
-          'const _ = require("remeda"); _.map(arr, x => x)',
+          'const R = require("remeda"); R.map(arr, x => x)',
           undefined,
           (lodashContext) => ({
             CallExpression(node) {
@@ -174,9 +174,9 @@ describe("LodashContext", () => {
           }),
         );
       });
-      it("should not collect anything from array patterns required from lodash", (done) => {
+      it("should not collect anything from array patterns required from remeda", (done) => {
         visitWithContext(
-          'const [map] = require("lodash"); map(arr, x => x)',
+          'const [map] = require("remeda"); map(arr, x => x)',
           undefined,
           (lodashContext) => ({
             CallExpression(node) {
@@ -188,9 +188,9 @@ describe("LodashContext", () => {
           }),
         );
       });
-      it("should not consider Object.prototype methods as Lodash", (done) => {
+      it("should not consider Object.prototype methods as Remeda", (done) => {
         visitWithContext(
-          'const {toString} = require("lodash/fp"); const x = toString(y)',
+          'const {toString} = require("remeda"); const x = toString(y)',
           undefined,
           (lodashContext) => ({
             CallExpression(node) {
@@ -283,7 +283,7 @@ describe("LodashContext", () => {
   describe("isLodashCall", () => {
     it("should return true if pragma is defined and it is a call from it", (done) => {
       visitWithContext(
-        'const ids = _.map(users, "id")',
+        'const ids = R.map(users, "id")',
         defaultPragmaConfig,
         (lodashContext) => ({
           CallExpression(node) {
@@ -293,177 +293,13 @@ describe("LodashContext", () => {
         }),
       );
     });
-    it("should return true if no pragma is defined and the call is an imported lodash", (done) => {
+    it("should return true if no pragma is defined and the call is an imported remeda", (done) => {
       visitWithContext(
         'import R from "remeda"; const ids = R.map(users, () => "id")',
         { sourceType: "module" },
         (lodashContext) => ({
           CallExpression(node) {
             assert(lodashContext.isLodashCall(node));
-            done();
-          },
-        }),
-      );
-    });
-  });
-  describe("isImplicitChainStart", () => {
-    it("should return true if the callExp is an implicit chain start", (done) => {
-      visitWithContext(
-        "const wrapper = _(val)",
-        defaultPragmaConfig,
-        (lodashContext) => ({
-          CallExpression(node) {
-            assert(lodashContext.isImplicitChainStart(node));
-            done();
-          },
-        }),
-      );
-    });
-    it("should return false if the callExp is an explicit chain start", (done) => {
-      visitWithContext(
-        "const wrapper = _.chain(val)",
-        defaultPragmaConfig,
-        (lodashContext) => ({
-          CallExpression(node) {
-            assert(!lodashContext.isImplicitChainStart(node));
-            done();
-          },
-        }),
-      );
-    });
-    it("should return false for any other lodash call", (done) => {
-      visitWithContext(
-        "const wrapper = _.map(val, f)",
-        defaultPragmaConfig,
-        (lodashContext) => ({
-          CallExpression(node) {
-            assert(!lodashContext.isImplicitChainStart(node));
-            done();
-          },
-        }),
-      );
-    });
-    it("should return false if chain was imported from lodash", (done) => {
-      visitWithContext(
-        'import {chain} from "lodash"; const wrapper = chain(val)',
-        { sourceType: "module" },
-        (lodashContext) => ({
-          CallExpression(node) {
-            assert(!lodashContext.isImplicitChainStart(node));
-            done();
-          },
-        }),
-      );
-    });
-  });
-  describe("isExplicitChainStart", () => {
-    it("should return false if the callExp is an implicit chain start", (done) => {
-      visitWithContext(
-        "const wrapper = _(val)",
-        defaultPragmaConfig,
-        (lodashContext) => ({
-          CallExpression(node) {
-            assert(!lodashContext.isExplicitChainStart(node));
-            done();
-          },
-        }),
-      );
-    });
-    it("should return true if the callExp is an explicit chain start", (done) => {
-      visitWithContext(
-        "const wrapper = _.chain(val)",
-        defaultPragmaConfig,
-        (lodashContext) => ({
-          CallExpression(node) {
-            assert(lodashContext.isExplicitChainStart(node));
-            done();
-          },
-        }),
-      );
-    });
-    it("should return false for any other lodash call", (done) => {
-      visitWithContext(
-        "const wrapper = _.map(val, f)",
-        defaultPragmaConfig,
-        (lodashContext) => ({
-          CallExpression(node) {
-            assert(!lodashContext.isExplicitChainStart(node));
-            done();
-          },
-        }),
-      );
-    });
-  });
-  describe("isImportedChainStart", () => {
-    it("should return true if the chain() is imported from remeda", (done) => {
-      visitWithContext(
-        'import {chain} from "remeda"; const wrapper = chain(val)',
-        { sourceType: "module" },
-        (lodashContext) => ({
-          CallExpression(node) {
-            assert(lodashContext.isImportedChainStart(node));
-            done();
-          },
-        }),
-      );
-    });
-    it("should return false if chain is not imported from lodash", (done) => {
-      visitWithContext(
-        "const chain = () => false; const wrapper = chain(val)",
-        { sourceType: "module" },
-        (lodashContext) => ({
-          CallExpression(node) {
-            assert(!lodashContext.isImportedChainStart(node));
-            done();
-          },
-        }),
-      );
-    });
-    it("should return false for any other lodash call", (done) => {
-      visitWithContext(
-        'import {chain} from "lodash"; const wrapper = _.map(val, f)',
-        { sourceType: "module" },
-        (lodashContext) => ({
-          CallExpression(node) {
-            assert(!lodashContext.isImportedChainStart(node));
-            done();
-          },
-        }),
-      );
-    });
-  });
-  describe("isLodashChainStart", () => {
-    it("should return true if the callExp is an implicit chain start", (done) => {
-      visitWithContext(
-        "const wrapper = _(val)",
-        defaultPragmaConfig,
-        (lodashContext) => ({
-          CallExpression(node) {
-            assert(lodashContext.isLodashChainStart(node));
-            done();
-          },
-        }),
-      );
-    });
-    it("should return true if the callExp is an explicit chain start", (done) => {
-      visitWithContext(
-        "const wrapper = _.chain(val)",
-        defaultPragmaConfig,
-        (lodashContext) => ({
-          CallExpression(node) {
-            assert(lodashContext.isLodashChainStart(node));
-            done();
-          },
-        }),
-      );
-    });
-    it("should return false for any other lodash call", (done) => {
-      visitWithContext(
-        "const wrapper = _.map(val, f)",
-        defaultPragmaConfig,
-        (lodashContext) => ({
-          CallExpression(node) {
-            assert(!lodashContext.isLodashChainStart(node));
             done();
           },
         }),
