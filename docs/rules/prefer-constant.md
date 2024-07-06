@@ -1,6 +1,6 @@
 # Prefer constant
 
-When you want a function that always returns the same value, it can be more concise to use `_.constant`.
+When you want a function that always returns the same value, it can be more concise to use `R.constant`.
 
 ## Rule Details
 
@@ -38,11 +38,11 @@ var getObj = function () {
 };
 ```
 
-The last example is not a warning because it is not equivalent to `_.constant({a:1})`, which always returns the same instance.
+The last example is not a warning because it is not equivalent to `R.constant({a:1})`, which always returns the same instance.
 Consider:
 
 ```js
-var getObj = _.constant({ a: 1 });
+var getObj = R.constant({ a: 1 });
 x = getObj();
 x.a = 2;
 console.log(getObj()); // ==> {a:2}
@@ -50,4 +50,4 @@ console.log(getObj()); // ==> {a:2}
 
 ## When Not To Use It
 
-If you do not want to enforce using `_.constant`, you should not use this rule.
+If you do not want to enforce using `R.constant`, you should not use this rule.

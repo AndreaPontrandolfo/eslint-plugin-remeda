@@ -1,6 +1,6 @@
-# Prefer _.isEmpty
+# Prefer R.isEmpty
 
-When checking if a collection is empty or no, it is more concise to use _.isEmpty instead.
+When checking if a collection is empty or no, it is more concise to use R.isEmpty instead.
 
 ## Rule Details
 
@@ -23,7 +23,6 @@ const myLengthEqualZero = myVar.myProp.mySecondProp.length > 0;
 The following patterns are not considered warnings:
 
 ```js
-
 const myLengthEqualZero = !isEmpty(myVar);
 
 const myLengthEqualZero = isEmpty(myVar);
@@ -35,6 +34,6 @@ const myLengthEqualZero = myVar.length;
 const myLengthEqualZero = myVar;
 ```
 
-
 ## When Not To Use It
-If you do not want to enforce using `_.isEmpty`, and prefer using native checks instead.
+
+If you do not want to enforce using `R.isEmpty`, and prefer using native checks instead.

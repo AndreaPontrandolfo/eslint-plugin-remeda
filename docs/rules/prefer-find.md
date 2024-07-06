@@ -1,6 +1,6 @@
 # Prefer find
 
-When using _.filter and accessing the first or last result, you should probably use `_.find` or `_.findLast`, respectively.
+When using R.filter and accessing the first or last result, you should probably use `R.find` or `R.findLast`, respectively.
 
 ## Rule Details
 
@@ -9,36 +9,31 @@ This rule takes no arguments.
 The following patterns are considered warnings:
 
 ```js
-const x = _.filter(a, f)[0];
+const x = R.filter(a, f)[0];
 ```
 
 ```js
-const x = _.head(_.filter(a, f));
+const x = R.head(R.filter(a, f));
 ```
 
 ```js
-const x = _(a)
-            .filter(f)
-            .head()
+const x = R.last(R.filter(a, f));
 ```
 
 ```js
-const x = _.last(_.filter(a, f));
+const x = R.head(R.reject(a, f));
 ```
 
-```js
-const x = _.head(_.reject(a, f));
-```
 The following patterns are not considered warnings:
 
 ```js
-const x = _.filter(a, f);
+const x = R.filter(a, f);
 ```
 
 ```js
-const x = _.filter(a, f)[3];
+const x = R.filter(a, f)[3];
 ```
 
 ```js
-const x = _.find(a, f);
+const x = R.find(a, f);
 ```

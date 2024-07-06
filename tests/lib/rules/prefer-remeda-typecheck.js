@@ -14,9 +14,9 @@ const ruleTesterUtil = require("../testUtil/ruleTesterUtil");
 const ruleTester = ruleTesterUtil.getRuleTester();
 const { withDefaultPragma } = require("../testUtil/optionsUtil");
 const errors = {
-  //   undefined: [{ message: "Prefer '_.isUndefined' over 'typeof' comparison." }],
-  typeof: [{ message: "Prefer '_.isNumber' over 'typeof' comparison." }],
-  instanceof: [{ message: "Prefer '_.isArray' over 'instanceof Array'." }],
+  //   undefined: [{ message: "Prefer 'R.isUndefined' over 'typeof' comparison." }],
+  typeof: [{ message: "Prefer 'R.isNumber' over 'typeof' comparison." }],
+  instanceof: [{ message: "Prefer 'R.isArray' over 'instanceof Array'." }],
 };
 ruleTester.run("prefer-remeda-typecheck", rule, {
   valid: [

@@ -19,7 +19,7 @@ The following patterns are not considered warnings:
 ```js
 var t = R.isNil(x);
 
-var t = _.isUndefined(x) || _.isNull(y);
+var t = R.isUndefined(x) || R.isNull(y);
 ```
 
 ## When Not To Use It

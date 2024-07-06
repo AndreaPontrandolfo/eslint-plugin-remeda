@@ -1,5 +1,5 @@
 /**
- * @fileoverview Rule to check if a call to _.forEach should be a call to _.filter
+ * @fileoverview Rule to check if a call to R.forEach should be a call to R.filter
  */
 "use strict";
 

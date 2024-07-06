@@ -60,7 +60,7 @@ module.exports = {
       }
     }
 
-    const REPORT_MESSAGE = "Prefer '_.{{method}}' over {{actual}}.";
+    const REPORT_MESSAGE = "Prefer 'R.{{method}}' over {{actual}}.";
 
     return {
       BinaryExpression(node) {

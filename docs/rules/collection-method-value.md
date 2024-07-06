@@ -9,27 +9,19 @@ This rule takes no arguments.
 The following patterns are considered warnings:
 
 ```js
-x = _.forEach(arr, g);
+x = R.forEach(arr, g);
 
-x = _.chain(arr).map(f).forEach(g).value();
-
-_.map(arr, f);
-
-_.chain(arr).find(p).map(f).value();
+R.map(arr, f);
 ```
 
 The following patterns are not considered warnings:
 
 ```js
-x = _.map(arr, f);
+x = R.map(arr, f);
 
-_.forEach(arr, g);
+R.forEach(arr, g);
 
-if (_.some(arr, h)) {
+if (R.some(arr, h)) {
   i();
 }
-
-x = _(arr).filter(p).map(q).value();
-
-_(arr).filter(p).forEach(g);
 ```

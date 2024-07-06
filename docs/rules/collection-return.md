@@ -10,20 +10,20 @@ The following patterns are considered warnings:
 
 ```js
 
-_.map(arr, function(x) { console.log(x); });
+R.map(arr, function(x) { console.log(x); });
 
-_.some(arr, function(x) { if (x.a) {f(x); });
+R.some(arr, function(x) { if (x.a) {f(x); });
 
-_.every(collection, x => { f(x); });
+R.every(collection, x => { f(x); });
 
 ```
 
 The following patterns are not considered warnings:
 
 ```js
-_.map((x) => x + 1);
+R.map((x) => x + 1);
 
-_.forEach(arr, function (a) {
+R.forEach(arr, function (a) {
   console.log(a);
 });
 ```
