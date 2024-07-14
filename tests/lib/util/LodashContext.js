@@ -1,28 +1,28 @@
 "use strict";
 const assign = require("lodash/assign");
 const traverser = require("eslint-traverser");
-const LodashContext = require("../../../src/util/LodashContext");
+const RemedaContext = require("../../../src/util/RemedaContext");
 const assert = require("assert");
 const defaultPragmaConfig = { settings: { remeda: { pragma: "R" } } };
 
-function visitWithContext(code, config, getVisitorsByLodashContext) {
+function visitWithContext(code, config, getVisitorsByRemedaContext) {
   traverser(code, config).runRuleCode((context) => {
-    const lodashContext = new LodashContext(context);
-    const importVisitors = lodashContext.getImportVisitors();
-    return assign(importVisitors, getVisitorsByLodashContext(lodashContext));
+    const remedaContext = new RemedaContext(context);
+    const importVisitors = remedaContext.getImportVisitors();
+    return assign(importVisitors, getVisitorsByRemedaContext(remedaContext));
   });
 }
 
-describe("LodashContext", () => {
+describe("RemedaContext", () => {
   describe("getImportVisitors", () => {
     describe("ImportDeclaration", () => {
       it("should accept a namespace import as remeda", (done) => {
         visitWithContext(
           'import * as remeda from "remeda"; remeda.map(arr, x => x)',
           { sourceType: "module" },
-          (lodashContext) => ({
+          (remedaContext) => ({
             CallExpression(node) {
-              assert(lodashContext.general[node.callee.object.name]);
+              assert(remedaContext.general[node.callee.object.name]);
               done();
             },
           }),
@@ -32,9 +32,9 @@ describe("LodashContext", () => {
         visitWithContext(
           'import remeda from "remeda"; remeda.map(arr, x => x)',
           { sourceType: "module" },
-          (lodashContext) => ({
+          (remedaContext) => ({
             CallExpression(node) {
-              assert(lodashContext.general[node.callee.object.name]);
+              assert(remedaContext.general[node.callee.object.name]);
               done();
             },
           }),
@@ -44,9 +44,9 @@ describe("LodashContext", () => {
         visitWithContext(
           'import { chain } from "remeda"; chain.map(arr, x => x)',
           { sourceType: "module" },
-          (lodashContext) => ({
+          (remedaContext) => ({
             CallExpression(node) {
-              assert(lodashContext.general[node.callee.object.name]);
+              assert(remedaContext.general[node.callee.object.name]);
               done();
             },
           }),
@@ -56,9 +56,9 @@ describe("LodashContext", () => {
         visitWithContext(
           'import {map} from "remeda"; map(arr, x => x)',
           { sourceType: "module" },
-          (lodashContext) => ({
+          (remedaContext) => ({
             CallExpression(node) {
-              assert(lodashContext.methods[node.callee.name] === "map");
+              assert(remedaContext.methods[node.callee.name] === "map");
               done();
             },
           }),
@@ -68,9 +68,9 @@ describe("LodashContext", () => {
         visitWithContext(
           'import map from "remeda/map"; map(arr, x => x)',
           { sourceType: "module" },
-          (lodashContext) => ({
+          (remedaContext) => ({
             CallExpression(node) {
-              assert(lodashContext.methods[node.callee.name] === "map");
+              assert(remedaContext.methods[node.callee.name] === "map");
               done();
             },
           }),
@@ -80,9 +80,9 @@ describe("LodashContext", () => {
         visitWithContext(
           'import map from "some-other-map"; map(arr, x => x)',
           { sourceType: "module" },
-          (lodashContext) => ({
+          (remedaContext) => ({
             CallExpression(node) {
-              assert(!lodashContext.methods[node.callee.name]);
+              assert(!remedaContext.methods[node.callee.name]);
               done();
             },
           }),
@@ -94,10 +94,10 @@ describe("LodashContext", () => {
         visitWithContext(
           'const R = require("remeda"); R.map(arr, x => x)',
           undefined,
-          (lodashContext) => ({
+          (remedaContext) => ({
             CallExpression(node) {
               if (node.callee.property && node.callee.property.name === "map") {
-                assert(lodashContext.general[node.callee.object.name]);
+                assert(remedaContext.general[node.callee.object.name]);
                 done();
               }
             },
@@ -108,10 +108,10 @@ describe("LodashContext", () => {
         visitWithContext(
           'const {map} = require("remeda"); map(arr, x => x)',
           undefined,
-          (lodashContext) => ({
+          (remedaContext) => ({
             CallExpression(node) {
               if (node.callee.name === "map") {
-                assert(lodashContext.methods[node.callee.name] === "map");
+                assert(remedaContext.methods[node.callee.name] === "map");
                 done();
               }
             },
@@ -122,10 +122,10 @@ describe("LodashContext", () => {
         visitWithContext(
           'const {chain} = require("remeda"); chain(arr).map(x => x)',
           undefined,
-          (lodashContext) => ({
+          (remedaContext) => ({
             CallExpression(node) {
               if (node.callee.name === "chain") {
-                assert(lodashContext.general[node.callee.name]);
+                assert(remedaContext.general[node.callee.name]);
                 done();
               }
             },
@@ -136,24 +136,10 @@ describe("LodashContext", () => {
         visitWithContext(
           'const map = require("remeda/map"); map(arr, x => x)',
           undefined,
-          (lodashContext) => ({
+          (remedaContext) => ({
             CallExpression(node) {
               if (node.callee.name === "map") {
-                assert(lodashContext.methods[node.callee.name] === "map");
-                done();
-              }
-            },
-          }),
-        );
-      });
-      it("should not accept a single method package require from lodash-es", (done) => {
-        visitWithContext(
-          'const map = require("lodash-es.map"); map(arr, x => x)',
-          undefined,
-          (lodashContext) => ({
-            CallExpression(node) {
-              if (node.callee.name === "map") {
-                assert(!lodashContext.methods[node.callee.name]);
+                assert(remedaContext.methods[node.callee.name] === "map");
                 done();
               }
             },
@@ -164,10 +150,10 @@ describe("LodashContext", () => {
         visitWithContext(
           'const map = require("some-other-map"); map(arr, x => x)',
           undefined,
-          (lodashContext) => ({
+          (remedaContext) => ({
             CallExpression(node) {
               if (node.callee.name === "map") {
-                assert(lodashContext.methods[node.callee.name] !== "map");
+                assert(remedaContext.methods[node.callee.name] !== "map");
                 done();
               }
             },
@@ -178,10 +164,10 @@ describe("LodashContext", () => {
         visitWithContext(
           'const [map] = require("remeda"); map(arr, x => x)',
           undefined,
-          (lodashContext) => ({
+          (remedaContext) => ({
             CallExpression(node) {
               if (node.callee.name === "map") {
-                assert(lodashContext.methods[node.callee.name] !== "map");
+                assert(remedaContext.methods[node.callee.name] !== "map");
                 done();
               }
             },
@@ -195,9 +181,9 @@ describe("LodashContext", () => {
       visitWithContext(
         'import * as Remeda from "remeda"; Remeda.map(arr, x => x)',
         { sourceType: "module" },
-        (lodashContext) => ({
+        (remedaContext) => ({
           CallExpression(node) {
-            assert(lodashContext.isImportedRemeda(node.callee.object));
+            assert(remedaContext.isImportedRemeda(node.callee.object));
             done();
           },
         }),
@@ -207,9 +193,9 @@ describe("LodashContext", () => {
       visitWithContext(
         'import * as R from "remeda"; R.map(arr, x => x)',
         { sourceType: "module" },
-        (lodashContext) => ({
+        (remedaContext) => ({
           CallExpression(node) {
-            assert(lodashContext.isImportedRemeda(node.callee.object));
+            assert(remedaContext.isImportedRemeda(node.callee.object));
             done();
           },
         }),
@@ -219,18 +205,18 @@ describe("LodashContext", () => {
       visitWithContext(
         'import * as remeda from "remeda"; remeda.map(arr, x => x)',
         { sourceType: "module" },
-        (lodashContext) => ({
+        (remedaContext) => ({
           CallExpression(node) {
-            assert(lodashContext.isImportedRemeda(node.callee.object));
+            assert(remedaContext.isImportedRemeda(node.callee.object));
             done();
           },
         }),
       );
     });
     it("should return false for other identifiers", (done) => {
-      visitWithContext("const one = 1", undefined, (lodashContext) => ({
+      visitWithContext("const one = 1", undefined, (remedaContext) => ({
         Identifier(node) {
-          assert(!lodashContext.isImportedRemeda(node));
+          assert(!remedaContext.isImportedRemeda(node));
           done();
         },
       }));
@@ -241,39 +227,39 @@ describe("LodashContext", () => {
       visitWithContext(
         'import map from "remeda/map"; map(arr, x => x)',
         { sourceType: "module" },
-        (lodashContext) => ({
+        (remedaContext) => ({
           CallExpression(node) {
-            assert(lodashContext.getImportedRemedaMethod(node) === "map");
+            assert(remedaContext.getImportedRemedaMethod(node) === "map");
             done();
           },
         }),
       );
     });
     it("should return undefined for other function calls", (done) => {
-      visitWithContext("const one = f()", undefined, (lodashContext) => ({
+      visitWithContext("const one = f()", undefined, (remedaContext) => ({
         CallExpression(node) {
-          assert(lodashContext.getImportedRemedaMethod(node) === undefined);
+          assert(remedaContext.getImportedRemedaMethod(node) === undefined);
           done();
         },
       }));
     });
     it("should return undefined for other node types", (done) => {
-      visitWithContext("const one = 1", undefined, (lodashContext) => ({
+      visitWithContext("const one = 1", undefined, (remedaContext) => ({
         Identifier(node) {
-          assert(lodashContext.getImportedRemedaMethod(node) === undefined);
+          assert(remedaContext.getImportedRemedaMethod(node) === undefined);
           done();
         },
       }));
     });
   });
-  describe("isLodashCall", () => {
+  describe("isRemedaCall", () => {
     it("should return true if pragma is defined and it is a call from it", (done) => {
       visitWithContext(
         'const ids = R.map(users, "id")',
         defaultPragmaConfig,
-        (lodashContext) => ({
+        (remedaContext) => ({
           CallExpression(node) {
-            assert(lodashContext.isLodashCall(node));
+            assert(remedaContext.isRemedaCall(node));
             done();
           },
         }),
@@ -283,9 +269,9 @@ describe("LodashContext", () => {
       visitWithContext(
         'import R from "remeda"; const ids = R.map(users, () => "id")',
         { sourceType: "module" },
-        (lodashContext) => ({
+        (remedaContext) => ({
           CallExpression(node) {
-            assert(lodashContext.isLodashCall(node));
+            assert(remedaContext.isRemedaCall(node));
             done();
           },
         }),

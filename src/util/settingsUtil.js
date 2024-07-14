@@ -3,9 +3,9 @@ const _ = require("lodash");
 
 module.exports = {
   /**
-   * Returns the lodash object settings, with default values if missing
+   * Returns the remeda object settings, with default values if missing
    * @param context
-   * @returns {LodashSettings}
+   * @returns {RemedaSettings}
    */
   getSettings(context) {
     return _.chain(context)

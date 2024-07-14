@@ -2,7 +2,7 @@
 
 const pkg = require("../../package.json");
 
-const REPO_URL = "https://github.com/wix/eslint-plugin-lodash";
+const REPO_URL = "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda";
 
 /**
  * Generates the URL to documentation for the given rule name. It uses the

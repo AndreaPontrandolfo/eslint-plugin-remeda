@@ -23,7 +23,7 @@ module.exports = {
       isChainBreaker,
       getRemedaMethodVisitors,
       isCallToMethod,
-    } = require("../util/lodashUtil");
+    } = require("../util/remedaUtil");
     const { getMethodName } = require("../util/astUtil");
     const {
       isCollectionMethod,

@@ -23,7 +23,7 @@ module.exports = {
   },
 
   create(context) {
-    const { getRemedaMethodVisitors } = require("../util/lodashUtil");
+    const { getRemedaMethodVisitors } = require("../util/remedaUtil");
     const {
       isIdentifierWithName,
       isMemberExpOf,

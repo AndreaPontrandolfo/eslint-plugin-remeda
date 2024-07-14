@@ -20,8 +20,8 @@ module.exports = {
   },
 
   create(context) {
-    const { getLodashContext } = require("../util/lodashUtil");
-    const lodashContext = getLodashContext(context);
+    const { getRemedaContext } = require("../util/remedaUtil");
+    const remedaContext = getRemedaContext(context);
 
     function getTextOfNode(node) {
       if (node) {
@@ -32,7 +32,7 @@ module.exports = {
       }
     }
 
-    const visitors = lodashContext.getImportVisitors();
+    const visitors = remedaContext.getImportVisitors();
     visitors.BinaryExpression = function (node) {
       if (node.operator === "===") {
         if (node.left) {
@@ -51,7 +51,7 @@ module.exports = {
                 fix(fixer) {
                   return fixer.replaceText(
                     node,
-                    `isEmpty(${getTextOfNode(subjectObject)})`
+                    `isEmpty(${getTextOfNode(subjectObject)})`,
                   );
                 },
               });
@@ -75,7 +75,7 @@ module.exports = {
                 fix(fixer) {
                   return fixer.replaceText(
                     node,
-                    `isEmpty(${getTextOfNode(subjectObject)})`
+                    `isEmpty(${getTextOfNode(subjectObject)})`,
                   );
                 },
               });
@@ -100,7 +100,7 @@ module.exports = {
                 fix(fixer) {
                   return fixer.replaceText(
                     node,
-                    `!isEmpty(${getTextOfNode(subjectObject)})`
+                    `!isEmpty(${getTextOfNode(subjectObject)})`,
                   );
                 },
               });
@@ -120,7 +120,7 @@ module.exports = {
                 fix(fixer) {
                   return fixer.replaceText(
                     node,
-                    `!isEmpty(${getTextOfNode(subjectObject)})`
+                    `!isEmpty(${getTextOfNode(subjectObject)})`,
                   );
                 },
               });

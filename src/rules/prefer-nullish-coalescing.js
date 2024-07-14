@@ -20,8 +20,8 @@ module.exports = {
   },
 
   create(context) {
-    const { getLodashContext } = require("../util/lodashUtil");
-    const lodashContext = getLodashContext(context);
+    const { getRemedaContext } = require("../util/remedaUtil");
+    const remedaContext = getRemedaContext(context);
 
     function getTextOfNode(node) {
       if (node) {
@@ -32,7 +32,7 @@ module.exports = {
       }
     }
 
-    const visitors = lodashContext.getImportVisitors();
+    const visitors = remedaContext.getImportVisitors();
     visitors.ConditionalExpression = function (node) {
       const statement = node.test;
       if (statement.operator === "!") {

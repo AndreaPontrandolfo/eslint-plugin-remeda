@@ -1,7 +1,3 @@
-# 🚧 UNDER CONSTRUCTION 🚧
-
-This library is still under construction. Don't use this in production yet. If you want to contribute, look at the open issues.
-
 # ESLint Plugin Remeda
 
 ESLint plugin for [Remeda](https://github.com/remeda/remeda).

@@ -1,12 +1,7 @@
 "use strict";
 
 const { getSettings } = require("./settingsUtil");
-const {
-  isMethodCall,
-  isCallFromObject,
-  getCaller,
-  getMethodName,
-} = require("./astUtil");
+const { isMethodCall, isCallFromObject, getCaller } = require("./astUtil");
 const {
   getNameFromCjsRequire,
   isFullRemedaImport,
@@ -26,7 +21,7 @@ module.exports = class {
   }
 
   /**
-   * Gets visitors to collect remeda declarations in the context
+   * Gets visitors to collect Remeda declarations in the context
    * @returns {Object} visitors for everywhere Remeda can be declared
    */
   getImportVisitors() {
@@ -103,11 +98,11 @@ module.exports = class {
   }
 
   /**
-   * Returns whether the node is a call from a Lodash object
+   * Returns whether the node is a call from a Remeda object
    * @param node
    * @returns {boolean|undefined}
    */
-  isLodashCall(node) {
+  isRemedaCall(node) {
     return (
       (this.pragma && isCallFromObject(node, this.pragma)) ||
       this.isImportedRemeda(getCaller(node))

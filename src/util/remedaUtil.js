@@ -2,7 +2,7 @@
 const _ = require("lodash");
 const methodDataUtil = require("./methodDataUtil");
 const astUtil = require("./astUtil");
-const LodashContext = require("./LodashContext");
+const RemedaContext = require("./RemedaContext");
 
 /**
  * Returns whether the node is a chain breaker method
@@ -46,59 +46,59 @@ function getIsTypeMethod(name) {
 }
 
 /**
- * Gets the context's Lodash settings and a function and returns a visitor that calls the function for every Lodash or chain call
- * @param {LodashContext} lodashContext
- * @param {LodashReporter} reporter
+ * Gets the context's Remeda settings and a function and returns a visitor that calls the function for every Remeda or chain call
+ * @param {RemedaContext} remedaContext
+ * @param {RemedaReporter} reporter
  * @returns {NodeTypeVisitor}
  */
-function getRemedaMethodCallExpVisitor(lodashContext, reporter) {
+function getRemedaMethodCallExpVisitor(remedaContext, reporter) {
   return function (node) {
     let iterateeIndex;
-    if (lodashContext.isLodashCall(node)) {
+    if (remedaContext.isRemedaCall(node)) {
       const method = astUtil.getMethodName(node);
       iterateeIndex = methodDataUtil.getIterateeIndex(method);
       reporter(node, node.arguments[iterateeIndex], {
         callType: "method",
         method,
-        lodashContext,
+        remedaContext,
       });
     } else {
-      const method = lodashContext.getImportedRemedaMethod(node);
+      const method = remedaContext.getImportedRemedaMethod(node);
       if (method) {
         iterateeIndex = methodDataUtil.getIterateeIndex(method);
         reporter(node, node.arguments[iterateeIndex], {
           method,
           callType: "single",
-          lodashContext,
+          remedaContext,
         });
       }
     }
   };
 }
 
-function isRemedaCallToMethod(node, method, lodashContext) {
-  return lodashContext.isLodashCall(node) && isCallToMethod(node, method);
+function isRemedaCallToMethod(node, method, remedaContext) {
+  return remedaContext.isRemedaCall(node) && isCallToMethod(node, method);
 }
 
-function isCallToRemedaMethod(node, method, lodashContext) {
+function isCallToRemedaMethod(node, method, remedaContext) {
   if (!node || node.type !== "CallExpression") {
     return false;
   }
   return (
-    isRemedaCallToMethod(node, method, lodashContext) ||
+    isRemedaCallToMethod(node, method, remedaContext) ||
     methodDataUtil.isAliasOfMethod(
       method,
-      lodashContext.getImportedRemedaMethod(node),
+      remedaContext.getImportedRemedaMethod(node),
     )
   );
 }
 
-function getRemedaMethodVisitors(context, lodashCallExpVisitor) {
-  const lodashContext = new LodashContext(context);
-  const visitors = lodashContext.getImportVisitors();
+function getRemedaMethodVisitors(context, remedaCallExpVisitor) {
+  const remedaContext = new RemedaContext(context);
+  const visitors = remedaContext.getImportVisitors();
   visitors.CallExpression = getRemedaMethodCallExpVisitor(
-    lodashContext,
-    lodashCallExpVisitor,
+    remedaContext,
+    remedaCallExpVisitor,
   );
   return visitors;
 }
@@ -106,10 +106,10 @@ function getRemedaMethodVisitors(context, lodashCallExpVisitor) {
 /**
  *
  * @param context
- * @returns {LodashContext} a LodashContext for a given context
+ * @returns {RemedaContext} a RemedaContext for a given context
  */
-function getLodashContext(context) {
-  return new LodashContext(context);
+function getRemedaContext(context) {
+  return new RemedaContext(context);
 }
 
 module.exports = {
@@ -117,7 +117,7 @@ module.exports = {
   isCallToMethod,
   getIsTypeMethod,
   getRemedaMethodCallExpVisitor,
-  isCallToLodashMethod: isCallToRemedaMethod,
+  isCallToRemedaMethod,
   getRemedaMethodVisitors,
-  getLodashContext,
+  getRemedaContext,
 };

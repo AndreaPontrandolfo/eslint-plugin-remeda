@@ -22,8 +22,8 @@ module.exports = {
     const {
       getRemedaMethodVisitors,
       isCallToMethod,
-      isCallToLodashMethod,
-    } = require("../util/lodashUtil");
+      isCallToRemedaMethod,
+    } = require("../util/remedaUtil");
     const { isAliasOfMethod } = require("../util/methodDataUtil");
 
     function isZeroIndexAccess(node) {
@@ -38,11 +38,11 @@ module.exports = {
 
     return getRemedaMethodVisitors(
       context,
-      (node, iteratee, { method, callType, lodashContext }) => {
+      (node, iteratee, { method, callType, remedaContext }) => {
         if (isAliasOfMethod("filter", method)) {
           if (
             isZeroIndexAccess(node.parent) ||
-            isCallToLodashMethod(node.parent, "first", lodashContext) ||
+            isCallToRemedaMethod(node.parent, "first", remedaContext) ||
             isChainedBeforeMethod(callType, node, "first")
           ) {
             context.report({
@@ -52,7 +52,7 @@ module.exports = {
             });
           }
           if (
-            isCallToLodashMethod(node.parent, "last", lodashContext) ||
+            isCallToRemedaMethod(node.parent, "last", remedaContext) ||
             isChainedBeforeMethod(callType, node, "last")
           ) {
             context.report({

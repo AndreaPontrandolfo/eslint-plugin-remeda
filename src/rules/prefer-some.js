@@ -20,7 +20,7 @@ module.exports = {
 
   create(context) {
     const { getExpressionComparedToInt } = require("../util/astUtil");
-    const { getRemedaMethodVisitors } = require("../util/lodashUtil");
+    const { getRemedaMethodVisitors } = require("../util/remedaUtil");
     const { isAliasOfMethod } = require("../util/methodDataUtil");
 
     const visitors = getRemedaMethodVisitors(

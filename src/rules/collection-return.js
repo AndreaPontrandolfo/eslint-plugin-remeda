@@ -21,18 +21,18 @@ module.exports = {
   create(context) {
     const {
       getRemedaMethodCallExpVisitor,
-      getLodashContext,
-    } = require("../util/lodashUtil");
+      getRemedaContext,
+    } = require("../util/remedaUtil");
     const { isCollectionMethod } = require("../util/methodDataUtil");
     const { isFunctionDefinitionWithBlock } = require("../util/astUtil");
     const assign = require("lodash/assign");
     const funcInfos = new Map();
     let currFuncInfo = {};
-    const lodashContext = getLodashContext(context);
+    const remedaContext = getRemedaContext(context);
     return assign(
       {
         "CallExpression:exit": getRemedaMethodCallExpVisitor(
-          lodashContext,
+          remedaContext,
           (node, iteratee, { method }) => {
             if (isCollectionMethod(method) && funcInfos.has(iteratee)) {
               const { hasReturn } = funcInfos.get(iteratee);
@@ -65,7 +65,7 @@ module.exports = {
           currFuncInfo = currFuncInfo.upper;
         },
       },
-      lodashContext.getImportVisitors(),
+      remedaContext.getImportVisitors(),
     );
   },
 };

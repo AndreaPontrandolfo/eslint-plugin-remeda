@@ -19,7 +19,7 @@ module.exports = {
   },
 
   create(context) {
-    const { getRemedaMethodVisitors } = require("../util/lodashUtil");
+    const { getRemedaMethodVisitors } = require("../util/remedaUtil");
     const { isAliasOfMethod } = require("../util/methodDataUtil");
     const get = require("lodash/get");
     return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {

@@ -20,7 +20,7 @@ module.exports = {
 
   create(context) {
     const some = require("lodash/some");
-    const { getIsTypeMethod } = require("../util/lodashUtil");
+    const { getIsTypeMethod } = require("../util/remedaUtil");
 
     const otherSides = {
       left: "right",
@@ -75,13 +75,13 @@ module.exports = {
             },
           });
         } else if (node.operator === "instanceof") {
-          const lodashEquivalent = getIsTypeMethod(node.right.name);
-          if (node.right.type === "Identifier" && lodashEquivalent) {
+          const remedaEquivalent = getIsTypeMethod(node.right.name);
+          if (node.right.type === "Identifier" && remedaEquivalent) {
             context.report({
               node,
               message: REPORT_MESSAGE,
               data: {
-                method: lodashEquivalent,
+                method: remedaEquivalent,
                 actual: `'instanceof ${node.right.name}'`,
               },
             });

@@ -22,8 +22,8 @@ module.exports = {
     const {
       getRemedaMethodVisitors,
       isCallToMethod,
-      isCallToLodashMethod,
-    } = require("../util/lodashUtil");
+      isCallToRemedaMethod,
+    } = require("../util/remedaUtil");
     const { getCaller } = require("../util/astUtil");
     const { isAliasOfMethod } = require("../util/methodDataUtil");
 
@@ -33,11 +33,11 @@ module.exports = {
 
     return getRemedaMethodVisitors(
       context,
-      (node, iteratee, { method, callType, lodashContext }) => {
+      (node, iteratee, { method, callType, remedaContext }) => {
         if (
           isAliasOfMethod("flatten", method) &&
           (isChainedMapFlatten(callType, node) ||
-            isCallToLodashMethod(node.arguments[0], "map", lodashContext))
+            isCallToRemedaMethod(node.arguments[0], "map", remedaContext))
         ) {
           context.report({
             node,
