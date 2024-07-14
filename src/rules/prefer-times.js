@@ -20,13 +20,9 @@ module.exports = {
 
   create(context) {
     const { getRemedaMethodVisitors } = require("../util/remedaUtil");
-    const { isAliasOfMethod } = require("../util/methodDataUtil");
     const get = require("lodash/get");
     return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {
-      if (
-        isAliasOfMethod("map", method) &&
-        get(iteratee, "params.length") === 0
-      ) {
+      if (method === "map" && get(iteratee, "params.length") === 0) {
         context.report({
           node,
           message: "Prefer R.times over R.map without using arguments",

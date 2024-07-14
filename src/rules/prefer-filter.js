@@ -34,7 +34,6 @@ module.exports = {
       hasOnlyOneStatement,
       getFirstParamName,
     } = require("../util/astUtil");
-    const { isAliasOfMethod } = require("../util/methodDataUtil");
     const DEFAULT_MAX_PROPERTY_PATH_LENGTH = 3;
     const maxLength =
       parseInt(context.options[0], 10) || DEFAULT_MAX_PROPERTY_PATH_LENGTH;
@@ -67,10 +66,7 @@ module.exports = {
     }
 
     return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {
-      if (
-        isAliasOfMethod("forEach", method) &&
-        onlyHasSimplifiableIf(iteratee)
-      ) {
+      if (method === "forEach" && onlyHasSimplifiableIf(iteratee)) {
         context.report({
           node,
           message:

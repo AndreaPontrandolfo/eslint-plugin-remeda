@@ -27,7 +27,6 @@ module.exports = {
     const { getMethodName } = require("../util/astUtil");
     const {
       isCollectionMethod,
-      isAliasOfMethod,
       getSideEffectIterationMethods,
     } = require("../util/methodDataUtil");
     const includes = require("lodash/includes");
@@ -39,10 +38,6 @@ module.exports = {
         (isBeforeChainBreaker ? node.parent.parent : node).parent.type !==
         "ExpressionStatement"
       );
-    }
-
-    function isPureRemedaCollectionMethod(method) {
-      return isCollectionMethod(method) && !isAliasOfMethod("remove", method);
     }
 
     function isSideEffectIterationMethod(method) {
@@ -58,10 +53,7 @@ module.exports = {
     return getRemedaMethodVisitors(
       context,
       (node, iteratee, { method, callType }) => {
-        if (
-          isPureRemedaCollectionMethod(method) &&
-          !parentUsesValue(node, callType)
-        ) {
+        if (isCollectionMethod(method) && !parentUsesValue(node, callType)) {
           context.report({
             node,
             message: `Use value returned from R.${method}`,

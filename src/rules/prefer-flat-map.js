@@ -25,7 +25,6 @@ module.exports = {
       isCallToRemedaMethod,
     } = require("../util/remedaUtil");
     const { getCaller } = require("../util/astUtil");
-    const { isAliasOfMethod } = require("../util/methodDataUtil");
 
     function isChainedMapFlatten(callType, node) {
       return callType === "chained" && isCallToMethod(getCaller(node), "map");
@@ -35,13 +34,13 @@ module.exports = {
       context,
       (node, iteratee, { method, callType, remedaContext }) => {
         if (
-          isAliasOfMethod("flatten", method) &&
+          method === "flat" &&
           (isChainedMapFlatten(callType, node) ||
             isCallToRemedaMethod(node.arguments[0], "map", remedaContext))
         ) {
           context.report({
             node,
-            message: "Prefer R.flatMap over consecutive map and flatten.",
+            message: "Prefer R.flatMap over consecutive R.map and R.flat.",
           });
         }
       },

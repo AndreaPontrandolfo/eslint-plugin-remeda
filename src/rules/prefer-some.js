@@ -21,13 +21,12 @@ module.exports = {
   create(context) {
     const { getExpressionComparedToInt } = require("../util/astUtil");
     const { getRemedaMethodVisitors } = require("../util/remedaUtil");
-    const { isAliasOfMethod } = require("../util/methodDataUtil");
 
     const visitors = getRemedaMethodVisitors(
       context,
       (node, iteratee, { method }) => {
         if (
-          isAliasOfMethod("findIndex", method) &&
+          method === "findIndex" &&
           node === getExpressionComparedToInt(node.parent, -1, true)
         ) {
           context.report({

@@ -24,7 +24,6 @@ module.exports = {
       isCallToMethod,
       isCallToRemedaMethod,
     } = require("../util/remedaUtil");
-    const { isAliasOfMethod } = require("../util/methodDataUtil");
 
     function isZeroIndexAccess(node) {
       return node.type === "MemberExpression" && node.property.value === 0;
@@ -39,7 +38,7 @@ module.exports = {
     return getRemedaMethodVisitors(
       context,
       (node, iteratee, { method, callType, remedaContext }) => {
-        if (isAliasOfMethod("filter", method)) {
+        if (method === "filter") {
           if (
             isZeroIndexAccess(node.parent) ||
             isCallToRemedaMethod(node.parent, "first", remedaContext) ||

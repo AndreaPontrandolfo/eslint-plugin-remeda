@@ -28,7 +28,7 @@ Enable all of the rules that you would like to use. All rules are off by default
 - [collection-return](docs/rules/collection-return.md): Always return a value in iteratees of Remeda collection methods that aren't `forEach`.
 - [prefer-filter](docs/rules/prefer-filter.md): Prefer `R.filter` over `R.forEach` with an `if` statement inside.
 - [prefer-find](docs/rules/prefer-find.md): Prefer `R.find` over `R.filter` followed by selecting the first result.
-- [prefer-flat-map](docs/rules/prefer-flat-map.md): Prefer `R.flatMap` over consecutive `map` and `flatten`.
+- [prefer-flat-map](docs/rules/prefer-flat-map.md): Prefer `R.flatMap` over consecutive `R.map` and `R.flat`.
 - [prefer-map](docs/rules/prefer-map.md): Prefer `R.map` over `R.forEach` with a `push` inside.
 - [prefer-nullish-coalescing](docs/rules/prefer-nullish-coalescing.md): Prefer `??` when doing a comparison with a non-nullish value as test.
 - [prefer-constant](docs/rules/prefer-constant.md): Prefer `R.constant` over functions returning literals.

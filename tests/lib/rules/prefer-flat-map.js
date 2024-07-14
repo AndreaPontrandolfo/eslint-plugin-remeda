@@ -14,7 +14,7 @@ const ruleTesterUtil = require("../testUtil/ruleTesterUtil");
 const ruleTester = ruleTesterUtil.getRuleTester();
 const { fromMessage, withDefaultPragma } = require("../testUtil/optionsUtil");
 const toErrorObject = fromMessage(
-  "Prefer R.flatMap over consecutive map and flatten.",
+  "Prefer R.flatMap over consecutive R.map and R.flat.",
 );
 ruleTester.run("prefer-flat-map", rule, {
   valid: ["t = R.map(a, f);", "t = R.flat(a);", "t = R.flatMap(a, f);"].map(

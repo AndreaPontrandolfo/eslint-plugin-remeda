@@ -27,7 +27,6 @@ module.exports = {
       isFunctionDefinitionWithBlock,
       collectParameterValues,
     } = require("../util/astUtil");
-    const { isAliasOfMethod } = require("../util/methodDataUtil");
     const get = require("lodash/get");
     const includes = require("lodash/includes");
 
@@ -50,7 +49,7 @@ module.exports = {
     }
 
     return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {
-      if (isAliasOfMethod("forEach", method) && onlyHasPush(iteratee)) {
+      if (method === "forEach" && onlyHasPush(iteratee)) {
         context.report({
           node,
           message:
