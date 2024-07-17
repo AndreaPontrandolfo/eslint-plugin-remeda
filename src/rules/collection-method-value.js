@@ -20,7 +20,6 @@ module.exports = {
 
   create(context) {
     const {
-      isChainBreaker,
       getRemedaMethodVisitors,
       isCallToMethod,
     } = require("../util/remedaUtil");
@@ -31,13 +30,8 @@ module.exports = {
     } = require("../util/methodDataUtil");
     const includes = require("lodash/includes");
 
-    function parentUsesValue(node, callType) {
-      const isBeforeChainBreaker =
-        callType === "chained" && isChainBreaker(node.parent.parent);
-      return (
-        (isBeforeChainBreaker ? node.parent.parent : node).parent.type !==
-        "ExpressionStatement"
-      );
+    function parentUsesValue(node) {
+      return node.parent.type !== "ExpressionStatement";
     }
 
     function isSideEffectIterationMethod(method) {

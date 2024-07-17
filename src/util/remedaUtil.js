@@ -5,22 +5,13 @@ const astUtil = require("./astUtil");
 const RemedaContext = require("./RemedaContext");
 
 /**
- * Returns whether the node is a chain breaker method
- * @param {Object} node
- * @returns {boolean}
- */
-function isChainBreaker(node) {
-  return methodDataUtil.isAliasOfMethod("value", astUtil.getMethodName(node));
-}
-
-/**
- * Returns whether the node is a call to the specified method or one of its aliases.
+ * Returns whether the node is a call to the specified method.
  * @param {Object} node
  * @param {string} method
  * @returns {boolean}
  */
 function isCallToMethod(node, method) {
-  return methodDataUtil.isAliasOfMethod(method, astUtil.getMethodName(node));
+  return method === astUtil.getMethodName(node);
 }
 
 /**
@@ -86,10 +77,7 @@ function isCallToRemedaMethod(node, method, remedaContext) {
   }
   return (
     isRemedaCallToMethod(node, method, remedaContext) ||
-    methodDataUtil.isAliasOfMethod(
-      method,
-      remedaContext.getImportedRemedaMethod(node),
-    )
+    method === remedaContext.getImportedRemedaMethod(node)
   );
 }
 
@@ -113,7 +101,6 @@ function getRemedaContext(context) {
 }
 
 module.exports = {
-  isChainBreaker,
   isCallToMethod,
   getIsTypeMethod,
   getRemedaMethodCallExpVisitor,

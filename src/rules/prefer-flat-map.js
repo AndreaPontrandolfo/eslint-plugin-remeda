@@ -26,16 +26,16 @@ module.exports = {
     } = require("../util/remedaUtil");
     const { getCaller } = require("../util/astUtil");
 
-    function isChainedMapFlatten(callType, node) {
-      return callType === "chained" && isCallToMethod(getCaller(node), "map");
+    function isChainedMapFlatten(node) {
+      return isCallToMethod(getCaller(node), "map");
     }
 
     return getRemedaMethodVisitors(
       context,
-      (node, iteratee, { method, callType, remedaContext }) => {
+      (node, iteratee, { method, remedaContext }) => {
         if (
           method === "flat" &&
-          (isChainedMapFlatten(callType, node) ||
+          (isChainedMapFlatten(node) ||
             isCallToRemedaMethod(node.arguments[0], "map", remedaContext))
         ) {
           context.report({
