@@ -1,22 +1,17 @@
-"use strict";
+import * as rule from "../../../src/rules/prefer-some";
+import optionsUtil from "../testUtil/optionsUtil";
+import { run } from "eslint-vitest-rule-tester";
 
-// ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-
-const rule = require("../../../src/rules/prefer-some");
-const ruleTesterUtil = require("../testUtil/ruleTesterUtil");
-
-// ------------------------------------------------------------------------------
-// Tests
-// ------------------------------------------------------------------------------
-
-const ruleTester = ruleTesterUtil.getRuleTester();
-const { fromMessage, withDefaultPragma } = require("../testUtil/optionsUtil");
+const { fromMessage, withDefaultPragma } = optionsUtil;
 const toErrorObject = fromMessage(
   "Prefer R.some over findIndex comparison to -1",
 );
-ruleTester.run("prefer-some", rule, {
+run({
+  name: "prefer-some",
+  rule,
+  parserOptions: {
+    sourceType: "module",
+  },
   valid: [
     "if(R.some(a, b)) {}",
     "x = R.findIndex(a, b) <= 0",
@@ -37,9 +32,6 @@ ruleTester.run("prefer-some", rule, {
     .concat([
       {
         code: 'import io from "remeda/findIndex"; x = io(a) !== -1',
-        parserOptions: {
-          sourceType: "module",
-        },
       },
     ])
     .map(toErrorObject),

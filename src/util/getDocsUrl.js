@@ -1,5 +1,3 @@
-"use strict";
-
 import { version } from "../../package.json";
 
 const REPO_URL = "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda";
@@ -12,6 +10,6 @@ const REPO_URL = "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda";
  * @param {string} ruleName - Name of the eslint rule
  * @returns {string} URL to the documentation for the given rule
  */
-export default function getDocsUrl(ruleName) {
+export function getDocsUrl(ruleName) {
   return `${REPO_URL}/blob/v${version}/docs/rules/${ruleName}.md`;
 }

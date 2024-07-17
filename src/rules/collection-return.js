@@ -1,10 +1,11 @@
-import getDocsUrl from "../util/getDocsUrl";
-import remedaUtil from "../util/remedaUtil";
+import { getDocsUrl } from "../util/getDocsUrl";
+import {
+  getRemedaMethodCallExpVisitor,
+  getRemedaContext,
+} from "../util/remedaUtil";
 import { isCollectionMethod } from "../util/methodDataUtil";
 import astUtil from "../util/astUtil";
 import assign from "lodash/assign";
-
-const { getRemedaMethodCallExpVisitor, getRemedaContext } = remedaUtil;
 
 /**
  * @fileoverview Rule to check that iteratees for all collection functions except forEach return a value;
@@ -61,7 +62,4 @@ function create(context) {
   );
 }
 
-export default {
-  create,
-  meta,
-};
+export { create, meta };

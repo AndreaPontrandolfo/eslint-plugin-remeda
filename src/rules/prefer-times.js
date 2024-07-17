@@ -3,10 +3,8 @@
  */
 
 import { get } from "lodash";
-import getDocsUrl from "../util/getDocsUrl";
-import remedaUtil from "../util/remedaUtil";
-
-const { getRemedaMethodVisitors } = remedaUtil;
+import { getDocsUrl } from "../util/getDocsUrl";
+import { getRemedaMethodVisitors } from "../util/remedaUtil";
 
 const meta = {
   type: "problem",
@@ -26,7 +24,4 @@ function create(context) {
   });
 }
 
-export default {
-  create,
-  meta,
-};
+export { create, meta };

@@ -100,7 +100,7 @@ function getRemedaContext(context) {
   return new RemedaContext(context);
 }
 
-export default {
+export {
   isCallToMethod,
   getIsTypeMethod,
   getRemedaMethodCallExpVisitor,
