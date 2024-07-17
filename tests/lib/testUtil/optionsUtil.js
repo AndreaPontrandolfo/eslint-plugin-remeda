@@ -1,5 +1,4 @@
-"use strict";
-const _ = require("lodash");
+import { isString, assign, defaultsDeep } from "lodash";
 
 function fromMessage(message) {
   return fromOptions({ errors: [{ message }] });
@@ -11,13 +10,15 @@ function fromMessageId(messageId) {
 
 function fromOptions(options) {
   return function (testCase) {
-    return _.isString(testCase)
-      ? _.assign({ code: testCase }, options)
-      : _.defaultsDeep(testCase, options);
+    return isString(testCase)
+      ? assign({ code: testCase }, options)
+      : defaultsDeep(testCase, options);
   };
 }
 
-module.exports = {
+export { fromMessage, fromMessageId, fromOptions };
+
+export default {
   fromMessage,
   fromMessageId,
   fromOptions,

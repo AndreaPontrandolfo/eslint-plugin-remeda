@@ -1,19 +1,14 @@
-"use strict";
+import rule from "../../../src/rules/collection-return";
+import optionsUtil from "../testUtil/optionsUtil";
+import { run } from "eslint-vitest-rule-tester";
 
-// ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-
-const rule = require("../../../src/rules/collection-return");
-const ruleTesterUtil = require("../testUtil/ruleTesterUtil");
-
-// ------------------------------------------------------------------------------
-// Tests
-// ------------------------------------------------------------------------------
-
-const ruleTester = ruleTesterUtil.getRuleTester();
-const { withDefaultPragma } = require("../testUtil/optionsUtil");
-ruleTester.run("collection-return", rule, {
+run({
+  name: "collection-return",
+  rule,
+  parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: "module",
+  },
   valid: [
     "R.forEach(arr, function(a) { console.log(a)})",
     "R.map(arr, function(a) { return a*a})",
@@ -23,11 +18,15 @@ ruleTester.run("collection-return", rule, {
     "R.map(a, x => f(x).then(() => {g()}))",
     { code: "R.map(x, async t => {})", parserOptions: { ecmaVersion: 8 } },
     { code: "R.map(x, function*(t) {})", parserOptions: { ecmaVersion: 6 } },
-  ].map(withDefaultPragma),
+  ].map(optionsUtil.withDefaultPragma),
   invalid: [
     {
       code: "R.map(arr, function(a) {console.log(a)})",
-      errors: [{ message: "Do not use R.map without returning a value" }],
+      errors: [
+        {
+          message: "Do not use R.map without returning a value",
+        },
+      ],
     },
     {
       code: "R.every(arr, function(a){f(a)})",
@@ -40,20 +39,22 @@ ruleTester.run("collection-return", rule, {
     {
       code: "R.reduce(arr, a => {f(a)})",
       errors: [{ message: "Do not use R.reduce without returning a value" }],
+      settings: { remeda: { pragma: "R" } },
       parserOptions: { ecmaVersion: 6 },
     },
     {
       code: "R.map(arr, function x(a) {arr2.push(a)})",
       errors: [{ message: "Do not use R.map without returning a value" }],
     },
-  ].map(withDefaultPragma),
-  // .concat([
-  //   {
-  //     code: 'import m from "remeda/map"; m(arr, x => {})',
-  //     errors: [{ message: "Do not use _.map without returning a value" }],
-  //     parserOptions: {
-  //       sourceType: "module",
-  //     },
-  //   },
-  // ]),
+  ].map(optionsUtil.withDefaultPragma),
 });
+
+// .concat([
+//   {
+//     code: 'import m from "remeda/map"; m(arr, x => {})',
+//     errors: [{ message: "Do not use _.map without returning a value" }],
+//     parserOptions: {
+//       sourceType: "module",
+//     },
+//   },
+// ]),

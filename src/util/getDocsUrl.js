@@ -1,6 +1,6 @@
 "use strict";
 
-const pkg = require("../../package.json");
+import { version } from "../../package.json";
 
 const REPO_URL = "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda";
 
@@ -12,6 +12,6 @@ const REPO_URL = "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda";
  * @param {string} ruleName - Name of the eslint rule
  * @returns {string} URL to the documentation for the given rule
  */
-module.exports = function getDocsUrl(ruleName) {
-  return `${REPO_URL}/blob/v${pkg.version}/docs/rules/${ruleName}.md`;
-};
+export default function getDocsUrl(ruleName) {
+  return `${REPO_URL}/blob/v${version}/docs/rules/${ruleName}.md`;
+}
