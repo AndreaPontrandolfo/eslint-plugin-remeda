@@ -1,42 +1,37 @@
 /**
  * @fileoverview Rule to check if a findIndex comparison should be a call to R.some
  */
-"use strict";
 
-//------------------------------------------------------------------------------
-// Rule Definition
-//------------------------------------------------------------------------------
+import { getDocsUrl } from "../util/getDocsUrl";
+import astUtil from "../util/astUtil";
+import { getRemedaMethodVisitors } from "../util/remedaUtil";
 
-const getDocsUrl = require("../util/getDocsUrl");
+const { getExpressionComparedToInt } = astUtil;
 
-module.exports = {
-  meta: {
-    type: "problem",
-    docs: {
-      url: getDocsUrl("prefer-some"),
-    },
-    schema: [],
+const meta = {
+  type: "problem",
+  docs: {
+    url: getDocsUrl("prefer-some"),
   },
-
-  create(context) {
-    const { getExpressionComparedToInt } = require("../util/astUtil");
-    const { getRemedaMethodVisitors } = require("../util/remedaUtil");
-
-    const visitors = getRemedaMethodVisitors(
-      context,
-      (node, iteratee, { method }) => {
-        if (
-          method === "findIndex" &&
-          node === getExpressionComparedToInt(node.parent, -1, true)
-        ) {
-          context.report({
-            node,
-            message: "Prefer R.some over findIndex comparison to -1",
-          });
-        }
-      },
-    );
-
-    return visitors;
-  },
+  schema: [],
 };
+function create(context) {
+  const visitors = getRemedaMethodVisitors(
+    context,
+    (node, iteratee, { method }) => {
+      if (
+        method === "findIndex" &&
+        node === getExpressionComparedToInt(node.parent, -1, true)
+      ) {
+        context.report({
+          node,
+          message: "Prefer R.some over findIndex comparison to -1",
+        });
+      }
+    },
+  );
+
+  return visitors;
+}
+
+export { create, meta };

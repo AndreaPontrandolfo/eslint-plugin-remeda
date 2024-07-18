@@ -1,49 +1,44 @@
 /**
  * @fileoverview Rule to check if a call to map and flatten should be a call to R.flatMap
  */
-"use strict";
 
-//------------------------------------------------------------------------------
-// Rule Definition
-//------------------------------------------------------------------------------
+import { getDocsUrl } from "../util/getDocsUrl";
+import {
+  getRemedaMethodVisitors,
+  isCallToMethod,
+  isCallToRemedaMethod,
+} from "../util/remedaUtil";
+import astUtil from "../util/astUtil";
 
-const getDocsUrl = require("../util/getDocsUrl");
+const { getCaller } = astUtil;
 
-module.exports = {
-  meta: {
-    type: "problem",
-    schema: [],
-    docs: {
-      url: getDocsUrl("prefer-flat-map"),
-    },
-  },
-
-  create(context) {
-    const {
-      getRemedaMethodVisitors,
-      isCallToMethod,
-      isCallToRemedaMethod,
-    } = require("../util/remedaUtil");
-    const { getCaller } = require("../util/astUtil");
-
-    function isChainedMapFlatten(node) {
-      return isCallToMethod(getCaller(node), "map");
-    }
-
-    return getRemedaMethodVisitors(
-      context,
-      (node, iteratee, { method, remedaContext }) => {
-        if (
-          method === "flat" &&
-          (isChainedMapFlatten(node) ||
-            isCallToRemedaMethod(node.arguments[0], "map", remedaContext))
-        ) {
-          context.report({
-            node,
-            message: "Prefer R.flatMap over consecutive R.map and R.flat.",
-          });
-        }
-      },
-    );
+const meta = {
+  type: "problem",
+  schema: [],
+  docs: {
+    url: getDocsUrl("prefer-flat-map"),
   },
 };
+function create(context) {
+  function isChainedMapFlatten(node) {
+    return isCallToMethod(getCaller(node), "map");
+  }
+
+  return getRemedaMethodVisitors(
+    context,
+    (node, iteratee, { method, remedaContext }) => {
+      if (
+        method === "flat" &&
+        (isChainedMapFlatten(node) ||
+          isCallToRemedaMethod(node.arguments[0], "map", remedaContext))
+      ) {
+        context.report({
+          node,
+          message: "Prefer R.flatMap over consecutive R.map and R.flat.",
+        });
+      }
+    },
+  );
+}
+
+export { create, meta };

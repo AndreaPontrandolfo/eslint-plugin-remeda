@@ -1,8 +1,7 @@
 "use strict";
 
-const _ = require("lodash");
-
-const getMethodData = _.memoize(() => require(`./methodData`));
+import { includes, get, isObject, has } from "lodash";
+import * as methodDataCatalog from "./methodData";
 
 /**
  * Gets whether the method is a collection method
@@ -12,7 +11,7 @@ const getMethodData = _.memoize(() => require(`./methodData`));
 function isCollectionMethod(method) {
   return (
     methodSupportsShorthand(method) ||
-    _.includes(["reduce", "reduceRight"], method)
+    includes(["reduce", "reduceRight"], method)
   );
 }
 
@@ -22,8 +21,8 @@ function isCollectionMethod(method) {
  * @returns {boolean}
  */
 function methodSupportsShorthand(method, shorthandType) {
-  const methodShorthandData = _.get(getMethodData(), [method, "shorthand"]);
-  return _.isObject(methodShorthandData)
+  const methodShorthandData = get(methodDataCatalog, [method, "shorthand"]);
+  return isObject(methodShorthandData)
     ? Boolean(shorthandType && methodShorthandData[shorthandType])
     : Boolean(methodShorthandData);
 }
@@ -34,8 +33,8 @@ function methodSupportsShorthand(method, shorthandType) {
  * @returns {number}
  */
 function getIterateeIndex(method) {
-  const methodData = getMethodData()[method];
-  if (_.has(methodData, "iterateeIndex")) {
+  const methodData = methodDataCatalog[method];
+  if (has(methodData, "iterateeIndex")) {
     return methodData.iterateeIndex;
   }
   if (methodData && methodData.iteratee) {
@@ -61,8 +60,4 @@ function getSideEffectIterationMethods() {
   return sideEffectIterationMethods;
 }
 
-module.exports = {
-  isCollectionMethod,
-  getIterateeIndex,
-  getSideEffectIterationMethods,
-};
+export { isCollectionMethod, getSideEffectIterationMethods, getIterateeIndex };

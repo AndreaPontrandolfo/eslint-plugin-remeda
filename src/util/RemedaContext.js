@@ -1,15 +1,16 @@
 "use strict";
 
-const { getSettings } = require("./settingsUtil");
-const { isMethodCall, isCallFromObject, getCaller } = require("./astUtil");
-const {
+import { getSettings } from "./settingsUtil";
+import astUtil from "./astUtil";
+const { isMethodCall, isCallFromObject, getCaller } = astUtil;
+import {
   getNameFromCjsRequire,
   isFullRemedaImport,
   getMethodImportFromName,
-} = require("./importUtil");
+} from "./importUtil";
 
 /* Class representing remeda data for a given context */
-module.exports = class {
+export default class {
   /**
    * Create a Remeda context wrapper from a file's RuleContext
    * @param {RuleContext} context
@@ -120,4 +121,4 @@ module.exports = class {
     }
     return this._pragma;
   }
-};
+}
