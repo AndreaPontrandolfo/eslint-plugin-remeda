@@ -1,19 +1,10 @@
-"use strict";
+import { run } from "eslint-vitest-rule-tester";
+import * as rule from "../../../src/rules/collection-method-value";
+import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-// ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-
-const rule = require("../../../src/rules/collection-method-value");
-const ruleTesterUtil = require("../testUtil/ruleTesterUtil");
-
-// ------------------------------------------------------------------------------
-// Tests
-// ------------------------------------------------------------------------------
-
-const ruleTester = ruleTesterUtil.getRuleTester();
-const { fromMessage, withDefaultPragma } = require("../testUtil/optionsUtil");
-ruleTester.run("collection-method-value", rule, {
+run({
+  name: "collection-method-value",
+  rule,
   valid: [
     "x = R.map(arr, f)",
     "R.forEach(arr, g)",

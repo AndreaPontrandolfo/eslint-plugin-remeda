@@ -1,5 +1,5 @@
 import * as rule from "../../../src/rules/collection-return";
-import optionsUtil from "../testUtil/optionsUtil";
+import { withDefaultPragma } from "../testUtil/optionsUtil";
 import { run } from "eslint-vitest-rule-tester";
 
 run({
@@ -18,7 +18,7 @@ run({
     "R.map(a, x => f(x).then(() => {g()}))",
     { code: "R.map(x, async t => {})", parserOptions: { ecmaVersion: 8 } },
     { code: "R.map(x, function*(t) {})", parserOptions: { ecmaVersion: 6 } },
-  ].map(optionsUtil.withDefaultPragma),
+  ].map(withDefaultPragma),
   invalid: [
     {
       code: "R.map(arr, function(a) {console.log(a)})",
@@ -46,7 +46,7 @@ run({
       code: "R.map(arr, function x(a) {arr2.push(a)})",
       errors: [{ message: "Do not use R.map without returning a value" }],
     },
-  ].map(optionsUtil.withDefaultPragma),
+  ].map(withDefaultPragma),
 });
 
 // .concat([

@@ -1,23 +1,14 @@
-"use strict";
+import { run } from "eslint-vitest-rule-tester";
+import * as rule from "../../../src/rules/prefer-do-nothing";
+import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-// ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-
-const rule = require("../../../src/rules/prefer-do-nothing");
-const ruleTesterUtil = require("../testUtil/ruleTesterUtil");
-
-// ------------------------------------------------------------------------------
-// Tests
-// ------------------------------------------------------------------------------
-
-const ruleTester = ruleTesterUtil.getRuleTester();
-const { fromMessage, withDefaultPragma } = require("../testUtil/optionsUtil");
 const toErrorObject = fromMessage(
   "Prefer R.doNothing() or R.constant(undefined) over an empty function",
 );
 
-ruleTester.run("prefer-do-nothing", rule, {
+run({
+  name: "prefer-do-nothing",
+  rule,
   valid: [
     "x = function() { return 2}",
     "x = function(x) {return x}",

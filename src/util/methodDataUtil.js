@@ -60,9 +60,4 @@ function getSideEffectIterationMethods() {
   return sideEffectIterationMethods;
 }
 
-export { isCollectionMethod };
-
-export default {
-  getIterateeIndex,
-  getSideEffectIterationMethods,
-};
+export { isCollectionMethod, getSideEffectIterationMethods, getIterateeIndex };

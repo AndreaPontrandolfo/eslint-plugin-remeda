@@ -1,22 +1,14 @@
-"use strict";
+import * as rule from "../../../src/rules/prefer-constant";
+import { withDefaultPragma, fromMessage } from "../testUtil/optionsUtil";
+import { run } from "eslint-vitest-rule-tester";
 
-// ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-
-const rule = require("../../../src/rules/prefer-constant");
-const ruleTesterUtil = require("../testUtil/ruleTesterUtil");
-
-// ------------------------------------------------------------------------------
-// Tests
-// ------------------------------------------------------------------------------
-
-const ruleTester = ruleTesterUtil.getRuleTester();
-const { withDefaultPragma, fromMessage } = require("../testUtil/optionsUtil");
 const toErrorObject = fromMessage(
   "Prefer R.constant over a function returning a literal",
 );
-ruleTester.run("prefer-constant", rule, {
+
+run({
+  name: "prefer-constant",
+  rule,
   valid: [
     "var x = function() { return f();}",
     "var x = function() {return [y]}",

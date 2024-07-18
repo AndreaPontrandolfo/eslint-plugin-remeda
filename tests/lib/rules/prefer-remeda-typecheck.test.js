@@ -1,24 +1,16 @@
-"use strict";
+import { run } from "eslint-vitest-rule-tester";
+import * as rule from "../../../src/rules/prefer-remeda-typecheck";
+import { withDefaultPragma } from "../testUtil/optionsUtil";
 
-// ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-
-const rule = require("../../../src/rules/prefer-remeda-typecheck");
-const ruleTesterUtil = require("../testUtil/ruleTesterUtil");
-
-// ------------------------------------------------------------------------------
-// Tests
-// ------------------------------------------------------------------------------
-
-const ruleTester = ruleTesterUtil.getRuleTester();
-const { withDefaultPragma } = require("../testUtil/optionsUtil");
 const errors = {
   //   undefined: [{ message: "Prefer 'R.isUndefined' over 'typeof' comparison." }],
   typeof: [{ message: "Prefer 'R.isNumber' over 'typeof' comparison." }],
   instanceof: [{ message: "Prefer 'R.isArray' over 'instanceof Array'." }],
 };
-ruleTester.run("prefer-remeda-typecheck", rule, {
+
+run({
+  name: "prefer-remeda-typecheck",
+  rule,
   valid: [
     "var x = a instanceof B",
     "var x = a > b ? a : b",

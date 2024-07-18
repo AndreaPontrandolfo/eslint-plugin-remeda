@@ -1,22 +1,14 @@
-"use strict";
+import { run } from "eslint-vitest-rule-tester";
+import * as rule from "../../../src/rules/prefer-map";
+import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-// ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-
-const rule = require("../../../src/rules/prefer-map");
-const ruleTesterUtil = require("../testUtil/ruleTesterUtil");
-
-// ------------------------------------------------------------------------------
-// Tests
-// ------------------------------------------------------------------------------
-
-const ruleTester = ruleTesterUtil.getRuleTester();
-const { fromMessage, withDefaultPragma } = require("../testUtil/optionsUtil");
 const toErrorObject = fromMessage(
   "Prefer R.map over a R.forEach with a push to an array inside",
 );
-ruleTester.run("prefer-map", rule, {
+
+run({
+  name: "prefer-map",
+  rule,
   valid: [
     "var x = R.map(arr, function(x) {return x + 7})",
     "R.forEach(arr, function(x) { if (x.a) {a.push(x)}})",

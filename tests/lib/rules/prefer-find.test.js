@@ -1,18 +1,7 @@
-"use strict";
+import { run } from "eslint-vitest-rule-tester";
+import * as rule from "../../../src/rules/prefer-find";
+import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-// ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-
-const rule = require("../../../src/rules/prefer-find");
-const ruleTesterUtil = require("../testUtil/ruleTesterUtil");
-
-// ------------------------------------------------------------------------------
-// Tests
-// ------------------------------------------------------------------------------
-
-const ruleTester = ruleTesterUtil.getRuleTester();
-const { fromMessage, withDefaultPragma } = require("../testUtil/optionsUtil");
 const toFindError = fromMessage(
   "Prefer using `R.find` over selecting the first item of a filtered result",
 );
@@ -20,7 +9,9 @@ const toFindLastError = fromMessage(
   "Prefer using `R.findLast` over selecting the last item of a filtered result",
 );
 
-ruleTester.run("prefer-find", rule, {
+run({
+  name: "prefer-find",
+  rule,
   valid: [
     "t = R.filter(arr, f)",
     "t = R.find(arr, f)",

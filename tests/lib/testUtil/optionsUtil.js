@@ -16,11 +16,8 @@ function fromOptions(options) {
   };
 }
 
-export { fromMessage, fromMessageId, fromOptions };
+const withDefaultPragma = fromOptions({
+  settings: { remeda: { pragma: "R" } },
+});
 
-export default {
-  fromMessage,
-  fromMessageId,
-  fromOptions,
-  withDefaultPragma: fromOptions({ settings: { remeda: { pragma: "R" } } }),
-};
+export { fromMessage, fromMessageId, fromOptions, withDefaultPragma };

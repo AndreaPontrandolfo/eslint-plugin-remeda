@@ -1,22 +1,14 @@
-"use strict";
+import { run } from "eslint-vitest-rule-tester";
+import * as rule from "../../../src/rules/prefer-flat-map";
+import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-// ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-
-const rule = require("../../../src/rules/prefer-flat-map");
-const ruleTesterUtil = require("../testUtil/ruleTesterUtil");
-
-// ------------------------------------------------------------------------------
-// Tests
-// ------------------------------------------------------------------------------
-
-const ruleTester = ruleTesterUtil.getRuleTester();
-const { fromMessage, withDefaultPragma } = require("../testUtil/optionsUtil");
 const toErrorObject = fromMessage(
   "Prefer R.flatMap over consecutive R.map and R.flat.",
 );
-ruleTester.run("prefer-flat-map", rule, {
+
+run({
+  name: "prefer-flat-map",
+  rule,
   valid: ["t = R.map(a, f);", "t = R.flat(a);", "t = R.flatMap(a, f);"].map(
     withDefaultPragma,
   ),

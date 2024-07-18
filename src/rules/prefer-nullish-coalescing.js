@@ -1,63 +1,57 @@
 /**
  * @fileoverview Rule to prefer nullish coalescing over checking a ternary with !isNullish.
  */
-"use strict";
 
-//------------------------------------------------------------------------------
-// Rule Definition
-//------------------------------------------------------------------------------
+import { getDocsUrl } from "../util/getDocsUrl";
+import { getRemedaContext } from "../util/remedaUtil";
 
-const getDocsUrl = require("../util/getDocsUrl");
-
-module.exports = {
-  meta: {
-    type: "problem",
-    schema: [],
-    docs: {
-      url: getDocsUrl("prefer-nullish-coalescing"),
-    },
-    fixable: "code",
+const meta = {
+  type: "problem",
+  schema: [],
+  docs: {
+    url: getDocsUrl("prefer-nullish-coalescing"),
   },
+  fixable: "code",
+};
+function create(context) {
+  const remedaContext = getRemedaContext(context);
 
-  create(context) {
-    const { getRemedaContext } = require("../util/remedaUtil");
-    const remedaContext = getRemedaContext(context);
+  function getTextOfNode(node) {
+    if (node) {
+      if (node.type === "Identifier") {
+        return node.name;
+      }
+      return context.getSourceCode().getText(node);
+    }
+  }
 
-    function getTextOfNode(node) {
-      if (node) {
-        if (node.type === "Identifier") {
-          return node.name;
+  const visitors = remedaContext.getImportVisitors();
+  visitors.ConditionalExpression = function (node) {
+    const statement = node.test;
+    if (statement.operator === "!") {
+      if (
+        statement.argument &&
+        statement.argument.callee &&
+        statement.argument.callee.name &&
+        statement.argument.callee.name === "isNullish"
+      ) {
+        const argument = getTextOfNode(statement.argument.arguments[0]);
+        const consequent = getTextOfNode(node.consequent);
+        const alternate = getTextOfNode(node.alternate);
+        if (argument === consequent) {
+          context.report({
+            node,
+            message:
+              "Prefer nullish coalescing over checking a ternary with !isNullish.",
+            fix(fixer) {
+              return fixer.replaceText(node, `${argument} ?? ${alternate}`);
+            },
+          });
         }
-        return context.getSourceCode().getText(node);
       }
     }
+  };
+  return visitors;
+}
 
-    const visitors = remedaContext.getImportVisitors();
-    visitors.ConditionalExpression = function (node) {
-      const statement = node.test;
-      if (statement.operator === "!") {
-        if (
-          statement.argument &&
-          statement.argument.callee &&
-          statement.argument.callee.name &&
-          statement.argument.callee.name === "isNullish"
-        ) {
-          const argument = getTextOfNode(statement.argument.arguments[0]);
-          const consequent = getTextOfNode(node.consequent);
-          const alternate = getTextOfNode(node.alternate);
-          if (argument === consequent) {
-            context.report({
-              node,
-              message:
-                "Prefer nullish coalescing over checking a ternary with !isNullish.",
-              fix(fixer) {
-                return fixer.replaceText(node, `${argument} ?? ${alternate}`);
-              },
-            });
-          }
-        }
-      }
-    };
-    return visitors;
-  },
-};
+export { create, meta };

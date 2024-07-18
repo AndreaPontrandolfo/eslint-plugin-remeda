@@ -1,8 +1,7 @@
 import * as rule from "../../../src/rules/prefer-some";
-import optionsUtil from "../testUtil/optionsUtil";
+import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 import { run } from "eslint-vitest-rule-tester";
 
-const { fromMessage, withDefaultPragma } = optionsUtil;
 const toErrorObject = fromMessage(
   "Prefer R.some over findIndex comparison to -1",
 );

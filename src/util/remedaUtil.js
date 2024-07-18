@@ -1,6 +1,6 @@
 "use strict";
 import { includes, capitalize } from "lodash";
-import methodDataUtil from "./methodDataUtil";
+import * as methodDataUtil from "./methodDataUtil";
 import astUtil from "./astUtil";
 import RemedaContext from "./RemedaContext";
 

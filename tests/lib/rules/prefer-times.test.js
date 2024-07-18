@@ -1,8 +1,6 @@
 import * as rule from "../../../src/rules/prefer-times";
-import optionsUtil from "../testUtil/optionsUtil";
+import { withDefaultPragma, fromMessage } from "../testUtil/optionsUtil";
 import { run } from "eslint-vitest-rule-tester";
-
-const { withDefaultPragma, fromMessage } = optionsUtil;
 
 const toErrorObject = fromMessage(
   "Prefer R.times over R.map without using arguments",
