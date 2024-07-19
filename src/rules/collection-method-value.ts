@@ -38,14 +38,14 @@ function create(context) {
   return getRemedaMethodVisitors(
     context,
     (node, iteratee, { method, callType }) => {
-      if (isCollectionMethod(method) && !parentUsesValue(node, callType)) {
+      if (isCollectionMethod(method) && !parentUsesValue(node)) {
         context.report({
           node,
           message: `Use value returned from R.${method}`,
         });
       } else if (
         isSideEffectIterationMethod(method) &&
-        parentUsesValue(node, callType) &&
+        parentUsesValue(node) &&
         !isParentCommit(node, callType)
       ) {
         context.report({

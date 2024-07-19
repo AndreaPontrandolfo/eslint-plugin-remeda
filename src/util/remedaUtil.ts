@@ -1,4 +1,3 @@
-"use strict";
 import { includes, capitalize } from "lodash";
 import * as methodDataUtil from "./methodDataUtil";
 import astUtil from "./astUtil";

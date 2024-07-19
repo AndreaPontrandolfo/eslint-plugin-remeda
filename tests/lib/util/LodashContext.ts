@@ -1,4 +1,3 @@
-"use strict";
 const assign = require("lodash/assign");
 const traverser = require("eslint-traverser");
 const RemedaContext = require("../../../src/util/RemedaContext");

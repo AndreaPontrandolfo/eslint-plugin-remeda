@@ -1,5 +1,3 @@
-"use strict";
-
 import { includes, get, isObject, has } from "lodash";
 import * as methodDataCatalog from "./methodData";
 

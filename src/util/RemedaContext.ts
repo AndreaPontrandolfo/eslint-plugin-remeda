@@ -1,5 +1,3 @@
-"use strict";
-
 import { getSettings } from "./settingsUtil";
 import astUtil from "./astUtil";
 const { isMethodCall, isCallFromObject, getCaller } = astUtil;
