@@ -3,14 +3,12 @@
   "version": "0.0.0-development",
   "author": "Andrea Pontrandolfo <andrea.pontra@gmail.com>",
   "description": "ESLint plugin for Remeda library.",
-  "type": "commonjs",
+  "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "knip": "knip",
     "publint": "publint",
-    "test": "npm run unit-test",
-    "unit-test": "cross-env nyc mocha \"tests/**/*.js\" --reporter=dot",
+    "test": "vitest --ui",
     "semantic-release": "semantic-release"
   },
   "files": [
@@ -25,26 +23,21 @@
   "homepage": "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda",
   "bugs": "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/issues",
   "peerDependencies": {
-    "eslint": ">=2"
+    "eslint": ">=9"
   },
   "devDependencies": {
     "@types/node": "^20.14.9",
-    "auto-changelog": "^2.4.0",
-    "coveralls": "^3.1.1",
-    "cross-env": "^7.0.3",
-    "eslint": "^8.16.0",
-    "eslint-config-wix-editor": "^8.4.2",
-    "eslint-import-resolver-node": "^0.3.6",
+    "@vitest/coverage-v8": "^2.0.3",
+    "@vitest/ui": "^2.0.3",
+    "eslint": "^9.7.0",
     "eslint-plugin-eslint-plugin": "^4.2.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-traverser": "^1.5.2",
+    "eslint-vitest-rule-tester": "^0.3.3",
     "knip": "^5.23.2",
-    "mocha": "^9.2.2",
-    "nyc": "^15.1.0",
     "prettier": "^3.3.2",
     "publint": "^0.2.8",
     "semantic-release": "^24.0.0",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.2",
+    "vitest": "^2.0.3"
   },
   "engines": {
     "node": ">=20"

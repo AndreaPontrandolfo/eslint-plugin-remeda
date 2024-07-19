@@ -1,33 +1,27 @@
 /**
  * @fileoverview Rule to check if a call to map should be a call to times
  */
-"use strict";
 
-//------------------------------------------------------------------------------
-// Rule Definition
-//------------------------------------------------------------------------------
+import { get } from "lodash";
+import { getDocsUrl } from "../util/getDocsUrl";
+import { getRemedaMethodVisitors } from "../util/remedaUtil";
 
-const getDocsUrl = require("../util/getDocsUrl");
-
-module.exports = {
-  meta: {
-    type: "problem",
-    schema: [],
-    docs: {
-      url: getDocsUrl("prefer-times"),
-    },
-  },
-
-  create(context) {
-    const { getRemedaMethodVisitors } = require("../util/remedaUtil");
-    const get = require("lodash/get");
-    return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {
-      if (method === "map" && get(iteratee, "params.length") === 0) {
-        context.report({
-          node,
-          message: "Prefer R.times over R.map without using arguments",
-        });
-      }
-    });
+const meta = {
+  type: "problem",
+  schema: [],
+  docs: {
+    url: getDocsUrl("prefer-times"),
   },
 };
+function create(context) {
+  return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {
+    if (method === "map" && get(iteratee, "params.length") === 0) {
+      context.report({
+        node,
+        message: "Prefer R.times over R.map without using arguments",
+      });
+    }
+  });
+}
+
+export { create, meta };

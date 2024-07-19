@@ -1,22 +1,14 @@
-"use strict";
+import { run } from "eslint-vitest-rule-tester";
+import * as rule from "../../../src/rules/prefer-nullish-coalescing";
+import { withDefaultPragma, fromMessage } from "../testUtil/optionsUtil";
 
-// ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-
-const rule = require("../../../src/rules/prefer-nullish-coalescing");
-const ruleTesterUtil = require("../testUtil/ruleTesterUtil");
-
-// ------------------------------------------------------------------------------
-// Tests
-// ------------------------------------------------------------------------------
-
-const ruleTester = ruleTesterUtil.getRuleTester();
-const { withDefaultPragma, fromMessage } = require("../testUtil/optionsUtil");
 const toErrorObject = fromMessage(
   "Prefer nullish coalescing over checking a ternary with !isNullish.",
 );
-ruleTester.run("prefer-nullish-coalescing", rule, {
+
+run({
+  name: "prefer-nullish-coalescing",
+  rule,
   valid: [
     "const myExpression = myVar ?? myOtherVar;",
     "const myExpression = !isNullish(myVar) ? mySecondVar : myThirdVar;",

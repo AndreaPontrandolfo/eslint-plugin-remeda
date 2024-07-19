@@ -21,5 +21,5 @@ sftp-config.json
 /lib
 .DS_Store
 coverage
-.nyc_output
 .eslintcache
+tests/vitest-ui-output

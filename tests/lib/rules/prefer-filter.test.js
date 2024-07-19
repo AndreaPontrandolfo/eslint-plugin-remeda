@@ -1,23 +1,14 @@
-"use strict";
+import { run } from "eslint-vitest-rule-tester";
+import * as rule from "../../../src/rules/prefer-filter";
+import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-// ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-
-const rule = require("../../../src/rules/prefer-filter");
-const ruleTesterUtil = require("../testUtil/ruleTesterUtil");
-
-// ------------------------------------------------------------------------------
-// Tests
-// ------------------------------------------------------------------------------
-
-const ruleTester = ruleTesterUtil.getRuleTester();
-const { fromMessage, withDefaultPragma } = require("../testUtil/optionsUtil");
 const toErrorObject = fromMessage(
   "Prefer R.filter or R.some over an if statement inside a R.forEach",
 );
 
-ruleTester.run("prefer-filter", rule, {
+run({
+  name: "prefer-filter",
+  rule,
   valid: [
     "var x = R.filter(arr, function(x) {return x + 7})",
     "R.forEach(arr, function(x) { if (x.a) {} else {}})",

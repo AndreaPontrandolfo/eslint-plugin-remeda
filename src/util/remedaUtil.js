@@ -1,8 +1,8 @@
 "use strict";
-const _ = require("lodash");
-const methodDataUtil = require("./methodDataUtil");
-const astUtil = require("./astUtil");
-const RemedaContext = require("./RemedaContext");
+import { includes, capitalize } from "lodash";
+import * as methodDataUtil from "./methodDataUtil";
+import astUtil from "./astUtil";
+import RemedaContext from "./RemedaContext";
 
 /**
  * Returns whether the node is a call to the specified method.
@@ -33,7 +33,7 @@ function getIsTypeMethod(name) {
     "Error",
     // "Element",
   ];
-  return _.includes(types, name) ? `is${_.capitalize(name)}` : null;
+  return includes(types, name) ? `is${capitalize(name)}` : null;
 }
 
 /**
@@ -100,7 +100,7 @@ function getRemedaContext(context) {
   return new RemedaContext(context);
 }
 
-module.exports = {
+export {
   isCallToMethod,
   getIsTypeMethod,
   getRemedaMethodCallExpVisitor,

@@ -1,22 +1,13 @@
-"use strict";
+import * as rule from "../../../src/rules/prefer-times";
+import { withDefaultPragma, fromMessage } from "../testUtil/optionsUtil";
+import { run } from "eslint-vitest-rule-tester";
 
-// ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-
-const rule = require("../../../src/rules/prefer-times");
-const ruleTesterUtil = require("../testUtil/ruleTesterUtil");
-
-// ------------------------------------------------------------------------------
-// Tests
-// ------------------------------------------------------------------------------
-
-const ruleTester = ruleTesterUtil.getRuleTester();
-const { fromMessage, withDefaultPragma } = require("../testUtil/optionsUtil");
 const toErrorObject = fromMessage(
   "Prefer R.times over R.map without using arguments",
 );
-ruleTester.run("prefer-times", rule, {
+run({
+  name: "prefer-times",
+  rule,
   valid: [
     "var a = R.map(arr, function(x) {return x + 1});",
     "R.forEach(arr, function() {f(g(r)); })",

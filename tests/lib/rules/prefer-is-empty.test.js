@@ -1,22 +1,14 @@
-"use strict";
+import { run } from "eslint-vitest-rule-tester";
+import * as rule from "../../../src/rules/prefer-is-empty";
+import { withDefaultPragma, fromMessage } from "../testUtil/optionsUtil";
 
-// ------------------------------------------------------------------------------
-// Requirements
-// ------------------------------------------------------------------------------
-
-const rule = require("../../../src/rules/prefer-is-empty");
-const ruleTesterUtil = require("../testUtil/ruleTesterUtil");
-
-// ------------------------------------------------------------------------------
-// Tests
-// ------------------------------------------------------------------------------
-
-const ruleTester = ruleTesterUtil.getRuleTester();
-const { withDefaultPragma, fromMessage } = require("../testUtil/optionsUtil");
 const toErrorObject = fromMessage(
   "Prefer isEmpty over manually checking for length value.",
 );
-ruleTester.run("prefer-is-empty", rule, {
+
+run({
+  name: "prefer-is-empty",
+  rule,
   valid: [
     "const myLengthEqualZero = !isEmpty(myVar);",
     "const myLengthEqualZero = isEmpty(myVar);",
