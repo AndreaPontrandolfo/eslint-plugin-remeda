@@ -30,7 +30,8 @@ function create(context) {
     const exp =
       func && !isFunctionDefinitionWithBlock(func)
         ? firstLine
-        : firstLine && firstLine.expression;
+        : //@ts-expect-error
+          firstLine?.expression;
     return (
       func &&
       hasOnlyOneStatement(func) &&

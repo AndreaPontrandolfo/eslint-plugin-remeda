@@ -2,6 +2,7 @@
  * @fileoverview Rule to prefer nullish coalescing over checking a ternary with !isNullish.
  */
 
+import type { RemedaMethodVisitors } from "../types";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaContext } from "../util/remedaUtil";
 
@@ -25,7 +26,7 @@ function create(context) {
     }
   }
 
-  const visitors = remedaContext.getImportVisitors();
+  const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
   visitors.ConditionalExpression = function (node) {
     const statement = node.test;
     if (statement.operator === "!") {

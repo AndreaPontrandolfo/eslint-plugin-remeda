@@ -1,5 +1,3 @@
-"use strict";
-
 import { getSettings } from "./settingsUtil";
 import astUtil from "./astUtil";
 const { isMethodCall, isCallFromObject, getCaller } = astUtil;
@@ -11,6 +9,10 @@ import {
 
 /* Class representing remeda data for a given context */
 export default class {
+  context: any;
+  general: any;
+  methods: any;
+  _pragma: any;
   /**
    * Create a Remeda context wrapper from a file's RuleContext
    * @param {RuleContext} context

@@ -2,6 +2,7 @@
  * @fileoverview Rule to prefer isNil over manual checking for undefined or null.
  */
 
+import type { RemedaMethodVisitors } from "../types";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { isCallToRemedaMethod, getRemedaContext } from "../util/remedaUtil";
@@ -113,7 +114,7 @@ function create(context) {
     );
   }
 
-  const visitors = remedaContext.getImportVisitors();
+  const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
   visitors.LogicalExpression = function (node) {
     if (node.operator === "||") {
       if (

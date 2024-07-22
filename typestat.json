@@ -1,0 +1,15 @@
+{
+  "include": ["src/**/*", "tests/**/*"],
+  "files": {
+    "renameExtensions": "ts"
+  },
+  "fixes": {
+    "incompleteTypes": true,
+    "missingProperties": true,
+    "noImplicitAny": true
+  },
+  "cleanups": {
+    "suppressTypeErrors": true
+  },
+  "project": "./tsconfig.json"
+}

@@ -1,4 +1,3 @@
-"use strict";
 export const add = {
   wrapper: false,
   shorthand: false,

@@ -4,6 +4,7 @@
 
 import { getRemedaContext } from "../util/remedaUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
+import type { RemedaMethodVisitors } from "../types";
 
 const meta = {
   type: "problem",
@@ -25,7 +26,7 @@ function create(context) {
     }
   }
 
-  const visitors = remedaContext.getImportVisitors();
+  const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
   visitors.BinaryExpression = function (node) {
     if (node.operator === "===") {
       if (node.left) {

@@ -1,13 +1,16 @@
 import { chain, get } from "lodash";
 
 export function getSettings(context) {
-  return chain(context)
-    .get(["settings", "remeda"])
-    .clone()
-    .defaults({
-      version: 4,
-    })
-    .value();
+  return (
+    chain(context)
+      .get(["settings", "remeda"])
+      .clone()
+      //@ts-expect-error
+      .defaults({
+        version: 4,
+      })
+      .value()
+  );
 }
 export function isEcmaFeatureOn(context, featureName) {
   return (

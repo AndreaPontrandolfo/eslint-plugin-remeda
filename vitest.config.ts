@@ -7,6 +7,7 @@ export default defineConfig({
       enabled: true,
       reporter: ["html"],
       include: ["src/rules/**/*"],
+      reportsDirectory: "tests/vitest-ui-output/coverage",
     },
     reporters: ["default", "html"],
   },
