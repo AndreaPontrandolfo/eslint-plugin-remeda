@@ -6,6 +6,7 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
+    "typecheck": "tsc",
     "knip": "knip",
     "publint": "publint",
     "test:watch": "vitest --ui",

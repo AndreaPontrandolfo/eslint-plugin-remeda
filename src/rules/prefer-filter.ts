@@ -50,7 +50,7 @@ function create(context) {
   }
 
   function onlyHasSimplifiableIf(func) {
-    const firstLine = getFirstFunctionLine(func);
+    const firstLine: any = getFirstFunctionLine(func);
     return (
       func &&
       hasOnlyOneStatement(func) &&

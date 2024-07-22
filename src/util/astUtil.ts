@@ -73,6 +73,11 @@ const isPropAccess = overSome(
   matchesProperty(["property", "type"], "Literal"),
 );
 
+interface IsMemberExpOfOptions {
+  maxLength?: number;
+  allowComputed?: boolean;
+}
+
 /**
  * Returns whether the node is a member expression starting with the same object, up to the specified length
  * @param {Object} node
@@ -83,9 +88,9 @@ const isPropAccess = overSome(
  * @returns {boolean|undefined}
  */
 function isMemberExpOf(
-  node,
-  objectName,
-  { maxLength = Number.MAX_VALUE, allowComputed } = {},
+  node: Record<string, any>,
+  objectName: string,
+  { maxLength = Number.MAX_VALUE, allowComputed }: IsMemberExpOfOptions = {},
 ) {
   if (objectName) {
     let curr = node;
@@ -156,21 +161,24 @@ function isLiteral(node) {
   return node.type === "Literal";
 }
 
+interface IsBinaryExpWithMemberOfOptions {
+  maxLength?: number;
+  allowComputed?: boolean;
+  onlyLiterals?: boolean;
+}
+
 /**
  * Returns whether the expression specified is a binary expression with the specified operator and one of its sides is a member expression of the specified object name
- * @param {string} operator
- * @param {Object} exp
- * @param {string} objectName
- * @param {number} maxLength
- * @param {boolean} allowComputed
- * @param {boolean} onlyLiterals
- * @returns {boolean|undefined}
  */
 function isBinaryExpWithMemberOf(
-  operator,
-  exp,
-  objectName,
-  { maxLength, allowComputed, onlyLiterals } = {},
+  operator: string,
+  exp: Record<string, any>,
+  objectName: string,
+  {
+    maxLength,
+    allowComputed,
+    onlyLiterals,
+  }: IsBinaryExpWithMemberOfOptions = {},
 ) {
   if (!isMatch(exp, { type: "BinaryExpression", operator })) {
     return false;
@@ -194,14 +202,18 @@ const isNegationExpression = matches({
   operator: "!",
 });
 
+interface IsNegationOfMemberOfOptions {
+  maxLength?: number;
+}
+
 /**
  * Returns whether the expression is a negation of a member of objectName, in the specified depth.
- * @param {Object} exp
- * @param {string} objectName
- * @param {number} maxLength
- * @returns {boolean|undefined}
  */
-function isNegationOfMemberOf(exp, objectName, { maxLength } = {}) {
+function isNegationOfMemberOf(
+  exp: any,
+  objectName: string,
+  { maxLength }: IsNegationOfMemberOfOptions = {},
+) {
   return (
     isNegationExpression(exp) &&
     isMemberExpOf(exp.argument, objectName, { maxLength, allowComputed: false })
@@ -226,7 +238,7 @@ function isIdentifierWithName(exp, paramName) {
  * @returns {Object|undefined}
  */
 function getValueReturnedInFirstStatement(func) {
-  const firstLine = getFirstFunctionLine(func);
+  const firstLine: any = getFirstFunctionLine(func);
   if (func) {
     if (isFunctionDefinitionWithBlock(func)) {
       return isReturnStatement(firstLine) ? firstLine.argument : undefined;

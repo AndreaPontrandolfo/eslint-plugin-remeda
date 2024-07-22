@@ -1,6 +1,6 @@
-const assignWith = require("lodash/assignWith");
-const mapValues = require("lodash/mapValues");
-const over = require("lodash/over");
+import assignWith from "lodash/assignWith";
+import mapValues from "lodash/mapValues";
+import over from "lodash/over";
 
 function combineVisitorObjects(...objects) {
   const accumForAllVisitors = assignWith(
@@ -8,9 +8,8 @@ function combineVisitorObjects(...objects) {
     ...objects,
     (objValue, sourceValue) => (objValue || []).concat(sourceValue),
   );
+  // @ts-expect-error
   return mapValues(accumForAllVisitors, over);
 }
 
-module.exports = {
-  combineVisitorObjects,
-};
+export { combineVisitorObjects };

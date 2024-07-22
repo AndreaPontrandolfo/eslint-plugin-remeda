@@ -2,6 +2,7 @@ import { includes, capitalize } from "lodash";
 import * as methodDataUtil from "./methodDataUtil";
 import astUtil from "./astUtil";
 import RemedaContext from "./RemedaContext";
+import type { RemedaMethodVisitors } from "../types";
 
 /**
  * Returns whether the node is a call to the specified method.
@@ -46,6 +47,8 @@ function getRemedaMethodCallExpVisitor(remedaContext, reporter) {
     let iterateeIndex;
     if (remedaContext.isRemedaCall(node)) {
       const method = astUtil.getMethodName(node);
+
+      //@ts-expect-error
       iterateeIndex = methodDataUtil.getIterateeIndex(method);
       reporter(node, node.arguments[iterateeIndex], {
         callType: "method",
@@ -82,7 +85,7 @@ function isCallToRemedaMethod(node, method, remedaContext) {
 
 function getRemedaMethodVisitors(context, remedaCallExpVisitor) {
   const remedaContext = new RemedaContext(context);
-  const visitors = remedaContext.getImportVisitors();
+  const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
   visitors.CallExpression = getRemedaMethodCallExpVisitor(
     remedaContext,
     remedaCallExpVisitor,

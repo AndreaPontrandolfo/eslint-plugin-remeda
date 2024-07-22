@@ -1,9 +1,11 @@
-const fs = require("fs");
-const path = require("path");
-const _ = require("lodash");
+import fs from "fs";
+import path from "path";
+import _ from "lodash";
+
 const rules = fs
   .readdirSync(path.resolve(__dirname, "rules"))
   .map((f) => f.replace(/\.js$/, ""));
+
 const recommended = {
   plugins: ["remeda"],
   rules: {
@@ -23,7 +25,8 @@ const recommended = {
     "remeda/prefer-do-nothing": 2,
   },
 };
-module.exports = {
+
+const userFacingConfig = {
   rules: _.zipObject(
     rules,
     rules.map((rule) => require(`./rules/${rule}`)),
@@ -32,3 +35,5 @@ module.exports = {
     recommended,
   },
 };
+
+export { userFacingConfig };

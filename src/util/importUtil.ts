@@ -1,4 +1,4 @@
-const get = require("lodash/get");
+import get from "lodash/get";
 
 function getNameFromCjsRequire(init) {
   if (
@@ -10,14 +10,10 @@ function getNameFromCjsRequire(init) {
   }
 }
 
-const isFullRemedaImport = (str) => /^remeda?(\/)?$/.test(str);
-const getMethodImportFromName = (str) => {
+const isFullRemedaImport = (str: string) => /^remeda?(\/)?$/.test(str);
+const getMethodImportFromName = (str: string) => {
   const match = /^remeda([./])(\w+)$/.exec(str);
   return match && match[2];
 };
 
-module.exports = {
-  getNameFromCjsRequire,
-  isFullRemedaImport,
-  getMethodImportFromName,
-};
+export { getNameFromCjsRequire, isFullRemedaImport, getMethodImportFromName };

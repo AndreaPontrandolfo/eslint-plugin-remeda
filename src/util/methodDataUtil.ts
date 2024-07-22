@@ -15,10 +15,9 @@ function isCollectionMethod(method) {
 
 /**
  * Returns whether the node's method call supports using shorthands.
- * @param {string} method
  * @returns {boolean}
  */
-function methodSupportsShorthand(method, shorthandType) {
+function methodSupportsShorthand(method: string, shorthandType?: string) {
   const methodShorthandData = get(methodDataCatalog, [method, "shorthand"]);
   return isObject(methodShorthandData)
     ? Boolean(shorthandType && methodShorthandData[shorthandType])
@@ -27,15 +26,14 @@ function methodSupportsShorthand(method, shorthandType) {
 
 /**
  * Gets the index of the iteratee of a method when it isn't chained, or -1 if it doesn't have one.
- * @param {string} method
- * @returns {number}
  */
-function getIterateeIndex(method) {
+function getIterateeIndex(method: string) {
   const methodData = methodDataCatalog[method];
   if (has(methodData, "iterateeIndex")) {
     return methodData.iterateeIndex;
   }
-  if (methodData && methodData.iteratee) {
+  //@ts-expect-error
+  if (methodData?.iteratee) {
     return 1;
   }
   return -1;
