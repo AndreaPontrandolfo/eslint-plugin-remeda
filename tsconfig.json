@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "exclude": ["node_modules", "dist", "tests/vitest-ui-output/**/*"],
+  "include": ["src/**/*", "tests/**/*"],
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["esnext"],
+    "composite": false,
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "verbatimModuleSyntax": true,
+    "strict": true,
+    "incremental": true,
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "noImplicitAny": false
+  }
+}

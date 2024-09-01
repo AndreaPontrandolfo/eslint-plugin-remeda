@@ -11,6 +11,12 @@ import assign from "lodash/assign";
  * @fileoverview Rule to check that iteratees for all collection functions except forEach return a value;
  */
 
+interface FuncInfo {
+  upper: FuncInfo;
+  codePath: any;
+  hasReturn: boolean;
+}
+
 const meta = {
   type: "problem",
   schema: [],
@@ -20,7 +26,7 @@ const meta = {
 };
 function create(context) {
   const funcInfos = new Map();
-  let currFuncInfo = {};
+  let currFuncInfo: FuncInfo;
   const remedaContext = getRemedaContext(context);
   return assign(
     {
