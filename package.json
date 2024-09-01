@@ -4,23 +4,33 @@
   "author": "Andrea Pontrandolfo <andrea.pontra@gmail.com>",
   "description": "ESLint plugin for Remeda library.",
   "type": "module",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "tsup",
     "typecheck": "tsc",
     "knip": "knip",
     "publint": "publint",
     "test:watch": "vitest --ui",
     "test": "vitest run",
-    "semantic-release": "semantic-release"
+    "attw": "attw --pack .",
+    "qa": "pnpm typecheck && pnpm test && pnpm knip && pnpm publint && attw",
+    "semantic-release": "pnpm build && semantic-release"
   },
   "files": [
     "README.md",
-    "src",
+    "dist",
     "docs"
   ],
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.cjs"
+    }
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda"
+    "url": "git+https://github.com/AndreaPontrandolfo/eslint-plugin-remeda.git"
   },
   "homepage": "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda",
   "bugs": "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/issues",
@@ -28,6 +38,7 @@
     "eslint": ">=9"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.15.4",
     "@types/lodash": "^4.17.7",
     "@types/node": "^20.14.9",
     "@vitest/coverage-v8": "^2.0.3",
@@ -35,21 +46,29 @@
     "eslint": "^9.7.0",
     "eslint-plugin-eslint-plugin": "^4.2.0",
     "eslint-vitest-rule-tester": "^0.3.3",
-    "knip": "^5.23.2",
+    "knip": "^5.29.1",
     "prettier": "^3.3.2",
-    "publint": "^0.2.8",
+    "publint": "^0.2.10",
     "semantic-release": "^24.0.0",
+    "tsup": "^8.2.4",
     "typescript": "^5.5.2",
     "vitest": "^2.0.3"
   },
   "engines": {
     "node": ">=20"
   },
+  "packageManager": "pnpm@9.7.1",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "eslint",
     "eslint-plugin",
+    "eslint plugin",
     "eslintplugin",
-    "remeda"
+    "remeda",
+    "functional",
+    "fp"
   ],
   "license": "MIT",
   "dependencies": {

@@ -5,13 +5,14 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["esnext"],
+    "composite": false,
     "module": "preserve",
     "moduleResolution": "bundler",
+    "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "sourceMap": true,
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
@@ -19,6 +20,8 @@
     "allowSyntheticDefaultImports": true,
     "verbatimModuleSyntax": true,
     "strict": true,
+    "incremental": true,
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "noImplicitAny": false
   }
 }
