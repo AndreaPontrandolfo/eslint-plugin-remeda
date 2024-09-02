@@ -19,7 +19,8 @@ const meta = {
   docs: {
     url: getDocsUrl("collection-method-value"),
   },
-};
+} as const;
+
 function create(context) {
   function parentUsesValue(node) {
     return node.parent.type !== "ExpressionStatement";
@@ -57,4 +58,10 @@ function create(context) {
   );
 }
 
-export { create, meta };
+const rule = {
+  create,
+  meta,
+};
+
+export const RULE_NAME = "collection-method-value";
+export default rule;

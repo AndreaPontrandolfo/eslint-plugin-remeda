@@ -35,7 +35,7 @@
   "homepage": "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda",
   "bugs": "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/issues",
   "peerDependencies": {
-    "eslint": ">=9"
+    "eslint": ">=9.0.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.15.4",

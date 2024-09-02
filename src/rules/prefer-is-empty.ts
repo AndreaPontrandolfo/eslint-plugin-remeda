@@ -13,7 +13,8 @@ const meta = {
     url: getDocsUrl("prefer-is-empty"),
   },
   fixable: "code",
-};
+} as const;
+
 function create(context) {
   const remedaContext = getRemedaContext(context);
 
@@ -126,4 +127,10 @@ function create(context) {
   return visitors;
 }
 
-export { create, meta };
+const rule = {
+  create,
+  meta,
+};
+
+export const RULE_NAME = "prefer-is-empty";
+export default rule;

@@ -13,7 +13,8 @@ const meta = {
     url: getDocsUrl("prefer-nullish-coalescing"),
   },
   fixable: "code",
-};
+} as const;
+
 function create(context) {
   const remedaContext = getRemedaContext(context);
 
@@ -55,4 +56,10 @@ function create(context) {
   return visitors;
 }
 
-export { create, meta };
+const rule = {
+  create,
+  meta,
+};
+
+export const RULE_NAME = "prefer-nullish-coalescing";
+export default rule;

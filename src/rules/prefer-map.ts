@@ -22,7 +22,8 @@ const meta = {
   docs: {
     url: getDocsUrl("prefer-map"),
   },
-};
+} as const;
+
 function create(context) {
   function onlyHasPush(func) {
     const firstLine = getFirstFunctionLine(func);
@@ -53,4 +54,10 @@ function create(context) {
   });
 }
 
-export { create, meta };
+const rule = {
+  create,
+  meta,
+};
+
+export const RULE_NAME = "prefer-map";
+export default rule;

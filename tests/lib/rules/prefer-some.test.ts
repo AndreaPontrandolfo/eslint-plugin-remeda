@@ -1,4 +1,4 @@
-import * as rule from "../../../src/rules/prefer-some";
+import rule from "../../../src/rules/prefer-some";
 import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 import { run } from "eslint-vitest-rule-tester";
 

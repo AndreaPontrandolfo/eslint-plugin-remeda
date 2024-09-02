@@ -20,7 +20,8 @@ const meta = {
       type: "boolean",
     },
   ],
-};
+} as const;
+
 function create(context) {
   const shouldCheckArrowFunctions =
     context.options[0] !== undefined ? context.options[0] : true;
@@ -80,4 +81,10 @@ function create(context) {
   };
 }
 
-export { create, meta };
+const rule = {
+  create,
+  meta,
+};
+
+export const RULE_NAME = "prefer-constant";
+export default rule;

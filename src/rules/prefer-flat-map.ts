@@ -18,7 +18,8 @@ const meta = {
   docs: {
     url: getDocsUrl("prefer-flat-map"),
   },
-};
+} as const;
+
 function create(context) {
   function isChainedMapFlatten(node) {
     return isCallToMethod(getCaller(node), "map");
@@ -41,4 +42,10 @@ function create(context) {
   );
 }
 
-export { create, meta };
+const rule = {
+  create,
+  meta,
+};
+
+export const RULE_NAME = "prefer-flat-map";
+export default rule;

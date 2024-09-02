@@ -1,5 +1,5 @@
 import { run } from "eslint-vitest-rule-tester";
-import * as rule from "../../../src/rules/prefer-find";
+import rule from "../../../src/rules/prefer-find";
 import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
 const toFindError = fromMessage(

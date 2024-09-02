@@ -1,4 +1,4 @@
-import * as rule from "../../../src/rules/prefer-times";
+import rule from "../../../src/rules/prefer-times";
 import { withDefaultPragma, fromMessage } from "../testUtil/optionsUtil";
 import { run } from "eslint-vitest-rule-tester";
 
