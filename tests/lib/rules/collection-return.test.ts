@@ -1,4 +1,4 @@
-import * as rule from "../../../src/rules/collection-return";
+import rule from "../../../src/rules/collection-return";
 import { withDefaultPragma } from "../testUtil/optionsUtil";
 import { run } from "eslint-vitest-rule-tester";
 

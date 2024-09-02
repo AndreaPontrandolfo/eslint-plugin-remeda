@@ -1,5 +1,5 @@
 import { run } from "eslint-vitest-rule-tester";
-import * as rule from "../../../src/rules/prefer-remeda-typecheck";
+import rule from "../../../src/rules/prefer-remeda-typecheck";
 import { withDefaultPragma } from "../testUtil/optionsUtil";
 
 const errors = {

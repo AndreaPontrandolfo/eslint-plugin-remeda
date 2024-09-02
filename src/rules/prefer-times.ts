@@ -12,7 +12,8 @@ const meta = {
   docs: {
     url: getDocsUrl("prefer-times"),
   },
-};
+} as const;
+
 function create(context) {
   return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {
     if (method === "map" && get(iteratee, "params.length") === 0) {
@@ -24,4 +25,10 @@ function create(context) {
   });
 }
 
-export { create, meta };
+const rule = {
+  create,
+  meta,
+};
+
+export const RULE_NAME = "prefer-times";
+export default rule;

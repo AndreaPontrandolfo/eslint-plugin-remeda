@@ -15,7 +15,8 @@ const meta = {
   docs: {
     url: getDocsUrl("prefer-find"),
   },
-};
+} as const;
+
 function create(context) {
   function isZeroIndexAccess(node) {
     return node.type === "MemberExpression" && node.property.value === 0;
@@ -55,4 +56,10 @@ function create(context) {
   );
 }
 
-export { create, meta };
+const rule = {
+  create,
+  meta,
+};
+
+export const RULE_NAME = "prefer-find";
+export default rule;

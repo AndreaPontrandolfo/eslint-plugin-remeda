@@ -12,7 +12,7 @@ const meta = {
   docs: {
     url: getDocsUrl("prefer-remeda-typecheck"),
   },
-};
+} as const;
 
 function create(context) {
   const otherSides = {
@@ -32,9 +32,7 @@ function create(context) {
 
   function isDeclaredVariable(node) {
     const sourceCode = context.sourceCode ?? context.getSourceCode();
-    const scope = sourceCode.getScope
-      ? sourceCode.getScope(node)
-      : context.getScope();
+    const scope = sourceCode?.getScope?.(node);
     const definedVariables = scope.variables;
     return some(definedVariables, { name: node.name });
   }
@@ -88,4 +86,10 @@ function create(context) {
   };
 }
 
-export { create, meta };
+const rule = {
+  create,
+  meta,
+};
+
+export const RULE_NAME = "prefer-remeda-typecheck";
+export default rule;

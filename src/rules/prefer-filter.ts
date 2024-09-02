@@ -27,7 +27,8 @@ const meta = {
       type: "integer",
     },
   ],
-};
+} as const;
+
 function create(context) {
   const DEFAULT_MAX_PROPERTY_PATH_LENGTH = 3;
   const maxLength =
@@ -71,4 +72,10 @@ function create(context) {
   });
 }
 
-export { create, meta };
+const rule = {
+  create,
+  meta,
+};
+
+export const RULE_NAME = "prefer-filter";
+export default rule;

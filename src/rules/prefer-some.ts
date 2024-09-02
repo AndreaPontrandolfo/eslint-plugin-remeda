@@ -14,7 +14,8 @@ const meta = {
     url: getDocsUrl("prefer-some"),
   },
   schema: [],
-};
+} as const;
+
 function create(context) {
   const visitors = getRemedaMethodVisitors(
     context,
@@ -34,4 +35,10 @@ function create(context) {
   return visitors;
 }
 
-export { create, meta };
+const rule = {
+  create,
+  meta,
+};
+
+export const RULE_NAME = "prefer-some";
+export default rule;

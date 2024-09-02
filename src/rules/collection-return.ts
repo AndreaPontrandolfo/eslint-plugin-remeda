@@ -23,7 +23,8 @@ const meta = {
   docs: {
     url: getDocsUrl("collection-return"),
   },
-};
+} as const;
+
 function create(context) {
   const funcInfos = new Map();
   let currFuncInfo: FuncInfo;
@@ -68,4 +69,10 @@ function create(context) {
   );
 }
 
-export { create, meta };
+const rule = {
+  create,
+  meta,
+};
+
+export const RULE_NAME = "collection-return";
+export default rule;

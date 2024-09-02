@@ -13,7 +13,8 @@ const meta = {
   docs: {
     url: getDocsUrl("prefer-do-nothing"),
   },
-};
+} as const;
+
 function create(context) {
   function reportIfEmptyFunction(node) {
     if (
@@ -36,4 +37,10 @@ function create(context) {
   };
 }
 
-export { create, meta };
+const rule = {
+  create,
+  meta,
+};
+
+export const RULE_NAME = "prefer-do-nothing";
+export default rule;

@@ -1,5 +1,5 @@
 import { run } from "eslint-vitest-rule-tester";
-import * as rule from "../../../src/rules/collection-method-value";
+import rule from "../../../src/rules/collection-method-value";
 import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
 run({

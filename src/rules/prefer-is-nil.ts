@@ -16,7 +16,8 @@ const meta = {
   docs: {
     url: getDocsUrl("prefer-is-nil"),
   },
-};
+} as const;
+
 function create(context) {
   const remedaContext = getRemedaContext(context);
   const nilChecks = {
@@ -139,4 +140,10 @@ function create(context) {
   return visitors;
 }
 
-export { create, meta };
+const rule = {
+  create,
+  meta,
+};
+
+export const RULE_NAME = "prefer-is-nil";
+export default rule;
