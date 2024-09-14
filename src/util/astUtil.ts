@@ -86,12 +86,12 @@ interface IsMemberExpOfOptions {
 /**
  * Returns whether the node is a member expression starting with the same object, up to the specified length
  *
- * @param {Object} node
- * @param {string} objectName
- * @param {Object} [options]
- * @param {number} [options.maxLength]
- * @param {boolean} [options.allowComputed]
- * @returns {boolean|undefined}
+ * @param node
+ * @param objectName
+ * @param [options]
+ * @param [options.maxLength]
+ * @param [options.allowComputed]
+ * @returns
  */
 function isMemberExpOf(
   node: Record<string, any>,
@@ -138,8 +138,8 @@ const isReturnStatement = matchesProperty("type", "ReturnStatement");
 /**
  * Returns whether the node specified has only one statement
  *
- * @param {Object} func
- * @returns {boolean}
+ * @param func
+ * @returns
  */
 function hasOnlyOneStatement(func) {
   if (isFunctionDefinitionWithBlock(func)) {
@@ -153,8 +153,8 @@ function hasOnlyOneStatement(func) {
 /**
  * Returns whether the node is an object of a method call
  *
- * @param {Object} node
- * @returns {boolean}
+ * @param node
+ * @returns
  */
 function isObjectOfMethodCall(node) {
   return (
@@ -166,8 +166,8 @@ function isObjectOfMethodCall(node) {
 /**
  * Returns whether the node is a literal
  *
- * @param {Object} node
- * @returns {boolean}
+ * @param node
+ * @returns
  */
 function isLiteral(node) {
   return node.type === "Literal";
@@ -236,9 +236,9 @@ function isNegationOfMemberOf(
 
 /**
  *
- * @param {Object} exp
- * @param {string} paramName
- * @returns {boolean|undefined}
+ * @param exp
+ * @param paramName
+ * @returns
  */
 function isIdentifierWithName(exp, paramName) {
   return (
@@ -249,8 +249,8 @@ function isIdentifierWithName(exp, paramName) {
 /**
  * Returns the node of the value returned in the first line, if any
  *
- * @param {Object} func
- * @returns {Object|undefined}
+ * @param func
+ * @returns
  */
 function getValueReturnedInFirstStatement(func) {
   const firstLine: any = getFirstFunctionLine(func);
@@ -268,9 +268,9 @@ function getValueReturnedInFirstStatement(func) {
 /**
  * Returns whether the node is a call from the specified object name
  *
- * @param {Object} node
- * @param {string} objName
- * @returns {boolean|undefined}
+ * @param node
+ * @param objName
+ * @returns
  */
 function isCallFromObject(node, objName) {
   return (
@@ -284,8 +284,8 @@ function isCallFromObject(node, objName) {
 /**
  * Returns whether the node is actually computed (x['ab'] does not count, x['a' + 'b'] does
  *
- * @param {Object} node
- * @returns {boolean|undefined}
+ * @param node
+ * @returns
  */
 function isComputed(node) {
   return get(node, "computed") && node.property.type !== "Literal";
@@ -294,9 +294,9 @@ function isComputed(node) {
 /**
  * Returns whether the two expressions refer to the same object (e.g. a['b'].c and a.b.c)
  *
- * @param {Object} a
- * @param {Object} b
- * @returns {boolean}
+ * @param a
+ * @param b
+ * @returns
  */
 function isEquivalentMemberExp(a, b) {
   return isEqualWith(a, b, (left, right, key) => {
@@ -349,10 +349,10 @@ function getIsValue(value) {
 /**
  * Returns the expression compared to the value in a binary expression, or undefined if there isn't one
  *
- * @param {Object} node
- * @param {number} value
- * @param {boolean} [checkOver=false]
- * @returns {Object|undefined}
+ * @param node
+ * @param value
+ * @param [checkOver=false]
+ * @returns
  */
 function getExpressionComparedToInt(node, value, checkOver) {
   const isValue = getIsValue(value);
@@ -392,8 +392,8 @@ function getExpressionComparedToInt(node, value, checkOver) {
 /**
  * Returns whether the node is a call to indexOf
  *
- * @param {Object} node
- * @returns {boolean}
+ * @param node
+ * @returns
  */
 const isIndexOfCall = (node) =>
   isMethodCall(node) && getMethodName(node) === "indexOf";
@@ -401,8 +401,8 @@ const isIndexOfCall = (node) =>
 /**
  * Returns whether the node is a call to findIndex
  *
- * @param {Object} node
- * @returns {boolean}
+ * @param node
+ * @returns
  */
 const isFindIndexCall = (node) =>
   isMethodCall(node) && getMethodName(node) === "findIndex";
@@ -411,7 +411,7 @@ const isFindIndexCall = (node) =>
  * Returns an array of identifier names returned in a parameter or variable definition
  *
  * @param node an AST node which is a parameter or variable declaration
- * @returns {string[]} List of names defined in the parameter
+ * @returns List of names defined in the parameter
  */
 function collectParameterValues(node) {
   switch (node && node.type) {

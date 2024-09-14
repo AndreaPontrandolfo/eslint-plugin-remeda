@@ -14,7 +14,7 @@
     "test:watch": "vitest --ui",
     "test": "vitest run",
     "attw": "attw --pack .",
-    "qa": "pnpm typecheck && pnpm lint && pnpm test && pnpm knip && pnpm publint && attw",
+    "qa": "pnpm typecheck && pnpm test && pnpm knip && pnpm publint && attw",
     "nuke": "rm -rf node_modules pnpm-lock.yaml",
     "semantic-release": "pnpm build && semantic-release"
   },

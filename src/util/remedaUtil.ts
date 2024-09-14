@@ -7,9 +7,9 @@ import RemedaContext from "./RemedaContext";
 /**
  * Returns whether the node is a call to the specified method.
  *
- * @param {Object} node
- * @param {string} method
- * @returns {boolean}
+ * @param node
+ * @param method
+ * @returns
  */
 function isCallToMethod(node, method) {
   return method === astUtil.getMethodName(node);
@@ -18,8 +18,8 @@ function isCallToMethod(node, method) {
 /**
  * Gets the 'isX' method for a specified type, e.g. isObject
  *
- * @param {string} name
- * @returns {string|null}
+ * @param name
+ * @returns
  */
 function getIsTypeMethod(name) {
   const types = [
@@ -42,9 +42,9 @@ function getIsTypeMethod(name) {
 /**
  * Gets the context's Remeda settings and a function and returns a visitor that calls the function for every Remeda or chain call
  *
- * @param {RemedaContext} remedaContext
- * @param {RemedaReporter} reporter
- * @returns {NodeTypeVisitor}
+ * @param remedaContext
+ * @param reporter
+ * @returns
  */
 function getRemedaMethodCallExpVisitor(remedaContext, reporter) {
   return function (node) {
@@ -105,7 +105,7 @@ function getRemedaMethodVisitors(context, remedaCallExpVisitor) {
 /**
  *
  * @param context
- * @returns {RemedaContext} a RemedaContext for a given context
+ * @returns a RemedaContext for a given context
  */
 function getRemedaContext(context) {
   return new RemedaContext(context);
