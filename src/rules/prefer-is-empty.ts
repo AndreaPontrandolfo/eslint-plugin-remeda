@@ -2,9 +2,9 @@
  * @fileoverview Rule to prefer isEmpty over manually checking for length value.
  */
 
-import { getRemedaContext } from "../util/remedaUtil";
-import { getDocsUrl } from "../util/getDocsUrl";
 import type { RemedaMethodVisitors } from "../types";
+import { getDocsUrl } from "../util/getDocsUrl";
+import { getRemedaContext } from "../util/remedaUtil";
 
 const meta = {
   type: "problem",
@@ -23,22 +23,26 @@ function create(context) {
       if (node.type === "Identifier") {
         return node.name;
       }
+
       return context.getSourceCode().getText(node);
     }
   }
 
   const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
+
   visitors.BinaryExpression = function (node) {
     if (node.operator === "===") {
       if (node.left) {
         if (node.left.property && node.right) {
           const leftExpressionMember = node.left.property.name;
           const rightExpressionMember = node.right.value;
+
           if (
             leftExpressionMember === "length" &&
             rightExpressionMember === 0
           ) {
             const subjectObject = node.left.object;
+
             context.report({
               node,
               message:
@@ -58,11 +62,13 @@ function create(context) {
         ) {
           const leftExpressionMember = node.left.expression.property.name;
           const rightExpressionMember = node.right.value;
+
           if (
             leftExpressionMember === "length" &&
             rightExpressionMember === 0
           ) {
             const subjectObject = node.left.expression.object;
+
             context.report({
               node,
               message:
@@ -83,11 +89,13 @@ function create(context) {
         if (node.left.property && node.right) {
           const leftExpressionMember = node.left.property.name;
           const rightExpressionMember = node.right.value;
+
           if (
             leftExpressionMember === "length" &&
             rightExpressionMember === 0
           ) {
             const subjectObject = node.left.object;
+
             context.report({
               node,
               message:
@@ -103,11 +111,13 @@ function create(context) {
         } else if (node.left.expression && node.right) {
           const leftExpressionMember = node.left.expression.property.name;
           const rightExpressionMember = node.right.value;
+
           if (
             leftExpressionMember === "length" &&
             rightExpressionMember === 0
           ) {
             const subjectObject = node.left.expression.object;
+
             context.report({
               node,
               message:
@@ -124,6 +134,7 @@ function create(context) {
       }
     }
   };
+
   return visitors;
 }
 

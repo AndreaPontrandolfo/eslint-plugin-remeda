@@ -23,13 +23,16 @@ function create(context) {
       if (node.type === "Identifier") {
         return node.name;
       }
+
       return context.getSourceCode().getText(node);
     }
   }
 
   const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
+
   visitors.ConditionalExpression = function (node) {
     const statement = node.test;
+
     if (statement.operator === "!") {
       if (
         statement.argument &&
@@ -40,6 +43,7 @@ function create(context) {
         const argument = getTextOfNode(statement.argument.arguments[0]);
         const consequent = getTextOfNode(node.consequent);
         const alternate = getTextOfNode(node.alternate);
+
         if (argument === consequent) {
           context.report({
             node,
@@ -53,6 +57,7 @@ function create(context) {
       }
     }
   };
+
   return visitors;
 }
 

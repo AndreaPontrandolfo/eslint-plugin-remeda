@@ -1,6 +1,6 @@
+import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/collection-return";
 import { withDefaultPragma } from "../testUtil/optionsUtil";
-import { run } from "eslint-vitest-rule-tester";
 
 run({
   name: "collection-return",

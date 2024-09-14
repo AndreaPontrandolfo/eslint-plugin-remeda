@@ -1,7 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "exclude": ["node_modules", "dist", "tests/vitest-ui-output/**/*"],
-  "include": ["src/**/*", "tests/**/*", "tsup.config.ts"],
+  "include": [
+    "src/**/*",
+    "tests/**/*",
+    "./tsup.config.ts",
+    "./vitest.config.ts"
+  ],
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["esnext"],

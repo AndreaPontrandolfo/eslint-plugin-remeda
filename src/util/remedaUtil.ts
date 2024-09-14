@@ -1,11 +1,12 @@
-import { includes, capitalize } from "lodash";
-import * as methodDataUtil from "./methodDataUtil";
-import astUtil from "./astUtil";
-import RemedaContext from "./RemedaContext";
+import { capitalize,includes } from "lodash";
 import type { RemedaMethodVisitors } from "../types";
+import astUtil from "./astUtil";
+import * as methodDataUtil from "./methodDataUtil";
+import RemedaContext from "./RemedaContext";
 
 /**
  * Returns whether the node is a call to the specified method.
+ *
  * @param {Object} node
  * @param {string} method
  * @returns {boolean}
@@ -16,6 +17,7 @@ function isCallToMethod(node, method) {
 
 /**
  * Gets the 'isX' method for a specified type, e.g. isObject
+ *
  * @param {string} name
  * @returns {string|null}
  */
@@ -33,11 +35,13 @@ function getIsTypeMethod(name) {
     "Error",
     // "Element",
   ];
+
   return includes(types, name) ? `is${capitalize(name)}` : null;
 }
 
 /**
  * Gets the context's Remeda settings and a function and returns a visitor that calls the function for every Remeda or chain call
+ *
  * @param {RemedaContext} remedaContext
  * @param {RemedaReporter} reporter
  * @returns {NodeTypeVisitor}
@@ -45,6 +49,7 @@ function getIsTypeMethod(name) {
 function getRemedaMethodCallExpVisitor(remedaContext, reporter) {
   return function (node) {
     let iterateeIndex;
+
     if (remedaContext.isRemedaCall(node)) {
       const method = astUtil.getMethodName(node);
 
@@ -57,6 +62,7 @@ function getRemedaMethodCallExpVisitor(remedaContext, reporter) {
       });
     } else {
       const method = remedaContext.getImportedRemedaMethod(node);
+
       if (method) {
         iterateeIndex = methodDataUtil.getIterateeIndex(method);
         reporter(node, node.arguments[iterateeIndex], {
@@ -77,6 +83,7 @@ function isCallToRemedaMethod(node, method, remedaContext) {
   if (!node || node.type !== "CallExpression") {
     return false;
   }
+
   return (
     isRemedaCallToMethod(node, method, remedaContext) ||
     method === remedaContext.getImportedRemedaMethod(node)
@@ -86,10 +93,12 @@ function isCallToRemedaMethod(node, method, remedaContext) {
 function getRemedaMethodVisitors(context, remedaCallExpVisitor) {
   const remedaContext = new RemedaContext(context);
   const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
+
   visitors.CallExpression = getRemedaMethodCallExpVisitor(
     remedaContext,
     remedaCallExpVisitor,
   );
+
   return visitors;
 }
 

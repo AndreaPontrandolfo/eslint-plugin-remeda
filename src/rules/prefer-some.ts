@@ -2,8 +2,8 @@
  * @fileoverview Rule to check if a findIndex comparison should be a call to R.some
  */
 
-import { getDocsUrl } from "../util/getDocsUrl";
 import astUtil from "../util/astUtil";
+import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaMethodVisitors } from "../util/remedaUtil";
 
 const { getExpressionComparedToInt } = astUtil;

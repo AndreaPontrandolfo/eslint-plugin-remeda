@@ -2,14 +2,14 @@
  * @fileoverview Rule to enforce usage of collection method values
  */
 
-import { getDocsUrl } from "../util/getDocsUrl";
-import { getRemedaMethodVisitors, isCallToMethod } from "../util/remedaUtil";
-import astUtil from "../util/astUtil";
-import {
-  isCollectionMethod,
-  getSideEffectIterationMethods,
-} from "../util/methodDataUtil";
 import includes from "lodash/includes";
+import astUtil from "../util/astUtil";
+import { getDocsUrl } from "../util/getDocsUrl";
+import {
+  getSideEffectIterationMethods,
+  isCollectionMethod,
+} from "../util/methodDataUtil";
+import { getRemedaMethodVisitors, isCallToMethod } from "../util/remedaUtil";
 
 const { getMethodName } = astUtil;
 

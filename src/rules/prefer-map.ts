@@ -2,11 +2,11 @@
  * @fileoverview Rule to check if a call to R.forEach should be a call to R.map
  */
 
-import { getDocsUrl } from "../util/getDocsUrl";
-import { getRemedaMethodVisitors } from "../util/remedaUtil";
-import astUtil from "../util/astUtil";
 import get from "lodash/get";
 import includes from "lodash/includes";
+import astUtil from "../util/astUtil";
+import { getDocsUrl } from "../util/getDocsUrl";
+import { getRemedaMethodVisitors } from "../util/remedaUtil";
 
 const {
   getFirstFunctionLine,
@@ -33,6 +33,7 @@ function create(context) {
         ? firstLine
         : //@ts-expect-error
           firstLine?.expression;
+
     return (
       func &&
       hasOnlyOneStatement(func) &&

@@ -2,8 +2,8 @@
  * @fileoverview Rule to prefer R.doNothing() or R.constant(undefined) over an empty function
  */
 
-import { getDocsUrl } from "../util/getDocsUrl";
 import astUtil from "../util/astUtil";
+import { getDocsUrl } from "../util/getDocsUrl";
 
 const { getFirstFunctionLine } = astUtil;
 

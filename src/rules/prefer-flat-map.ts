@@ -2,13 +2,13 @@
  * @fileoverview Rule to check if a call to map and flatten should be a call to R.flatMap
  */
 
+import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import {
   getRemedaMethodVisitors,
   isCallToMethod,
   isCallToRemedaMethod,
 } from "../util/remedaUtil";
-import astUtil from "../util/astUtil";
 
 const { getCaller } = astUtil;
 

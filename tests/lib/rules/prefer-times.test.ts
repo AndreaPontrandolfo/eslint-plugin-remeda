@@ -1,10 +1,11 @@
-import rule from "../../../src/rules/prefer-times";
-import { withDefaultPragma, fromMessage } from "../testUtil/optionsUtil";
 import { run } from "eslint-vitest-rule-tester";
+import rule from "../../../src/rules/prefer-times";
+import { fromMessage,withDefaultPragma } from "../testUtil/optionsUtil";
 
 const toErrorObject = fromMessage(
   "Prefer R.times over R.map without using arguments",
 );
+
 run({
   name: "prefer-times",
   rule,

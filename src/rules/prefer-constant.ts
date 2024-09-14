@@ -2,8 +2,8 @@
  * @fileoverview Rule to check if the expression could be better expressed as a R.constant
  */
 
-import { getDocsUrl } from "../util/getDocsUrl";
 import astUtil from "../util/astUtil";
+import { getDocsUrl } from "../util/getDocsUrl";
 
 const { getValueReturnedInFirstStatement } = astUtil;
 
@@ -30,27 +30,33 @@ function create(context) {
 
   function isCompletelyLiteral(node) {
     switch (node.type) {
-      case "Literal":
+      case "Literal": {
         return true;
-      case "BinaryExpression":
+      }
+      case "BinaryExpression": {
         return (
           isCompletelyLiteral(node.left) && isCompletelyLiteral(node.right)
         );
-      case "UnaryExpression":
+      }
+      case "UnaryExpression": {
         return isCompletelyLiteral(node.argument);
-      case "ConditionalExpression":
+      }
+      case "ConditionalExpression": {
         return (
           isCompletelyLiteral(node.test) &&
           isCompletelyLiteral(node.consequent) &&
           isCompletelyLiteral(node.alternate)
         );
-      default:
+      }
+      default: {
         return false;
+      }
     }
   }
 
   function reportIfLikeConstant(func, node) {
     const valueReturnedInFirstLine = func(node);
+
     if (
       valueReturnedInFirstLine &&
       isCompletelyLiteral(valueReturnedInFirstLine)

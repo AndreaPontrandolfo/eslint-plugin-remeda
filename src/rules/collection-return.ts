@@ -1,11 +1,11 @@
-import { getDocsUrl } from "../util/getDocsUrl";
-import {
-  getRemedaMethodCallExpVisitor,
-  getRemedaContext,
-} from "../util/remedaUtil";
-import { isCollectionMethod } from "../util/methodDataUtil";
-import astUtil from "../util/astUtil";
 import assign from "lodash/assign";
+import astUtil from "../util/astUtil";
+import { getDocsUrl } from "../util/getDocsUrl";
+import { isCollectionMethod } from "../util/methodDataUtil";
+import {
+  getRemedaContext,
+  getRemedaMethodCallExpVisitor,
+} from "../util/remedaUtil";
 
 /**
  * @fileoverview Rule to check that iteratees for all collection functions except forEach return a value;
@@ -29,6 +29,7 @@ function create(context) {
   const funcInfos = new Map();
   let currFuncInfo: FuncInfo;
   const remedaContext = getRemedaContext(context);
+
   return assign(
     {
       "CallExpression:exit": getRemedaMethodCallExpVisitor(
@@ -36,6 +37,7 @@ function create(context) {
         (node, iteratee, { method }) => {
           if (isCollectionMethod(method) && funcInfos.has(iteratee)) {
             const { hasReturn } = funcInfos.get(iteratee);
+
             if (
               astUtil.isFunctionDefinitionWithBlock(iteratee) &&
               !hasReturn &&
