@@ -1,4 +1,4 @@
-import { isString, assign, defaultsDeep } from "lodash";
+import { assign, defaultsDeep,isString } from "lodash";
 
 function fromMessage(message) {
   return fromOptions({ errors: [{ message }] });

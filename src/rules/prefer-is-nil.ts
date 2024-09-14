@@ -2,11 +2,11 @@
  * @fileoverview Rule to prefer isNil over manual checking for undefined or null.
  */
 
+import _, { cond, matches, property } from "lodash";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
-import { isCallToRemedaMethod, getRemedaContext } from "../util/remedaUtil";
-import _, { matches, cond, property } from "lodash";
+import { getRemedaContext,isCallToRemedaMethod } from "../util/remedaUtil";
 
 const { isNegationExpression, isEquivalentMemberExp } = astUtil;
 
@@ -95,6 +95,7 @@ function create(context) {
 
   function isEquivalentExistingExpression(node, leftNil, rightNil) {
     const leftExp = checkExpression(leftNil, "===", node.left);
+
     return (
       leftExp &&
       isEquivalentMemberExp(
@@ -106,6 +107,7 @@ function create(context) {
 
   function isEquivalentExistingNegation(node, leftNil, rightNil) {
     const leftExp = checkNegatedExpression(leftNil, node.left);
+
     return (
       leftExp &&
       isEquivalentMemberExp(
@@ -116,6 +118,7 @@ function create(context) {
   }
 
   const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
+
   visitors.LogicalExpression = function (node) {
     if (node.operator === "||") {
       if (
@@ -137,6 +140,7 @@ function create(context) {
       });
     }
   };
+
   return visitors;
 }
 

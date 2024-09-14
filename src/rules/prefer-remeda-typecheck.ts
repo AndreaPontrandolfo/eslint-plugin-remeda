@@ -2,9 +2,9 @@
  * @fileoverview Rule to check if there's a method in the chain start that can be in the chain
  */
 
+import some from "lodash/some";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getIsTypeMethod } from "../util/remedaUtil";
-import some from "lodash/some";
 
 const meta = {
   type: "problem",
@@ -34,11 +34,13 @@ function create(context) {
     const sourceCode = context.sourceCode ?? context.getSourceCode();
     const scope = sourceCode?.getScope?.(node);
     const definedVariables = scope.variables;
+
     return some(definedVariables, { name: node.name });
   }
 
   function getValueForSide(node, side) {
     const otherSide = otherSides[side];
+
     if (
       isTypeOf(node[side]) &&
       (node[otherSide].value !== "undefined" ||
@@ -60,6 +62,7 @@ function create(context) {
   return {
     BinaryExpression(node) {
       const typeofCompareType = getTypeofCompareType(node);
+
       if (typeofCompareType) {
         context.report({
           node,
@@ -71,6 +74,7 @@ function create(context) {
         });
       } else if (node.operator === "instanceof") {
         const remedaEquivalent = getIsTypeMethod(node.right.name);
+
         if (node.right.type === "Identifier" && remedaEquivalent) {
           context.report({
             node,

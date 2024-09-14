@@ -2,9 +2,9 @@
  * @fileoverview Rule to check if a call to R.forEach should be a call to R.filter
  */
 
+import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaMethodVisitors } from "../util/remedaUtil";
-import astUtil from "../util/astUtil";
 
 const {
   isIdentifierWithName,
@@ -52,6 +52,7 @@ function create(context) {
 
   function onlyHasSimplifiableIf(func) {
     const firstLine: any = getFirstFunctionLine(func);
+
     return (
       func &&
       hasOnlyOneStatement(func) &&

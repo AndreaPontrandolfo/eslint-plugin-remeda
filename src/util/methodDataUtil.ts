@@ -1,10 +1,10 @@
-import { includes, get, isObject, has } from "lodash";
+import { get, has, includes, isObject } from "lodash";
 import * as methodDataCatalog from "./methodData";
 
 /**
- * Gets whether the method is a collection method
- * @param {string} method
- * @returns {Boolean}
+ * Gets whether the method is a collection method.
+ *
+ * @param method
  */
 function isCollectionMethod(method) {
   return (
@@ -15,10 +15,12 @@ function isCollectionMethod(method) {
 
 /**
  * Returns whether the node's method call supports using shorthands.
- * @returns {boolean}
+ *
+ * @returns
  */
 function methodSupportsShorthand(method: string, shorthandType?: string) {
-  const methodShorthandData = get(methodDataCatalog, [method, "shorthand"]);
+  const methodShorthandData = get(methodDataCatalog, `${method}.shorthand`);
+
   return isObject(methodShorthandData)
     ? Boolean(shorthandType && methodShorthandData[shorthandType])
     : Boolean(methodShorthandData);
@@ -29,13 +31,15 @@ function methodSupportsShorthand(method: string, shorthandType?: string) {
  */
 function getIterateeIndex(method: string) {
   const methodData = methodDataCatalog[method];
+
   if (has(methodData, "iterateeIndex")) {
     return methodData.iterateeIndex;
   }
   //@ts-expect-error
-  if (methodData?.iteratee) {
+  if (methodData.iteratee) {
     return 1;
   }
+
   return -1;
 }
 
@@ -49,11 +53,12 @@ const sideEffectIterationMethods = [
 ];
 
 /**
- * Gets a list of side effect iteration methods
- * @returns {string[]}
+ * Gets a list of side effect iteration methods.
+ *
+ * @returns
  */
 function getSideEffectIterationMethods() {
   return sideEffectIterationMethods;
 }
 
-export { isCollectionMethod, getSideEffectIterationMethods, getIterateeIndex };
+export { getIterateeIndex, getSideEffectIterationMethods, isCollectionMethod };

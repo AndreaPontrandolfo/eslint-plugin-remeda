@@ -1,6 +1,6 @@
 import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/prefer-is-empty";
-import { withDefaultPragma, fromMessage } from "../testUtil/optionsUtil";
+import { fromMessage,withDefaultPragma } from "../testUtil/optionsUtil";
 
 const toErrorObject = fromMessage(
   "Prefer isEmpty over manually checking for length value.",

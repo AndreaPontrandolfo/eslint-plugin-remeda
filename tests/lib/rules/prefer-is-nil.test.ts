@@ -5,6 +5,7 @@ import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 const toErrorObject = fromMessage(
   "Prefer isNil over checking for undefined or null.",
 );
+
 run({
   name: "prefer-is-nil",
   rule,

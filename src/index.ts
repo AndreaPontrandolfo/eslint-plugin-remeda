@@ -1,6 +1,6 @@
+import type { ESLint } from "eslint";
 import _ from "lodash";
 import packageJson from "../package.json";
-import type { ESLint } from "eslint";
 import { rules } from "./rules";
 
 const plugin = {

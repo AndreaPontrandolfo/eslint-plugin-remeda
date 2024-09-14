@@ -13,6 +13,7 @@ function getNameFromCjsRequire(init) {
 const isFullRemedaImport = (str: string) => /^remeda?(\/)?$/.test(str);
 const getMethodImportFromName = (str: string) => {
   const match = /^remeda([./])(\w+)$/.exec(str);
+
   return match && match[2];
 };
 

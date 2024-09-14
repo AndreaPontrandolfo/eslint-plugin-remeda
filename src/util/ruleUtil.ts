@@ -8,6 +8,7 @@ function combineVisitorObjects(...objects) {
     ...objects,
     (objValue, sourceValue) => (objValue || []).concat(sourceValue),
   );
+
   // @ts-expect-error
   return mapValues(accumForAllVisitors, over);
 }
