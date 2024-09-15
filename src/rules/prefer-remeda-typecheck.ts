@@ -1,8 +1,8 @@
 /**
- * @fileoverview Rule to check if there's a method in the chain start that can be in the chain
+ * @file Rule to check if there's a method in the chain start that can be in the chain.
  */
 
-import some from "lodash/some";
+import { some } from "lodash";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getIsTypeMethod } from "../util/remedaUtil";
 

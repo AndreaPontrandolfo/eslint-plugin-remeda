@@ -1,4 +1,4 @@
-import assign from "lodash/assign";
+import { assign } from "lodash";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { isCollectionMethod } from "../util/methodDataUtil";
@@ -6,10 +6,6 @@ import {
   getRemedaContext,
   getRemedaMethodCallExpVisitor,
 } from "../util/remedaUtil";
-
-/**
- * @fileoverview Rule to check that iteratees for all collection functions except forEach return a value;
- */
 
 interface FuncInfo {
   upper: FuncInfo;
@@ -25,6 +21,9 @@ const meta = {
   },
 } as const;
 
+/**
+ * Rule to check that iteratees for all collection functions except forEach return a value;.
+ */
 function create(context) {
   const funcInfos = new Map();
   let currFuncInfo: FuncInfo;

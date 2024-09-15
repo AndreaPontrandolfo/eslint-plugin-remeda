@@ -1,9 +1,8 @@
 /**
- * @fileoverview Rule to check if a call to R.forEach should be a call to R.map
+ * Rule to check if a call to R.forEach should be a call to R.map.
  */
 
-import get from "lodash/get";
-import includes from "lodash/includes";
+import { get, includes } from "lodash";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaMethodVisitors } from "../util/remedaUtil";

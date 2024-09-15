@@ -1,5 +1,5 @@
 import type { ESLint } from "eslint";
-import _ from "lodash";
+import { last } from "lodash";
 import packageJson from "../package.json";
 import { rules } from "./rules";
 
@@ -11,7 +11,7 @@ const plugin = {
   processors: {},
 } satisfies ESLint.Plugin;
 
-const pluginShortName = _.last(plugin.meta.name.split("-")) as string;
+const pluginShortName = last(plugin.meta.name.split("-")) as string;
 
 Object.assign(plugin.configs, {
   recommended: {

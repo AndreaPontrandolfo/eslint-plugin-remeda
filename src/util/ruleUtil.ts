@@ -1,6 +1,4 @@
-import assignWith from "lodash/assignWith";
-import mapValues from "lodash/mapValues";
-import over from "lodash/over";
+import { assignWith, mapValues, over } from "lodash";
 
 function combineVisitorObjects(...objects) {
   const accumForAllVisitors = assignWith(

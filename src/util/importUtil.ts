@@ -1,4 +1,4 @@
-import get from "lodash/get";
+import { get } from "lodash";
 
 function getNameFromCjsRequire(init) {
   if (
@@ -17,4 +17,4 @@ const getMethodImportFromName = (str: string) => {
   return match && match[2];
 };
 
-export { getNameFromCjsRequire, isFullRemedaImport, getMethodImportFromName };
+export { getMethodImportFromName, getNameFromCjsRequire, isFullRemedaImport };

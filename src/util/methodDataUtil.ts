@@ -32,12 +32,13 @@ function methodSupportsShorthand(method: string, shorthandType?: string) {
 function getIterateeIndex(method: string) {
   const methodData = methodDataCatalog[method];
 
-  if (has(methodData, "iterateeIndex")) {
-    return methodData.iterateeIndex;
-  }
-  //@ts-expect-error
-  if (methodData.iteratee) {
-    return 1;
+  if (methodData) {
+    if (has(methodData, "iterateeIndex")) {
+      return methodData.iterateeIndex;
+    }
+    if (methodData.iteratee) {
+      return 1;
+    }
   }
 
   return -1;

@@ -1,4 +1,4 @@
-import { capitalize,includes } from "lodash";
+import { capitalize, includes } from "lodash";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "./astUtil";
 import * as methodDataUtil from "./methodDataUtil";
@@ -16,7 +16,7 @@ function isCallToMethod(node, method) {
 }
 
 /**
- * Gets the 'isX' method for a specified type, e.g. isObject
+ * Gets the 'isX' method for a specified type, e.g. IsObject.
  *
  * @param name
  * @returns
@@ -40,7 +40,7 @@ function getIsTypeMethod(name) {
 }
 
 /**
- * Gets the context's Remeda settings and a function and returns a visitor that calls the function for every Remeda or chain call
+ * Gets the context's Remeda settings and a function and returns a visitor that calls the function for every Remeda or chain call.
  *
  * @param remedaContext
  * @param reporter
@@ -103,19 +103,18 @@ function getRemedaMethodVisitors(context, remedaCallExpVisitor) {
 }
 
 /**
- *
  * @param context
- * @returns a RemedaContext for a given context
+ * @returns A RemedaContext for a given context.
  */
 function getRemedaContext(context) {
   return new RemedaContext(context);
 }
 
 export {
-  isCallToMethod,
   getIsTypeMethod,
-  getRemedaMethodCallExpVisitor,
-  isCallToRemedaMethod,
-  getRemedaMethodVisitors,
   getRemedaContext,
+  getRemedaMethodCallExpVisitor,
+  getRemedaMethodVisitors,
+  isCallToMethod,
+  isCallToRemedaMethod,
 };
