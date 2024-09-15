@@ -1,4 +1,4 @@
-import { chain, get } from "lodash";
+import { chain, get } from "lodash-es";
 
 export function getSettings(context) {
   return (

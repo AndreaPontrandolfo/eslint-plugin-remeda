@@ -1,4 +1,4 @@
-import { assign } from "lodash";
+import { assign } from "lodash-es";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { isCollectionMethod } from "../util/methodDataUtil";

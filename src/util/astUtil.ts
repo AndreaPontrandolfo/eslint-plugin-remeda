@@ -10,7 +10,7 @@ import {
   overEvery,
   overSome,
   property,
-} from "lodash";
+} from "lodash-es";
 
 /**
  * Gets the object that called the method in a CallExpression

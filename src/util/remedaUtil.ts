@@ -1,4 +1,4 @@
-import { capitalize, includes } from "lodash";
+import { capitalize, includes } from "lodash-es";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "./astUtil";
 import * as methodDataUtil from "./methodDataUtil";

@@ -1,12 +1,12 @@
 /**
- * @fileoverview Rule to prefer isNil over manual checking for undefined or null.
+ * @file Rule to prefer isNil over manual checking for undefined or null.
  */
 
-import _, { cond, matches, property } from "lodash";
+import { cond, find, map, matches, property } from "lodash-es";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
-import { getRemedaContext,isCallToRemedaMethod } from "../util/remedaUtil";
+import { getRemedaContext, isCallToRemedaMethod } from "../util/remedaUtil";
 
 const { isNegationExpression, isEquivalentMemberExp } = astUtil;
 
@@ -80,9 +80,11 @@ function create(context) {
   }
 
   function checkExpression(nil, operator, node) {
-    return _(nilChecks[nil].expressionChecks)
-      .map((check) => check(node, operator))
-      .find();
+    const mappedValues = map(nilChecks[nil].expressionChecks, (check) =>
+      check(node, operator),
+    );
+
+    return find(mappedValues);
   }
 
   function checkNegatedExpression(nil, node) {

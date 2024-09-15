@@ -2,7 +2,7 @@
  * @fileoverview Rule to check if a call to map should be a call to times
  */
 
-import { get } from "lodash";
+import { get } from "lodash-es";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaMethodVisitors } from "../util/remedaUtil";
 

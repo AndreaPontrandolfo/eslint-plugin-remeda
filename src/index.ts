@@ -1,5 +1,5 @@
 import type { ESLint } from "eslint";
-import { last } from "lodash";
+import { last } from "lodash-es";
 import packageJson from "../package.json";
 import { rules } from "./rules";
 

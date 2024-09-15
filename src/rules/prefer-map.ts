@@ -2,7 +2,7 @@
  * Rule to check if a call to R.forEach should be a call to R.map.
  */
 
-import { get, includes } from "lodash";
+import { get, includes } from "lodash-es";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaMethodVisitors } from "../util/remedaUtil";

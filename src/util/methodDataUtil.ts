@@ -1,4 +1,4 @@
-import { get, has, includes, isObject } from "lodash";
+import { get, has, includes, isObject } from "lodash-es";
 import * as methodDataCatalog from "./methodData";
 
 /**
@@ -36,6 +36,7 @@ function getIterateeIndex(method: string) {
     if (has(methodData, "iterateeIndex")) {
       return methodData.iterateeIndex;
     }
+    //@ts-expect-error
     if (methodData.iteratee) {
       return 1;
     }

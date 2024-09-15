@@ -2,7 +2,7 @@
  * @file Rule to enforce usage of collection method values.
  */
 
-import { includes } from "lodash";
+import { includes } from "lodash-es";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import {
