@@ -1,7 +1,3 @@
-/**
- * @fileoverview Rule to prefer R.doNothing() or R.constant(undefined) over an empty function
- */
-
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 
@@ -15,6 +11,9 @@ const meta = {
   },
 } as const;
 
+/**
+ * Rule to prefer R.doNothing() or R.constant(undefined) over an empty function.
+ */
 function create(context) {
   function reportIfEmptyFunction(node) {
     if (
