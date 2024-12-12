@@ -37,7 +37,8 @@
   "homepage": "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda",
   "bugs": "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/issues",
   "peerDependencies": {
-    "eslint": ">=9.0.0"
+    "eslint": ">=9.0.0",
+    "remeda": "^1.0.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.15.4",
@@ -53,6 +54,7 @@
     "knip": "^5.29.1",
     "prettier": "^3.3.2",
     "publint": "^0.2.10",
+    "remeda": "^1.0.0",
     "semantic-release": "^24.0.0",
     "tsup": "^8.2.4",
     "typescript": "^5.5.2",
