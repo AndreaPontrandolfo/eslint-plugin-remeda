@@ -840,7 +840,7 @@ export const isNative = {
   iteratee: false,
   args: 1,
 };
-export const isNil = {
+export const isNullish = {
   wrapper: false,
   shorthand: false,
   chainable: false,

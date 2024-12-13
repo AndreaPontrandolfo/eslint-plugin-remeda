@@ -33,7 +33,7 @@ Enable all of the rules that you would like to use. All rules are off by default
 - [prefer-nullish-coalescing](docs/rules/prefer-nullish-coalescing.md): Prefer `??` when doing a comparison with a non-nullish value as test.
 - [prefer-constant](docs/rules/prefer-constant.md): Prefer `R.constant` over functions returning literals.
 - [prefer-is-empty](docs/rules/prefer-is-empty.md): Prefer `R.isEmpty` over manual checking for length value.
-- [prefer-is-nil](docs/rules/prefer-is-nil.md): Prefer `R.isNil` over checks for both null and undefined.
+- [prefer-is-nil](docs/rules/prefer-is-nullish.md): Prefer `R.isNullish` over checks for both null and undefined.
 - [prefer-remeda-typecheck](docs/rules/prefer-remeda-typecheck.md): Prefer using `R.is*` methods over `typeof` and `instanceof` checks when applicable.
 - [prefer-do-nothing](docs/rules/prefer-do-nothing.md): Prefer `R.doNothing` over empty functions.
 - [prefer-some](docs/rules/prefer-some.md): Prefer using `R.some` over comparing `findIndex` to -1.

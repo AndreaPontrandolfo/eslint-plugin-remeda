@@ -1,5 +1,5 @@
 /**
- * @file Rule to prefer isNil over manual checking for undefined or null.
+ * @file Rule to prefer isNullish over manual checking for undefined or null.
  */
 
 import { cond, find, map, matches, property } from "lodash-es";
@@ -14,7 +14,7 @@ const meta = {
   type: "problem",
   schema: [],
   docs: {
-    url: getDocsUrl("prefer-is-nil"),
+    url: getDocsUrl("prefer-is-nullish"),
   },
 } as const;
 
@@ -129,7 +129,7 @@ function create(context) {
       ) {
         context.report({
           node,
-          message: "Prefer isNil over checking for undefined or null.",
+          message: "Prefer isNullish over checking for undefined or null.",
         });
       }
     } else if (
@@ -138,7 +138,7 @@ function create(context) {
     ) {
       context.report({
         node,
-        message: "Prefer isNil over checking for undefined or null.",
+        message: "Prefer isNullish over checking for undefined or null.",
       });
     }
   };
@@ -151,5 +151,5 @@ const rule = {
   meta,
 };
 
-export const RULE_NAME = "prefer-is-nil";
+export const RULE_NAME = "prefer-is-nullish";
 export default rule;

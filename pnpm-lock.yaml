@@ -51,6 +51,9 @@ importers:
       publint:
         specifier: ^0.2.10
         version: 0.2.10
+      remeda:
+        specifier: ^2.17.4
+        version: 2.17.4
       semantic-release:
         specifier: ^24.0.0
         version: 24.1.0(typescript@5.5.4)
@@ -3034,6 +3037,9 @@ packages:
     resolution: {integrity: sha512-qx+xQGZVsy55CH0a1hiVwHmqjLryfh7wQyF5HO07XJ9f7dQMY/gPQHhlyDkIzJKC+x2fUCpCcUODUUUFrm7SHA==}
     hasBin: true
 
+  remeda@2.17.4:
+    resolution: {integrity: sha512-pviU2Ag7Qx9mOCAKO4voxDx/scfLzdhp3v85qDO4xxntQsU76uE9sgrAAdK1ATn4zzaOJqCXYMMNRP+O9F4Wiw==}
+
   require-directory@2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
     engines: {node: '>=0.10.0'}
@@ -3493,6 +3499,10 @@ packages:
 
   type-fest@4.26.0:
     resolution: {integrity: sha512-OduNjVJsFbifKb57UqZ2EMP1i4u64Xwow3NYXUtBbD4vIwJdQd4+xl8YDou1dlm4DVrtwT/7Ky8z8WyCULVfxw==}
+    engines: {node: '>=16'}
+
+  type-fest@4.30.1:
+    resolution: {integrity: sha512-ojFL7eDMX2NF0xMbDwPZJ8sb7ckqtlAi1GsmgsFXvErT9kFTk1r0DuQKvrCh73M6D4nngeHJmvogF9OluXs7Hw==}
     engines: {node: '>=16'}
 
   typed-array-buffer@1.0.2:
@@ -7057,6 +7067,10 @@ snapshots:
     dependencies:
       jsesc: 0.5.0
 
+  remeda@2.17.4:
+    dependencies:
+      type-fest: 4.30.1
+
   require-directory@2.1.1: {}
 
   requireindex@1.2.0: {}
@@ -7553,6 +7567,8 @@ snapshots:
   type-fest@2.19.0: {}
 
   type-fest@4.26.0: {}
+
+  type-fest@4.30.1: {}
 
   typed-array-buffer@1.0.2:
     dependencies:
