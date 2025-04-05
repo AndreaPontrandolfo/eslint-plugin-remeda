@@ -16,6 +16,8 @@
     "attw": "attw --pack .",
     "qa": "pnpm typecheck && pnpm test && pnpm knip && pnpm publint && attw",
     "nuke": "rm -rf node_modules pnpm-lock.yaml",
+    "update:eslint-docs": "eslint-doc-generator",
+    "lint:eslint-docs": "pnpm update:eslint-docs -- --check",
     "semantic-release": "pnpm build && semantic-release"
   },
   "files": [
