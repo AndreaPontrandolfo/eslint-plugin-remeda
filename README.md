@@ -2,23 +2,23 @@
 
 ESLint plugin for [Remeda](https://github.com/remeda/remeda).
 
+## Preamble
+
+This plugin was originally derived from [eslint-plugin-lodash-f](https://github.com/AndreaPontrandolfo/eslint-plugin-lodash) (fork of [eslint-plugin-lodash](https://github.com/wix-incubator/eslint-plugin-lodash)) and used that as a base to build upon.
+
 ## Installation
 
 First, you'll first need to install [ESLint](https://eslint.org/):
 
 ```sh
-npm add eslint -D
+pnpm add -D eslint
 ```
 
 Next, install `eslint-plugin-remeda`:
 
 ```sh
-npm add eslint-plugin-remeda -D
+pnpm add -D eslint-plugin-remeda
 ```
-
-## Preamble
-
-This plugin was originally derived from [eslint-plugin-lodash-f](https://github.com/AndreaPontrandolfo/eslint-plugin-lodash) (fork of [eslint-plugin-lodash](https://github.com/wix-incubator/eslint-plugin-lodash)) and used that as a base to build upon.
 
 ## Rules
 
