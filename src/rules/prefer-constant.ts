@@ -1,5 +1,5 @@
 /**
- * @fileoverview Rule to check if the expression could be better expressed as a R.constant
+ * @file Rule to check if the expression could be better expressed as a R.constant.
  */
 
 import astUtil from "../util/astUtil";
@@ -10,6 +10,7 @@ const { getValueReturnedInFirstStatement } = astUtil;
 const meta = {
   type: "problem",
   docs: {
+    description: "Prefer R.constant over functions returning literals",
     url: getDocsUrl("prefer-constant"),
   },
   schema: [

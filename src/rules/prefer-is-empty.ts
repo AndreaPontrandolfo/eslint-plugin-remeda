@@ -1,5 +1,5 @@
 /**
- * @fileoverview Rule to prefer isEmpty over manually checking for length value.
+ * @file Rule to prefer isEmpty over manually checking for length value.
  */
 
 import type { RemedaMethodVisitors } from "../types";
@@ -10,6 +10,7 @@ const meta = {
   type: "problem",
   schema: [],
   docs: {
+    description: "Prefer R.isEmpty over manually checking for length value.",
     url: getDocsUrl("prefer-is-empty"),
   },
   fixable: "code",

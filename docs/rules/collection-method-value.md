@@ -1,4 +1,8 @@
-# Collection Method Value
+# remeda/collection-method-value
+
+💼 This rule is enabled in the ✅ `recommended` config.
+
+<!-- end auto-generated rule header -->
 
 When using a Remeda collection method, the expression should be used (e.g. assigning to a variable or check in a condition), unless it's a method meant for side effects (e.g. `forEach` or `forOwn`) which should NOT be used.
 

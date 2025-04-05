@@ -19,6 +19,7 @@ const meta = {
   type: "problem",
   schema: [],
   docs: {
+    description: "Prefer R.map over a R.forEach with a push to an array inside",
     url: getDocsUrl("prefer-map"),
   },
 } as const;

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Rule to check if a call to `R.filter` should be a call to `R.find`.
+ * @file Rule to check if a call to `R.filter` should be a call to `R.find`.
  */
 
 import { getDocsUrl } from "../util/getDocsUrl";
@@ -13,6 +13,8 @@ const meta = {
   type: "problem",
   schema: [],
   docs: {
+    description:
+      "Prefer using `R.find` over selecting the first item of a filtered result",
     url: getDocsUrl("prefer-find"),
   },
 } as const;

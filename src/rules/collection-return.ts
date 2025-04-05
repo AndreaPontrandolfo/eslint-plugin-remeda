@@ -17,6 +17,8 @@ const meta = {
   type: "problem",
   schema: [],
   docs: {
+    description:
+      "Always return a value in iteratees of Remeda collection methods that aren't `forEach`",
     url: getDocsUrl("collection-return"),
   },
 } as const;

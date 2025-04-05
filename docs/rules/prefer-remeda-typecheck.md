@@ -1,4 +1,8 @@
-# Prefer Remeda typecheck
+# remeda/prefer-remeda-typecheck
+
+💼 This rule is enabled in the ✅ `recommended` config.
+
+<!-- end auto-generated rule header -->
 
 Getting the specific type of a variable or expression can be done with `typeof` or `instanceof`. However, it's often more expressive to use the Remeda equivalent function
 

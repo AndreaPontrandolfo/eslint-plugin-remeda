@@ -1,4 +1,8 @@
-# Prefer [`R.flatMap`] over consecutive [`R.map`] and [`R.flat`]
+# remeda/prefer-flat-map
+
+💼 This rule is enabled in the ✅ `recommended` config.
+
+<!-- end auto-generated rule header -->
 
 When using [`R.map`] and [`R.flat`], it can be more concise to use [`R.flatMap`] instead.
 

@@ -1,4 +1,8 @@
-# Prefer noop
+# remeda/prefer-do-nothing
+
+💼 This rule is enabled in the ✅ `recommended` config.
+
+<!-- end auto-generated rule header -->
 
 When defining an empty function (e.g. for callbacks) it can be more readable to use `R.doNothing()` or `R.constant(undefined)` instead. Use `R.doNothing()` if you need to return void, otherwise use `R.constant(undefined)`.
 

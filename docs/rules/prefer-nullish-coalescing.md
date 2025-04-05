@@ -1,4 +1,10 @@
-# Prefer nullish coalescing over checking a ternary with !isNullish.
+# remeda/prefer-nullish-coalescing
+
+💼 This rule is enabled in the ✅ `recommended` config.
+
+🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
+
+<!-- end auto-generated rule header -->
 
 When checking if a variable is not nil as a test for a ternary equation, it's more coincise to just use the nullish coalescing operator.
 
