@@ -20,7 +20,7 @@ Object.assign(plugin.configs, {
     },
     rules: {
       [`${pluginShortName}/prefer-is-empty`]: 2,
-      [`${pluginShortName}/prefer-is-nil`]: 2,
+      [`${pluginShortName}/prefer-is-nullish`]: 2,
       [`${pluginShortName}/prefer-times`]: 2,
       [`${pluginShortName}/prefer-constant`]: 2,
       [`${pluginShortName}/prefer-remeda-typecheck`]: 2,

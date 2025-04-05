@@ -18,7 +18,7 @@ import preferFlatMap, {
 import preferIsEmpty, {
   RULE_NAME as preferIsEmptyName,
 } from "./prefer-is-empty";
-import preferIsNil, { RULE_NAME as preferIsNilName } from "./prefer-is-nil";
+import preferIsNullish, { RULE_NAME as preferIsNullishName } from "./prefer-is-nullish";
 import preferMap, { RULE_NAME as preferMapName } from "./prefer-map";
 import preferNullishCoalescing, {
   RULE_NAME as preferNullishCoalescingName,
@@ -38,7 +38,7 @@ export const rules = {
   [preferFindName]: preferFind,
   [preferFlatMapName]: preferFlatMap,
   [preferIsEmptyName]: preferIsEmpty,
-  [preferIsNilName]: preferIsNil,
+  [preferIsNullishName]: preferIsNullish,
   [preferMapName]: preferMap,
   [preferNullishCoalescingName]: preferNullishCoalescing,
   [preferRemedaTypecheckName]: preferRemedaTypecheck,

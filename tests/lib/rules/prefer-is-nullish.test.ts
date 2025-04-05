@@ -1,13 +1,13 @@
 import { run } from "eslint-vitest-rule-tester";
-import rule from "../../../src/rules/prefer-is-nil";
+import rule from "../../../src/rules/prefer-is-nullish";
 import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
 const toErrorObject = fromMessage(
-  "Prefer isNil over checking for undefined or null.",
+  "Prefer isNullish over checking for undefined or null.",
 );
 
 run({
-  name: "prefer-is-nil",
+  name: "prefer-is-nullish",
   rule,
   valid: [
     "if (x === undefined) {}",
