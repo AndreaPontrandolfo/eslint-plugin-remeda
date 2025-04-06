@@ -10,6 +10,6 @@ const REPO_URL = "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda";
  * @param ruleName - Name of the eslint rule.
  * @returns URL to the documentation for the given rule.
  */
-export function getDocsUrl(ruleName) {
+export function getDocsUrl(ruleName: string) {
   return `${REPO_URL}/blob/v${version}/docs/rules/${ruleName}.md`;
 }
