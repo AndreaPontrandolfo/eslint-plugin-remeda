@@ -385,8 +385,7 @@ function getExpressionComparedToInt(node, value, checkOver) {
 /**
  * Returns whether the node is a call to indexOf.
  *
- * @param node
- * @returns
+ * @param node - The node to check.
  */
 const isIndexOfCall = (node) =>
   isMethodCall(node) && getMethodName(node) === "indexOf";
@@ -394,8 +393,7 @@ const isIndexOfCall = (node) =>
 /**
  * Returns whether the node is a call to findIndex.
  *
- * @param node
- * @returns
+ * @param node - The node to check.
  */
 const isFindIndexCall = (node) => {
   return isMethodCall(node) && getMethodName(node) === "findIndex";
