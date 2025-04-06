@@ -3,6 +3,11 @@
  */
 
 import { includes } from "lodash-es";
+import {
+  AST_NODE_TYPES,
+  type TSESLint,
+  type TSESTree,
+} from "@typescript-eslint/utils";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import {
@@ -14,11 +19,11 @@ import { getRemedaMethodVisitors, isCallToMethod } from "../util/remedaUtil";
 const { getMethodName } = astUtil;
 
 const meta = {
-  type: "problem",
-  schema: [],
+  type: "problem" as const,
+  schema: [] as const,
   messages: {
-    useReturnValue: "Use value returned from R.{{method}}",
-    dontUseReturnValue: "Do not use value returned from R.{{method}}",
+    useReturnValueId: "Use value returned from R.{{method}}",
+    dontUseReturnValueId: "Do not use value returned from R.{{method}}",
   },
   docs: {
     description: "Use value returned from collection methods properly",
@@ -26,26 +31,35 @@ const meta = {
   },
 } as const;
 
-function parentUsesValue(node) {
-  return node.parent.type !== "ExpressionStatement";
+function parentUsesValue(node: TSESTree.CallExpression) {
+  return node.parent.type !== AST_NODE_TYPES.ExpressionStatement;
 }
 
-function isSideEffectIterationMethod(method) {
+function isSideEffectIterationMethod(method: string) {
   return includes(getSideEffectIterationMethods(), method);
 }
 
-function isParentCommit(node, callType) {
+function isParentCommit(node: TSESTree.CallExpression, callType: string) {
   return callType === "chained" && isCallToMethod(node.parent.parent, "commit");
 }
 
-function create(context) {
+function create(
+  context: TSESLint.RuleContext<
+    "useReturnValueId" | "dontUseReturnValueId",
+    []
+  >,
+) {
   return getRemedaMethodVisitors(
     context,
-    (node, iteratee, { method, callType }) => {
+    (
+      node: TSESTree.CallExpression,
+      iteratee: TSESTree.Node,
+      { method, callType }: { method: string; callType: string },
+    ) => {
       if (isCollectionMethod(method) && !parentUsesValue(node)) {
         context.report({
           node,
-          messageId: "useReturnValue",
+          messageId: "useReturnValueId",
           data: { method },
         });
       } else if (
@@ -55,7 +69,7 @@ function create(context) {
       ) {
         context.report({
           node,
-          messageId: "dontUseReturnValue",
+          messageId: "dontUseReturnValueId",
           data: { method: getMethodName(node) },
         });
       }
