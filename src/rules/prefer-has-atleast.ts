@@ -172,10 +172,18 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
           if (isEmptyCall && !isEmpty(isEmptyCall.arguments)) {
             // Only report if it's a negated comparison (isEmpty === false or isEmpty !== true)
             const isNegated =
-              (node.operator === "===" && node.left.value === false) ||
-              (node.operator === "===" && node.right.value === false) ||
-              (node.operator === "!==" && node.left.value === true) ||
-              (node.operator === "!==" && node.right.value === true);
+              (node.operator === "===" &&
+                node.left.type === AST_NODE_TYPES.Literal &&
+                node.left.value === false) ||
+              (node.operator === "===" &&
+                node.right.type === AST_NODE_TYPES.Literal &&
+                node.right.value === false) ||
+              (node.operator === "!==" &&
+                node.left.type === AST_NODE_TYPES.Literal &&
+                node.left.value === true) ||
+              (node.operator === "!==" &&
+                node.right.type === AST_NODE_TYPES.Literal &&
+                node.right.value === true);
 
             if (isNegated) {
               context.report({
