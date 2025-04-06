@@ -1,12 +1,12 @@
 import astUtil from "./astUtil";
-import { getSettings } from "./settingsUtil";
-const { isMethodCall, isCallFromObject, getCaller } = astUtil;
-
 import {
   getMethodImportFromName,
   getNameFromCjsRequire,
   isFullRemedaImport,
 } from "./importUtil";
+import { getSettings } from "./settingsUtil";
+
+const { isMethodCall, isCallFromObject, getCaller } = astUtil;
 
 /* Class representing remeda data for a given context */
 export default class {
@@ -15,7 +15,7 @@ export default class {
   methods: any;
   _pragma: any;
   /**
-   * Create a Remeda context wrapper from a file's RuleContext
+   * Create a Remeda context wrapper from a file's RuleContext.
    *
    * @param context
    */
@@ -26,9 +26,9 @@ export default class {
   }
 
   /**
-   * Gets visitors to collect Remeda declarations in the context
+   * Gets visitors to collect Remeda declarations in the context.
    *
-   * @returns visitors for everywhere Remeda can be declared
+   * @returns Visitors for everywhere Remeda can be declared.
    */
   getImportVisitors() {
     const self = this;
@@ -88,7 +88,7 @@ export default class {
   }
 
   /**
-   * Returns whether the node is an imported Remeda in this context
+   * Returns whether the node is an imported Remeda in this context.
    *
    * @param node
    * @returns
@@ -100,7 +100,7 @@ export default class {
   }
 
   /**
-   * Returns the name of the Remeda method for this node, if any
+   * Returns the name of the Remeda method for this node, if any.
    *
    * @param node
    * @returns
@@ -112,7 +112,7 @@ export default class {
   }
 
   /**
-   * Returns whether the node is a call from a Remeda object
+   * Returns whether the node is a call from a Remeda object.
    *
    * @param node
    * @returns
@@ -125,8 +125,7 @@ export default class {
   }
 
   /**
-   *
-   * @returns the current Remeda pragma
+   * @returns The current Remeda pragma.
    */
   get pragma() {
     if (!this._pragma) {
