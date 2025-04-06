@@ -174,8 +174,6 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
                 node,
                 messageId: "prefer-has-atleast-over-negated-isempty",
                 fix(fixer) {
-                  const sourceCode = context.getSourceCode();
-
                   return fixer.replaceText(
                     node,
                     `R.hasAtLeast(${sourceCode.getText(isEmptyCall.arguments[0])}, 1)`,
@@ -195,8 +193,6 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
               node,
               messageId: "prefer-has-atleast-over-negated-isempty",
               fix(fixer) {
-                const sourceCode = context.getSourceCode();
-
                 return fixer.replaceText(
                   node,
                   `R.hasAtLeast(${sourceCode.getText(isEmptyCall.arguments[0])}, 1)`,
