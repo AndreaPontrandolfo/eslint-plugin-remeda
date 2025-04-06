@@ -111,6 +111,8 @@ function isMemberExpOf(
       return false;
     }
   }
+
+  return false;
 }
 
 /**
