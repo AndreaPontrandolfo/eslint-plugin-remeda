@@ -163,11 +163,13 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
             (node.right.type === AST_NODE_TYPES.Literal &&
               node.right.value === true))
         ) {
-          const isEmptyCall = isRemedaIsEmptyCall(node.left)
-            ? node.left
-            : isRemedaIsEmptyCall(node.right)
-              ? node.right
-              : null;
+          let isEmptyCall: TSESTree.CallExpression | null = null;
+
+          if (isRemedaIsEmptyCall(node.left)) {
+            isEmptyCall = node.left;
+          } else if (isRemedaIsEmptyCall(node.right)) {
+            isEmptyCall = node.right;
+          }
 
           if (isEmptyCall && !isEmpty(isEmptyCall.arguments)) {
             // Only report if it's a negated comparison (isEmpty === false or isEmpty !== true)
