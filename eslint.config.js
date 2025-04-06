@@ -19,6 +19,9 @@ export default defineFlatConfig([
     rules: {
       "eslint-plugin/require-meta-docs-url": 2,
       "eslint-plugin/require-meta-docs-description": 2,
+      "@typescript-eslint/no-this-alias": 0,
+      "import/no-anonymous-default-export": 0,
+      "no-restricted-syntax": 0,
       "func-style": 0,
       "import/no-default-export": 0,
       "vitest/require-hook": 0,
