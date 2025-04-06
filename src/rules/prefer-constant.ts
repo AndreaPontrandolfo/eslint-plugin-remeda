@@ -1,5 +1,5 @@
 /**
- * @file Rule to check if the expression could be better expressed as a R.constant.
+ * Rule to check if the expression could be better expressed as a R.constant.
  */
 
 import astUtil from "../util/astUtil";
@@ -23,39 +23,40 @@ const meta = {
   ],
 } as const;
 
-function create(context) {
-  const shouldCheckArrowFunctions =
-    context.options[0] !== undefined ? context.options[0] : true;
-  const shouldCheckFunctionDeclarations =
-    context.options[1] !== undefined ? context.options[1] : false;
-
-  function isCompletelyLiteral(node) {
-    switch (node.type) {
-      case "Literal": {
-        return true;
-      }
-      case "BinaryExpression": {
-        return (
-          isCompletelyLiteral(node.left) && isCompletelyLiteral(node.right)
-        );
-      }
-      case "UnaryExpression": {
-        return isCompletelyLiteral(node.argument);
-      }
-      case "ConditionalExpression": {
-        return (
-          isCompletelyLiteral(node.test) &&
-          isCompletelyLiteral(node.consequent) &&
-          isCompletelyLiteral(node.alternate)
-        );
-      }
-      default: {
-        return false;
-      }
+function isCompletelyLiteral(node) {
+  switch (node.type) {
+    case "Literal": {
+      return true;
+    }
+    case "BinaryExpression": {
+      return isCompletelyLiteral(node.left) && isCompletelyLiteral(node.right);
+    }
+    case "UnaryExpression": {
+      return isCompletelyLiteral(node.argument);
+    }
+    case "ConditionalExpression": {
+      return (
+        isCompletelyLiteral(node.test) &&
+        isCompletelyLiteral(node.consequent) &&
+        isCompletelyLiteral(node.alternate)
+      );
+    }
+    default: {
+      return false;
     }
   }
+}
 
-  function reportIfLikeConstant(func, node) {
+function create(context: { options: unknown[] }) {
+  const shouldCheckArrowFunctions =
+    context.options[0] === undefined ? true : context.options[0];
+  const shouldCheckFunctionDeclarations =
+    context.options[1] === undefined ? false : context.options[1];
+
+  function reportIfLikeConstant(
+    func: (node: unknown) => unknown,
+    node: unknown,
+  ) {
     const valueReturnedInFirstLine = func(node);
 
     if (
