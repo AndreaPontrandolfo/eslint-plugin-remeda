@@ -1,4 +1,5 @@
 import { assign } from "lodash-es";
+import type { TSESTree } from "@typescript-eslint/utils";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { isCollectionMethod } from "../util/methodDataUtil";
@@ -9,7 +10,7 @@ import {
 
 interface FuncInfo {
   upper: FuncInfo;
-  codePath: any;
+  codePath: Record<string, unknown>;
   hasReturn: boolean;
 }
 
@@ -35,7 +36,14 @@ function create(context) {
     {
       "CallExpression:exit": getRemedaMethodCallExpVisitor(
         remedaContext,
-        (node, iteratee, { method }) => {
+        (
+          node,
+          iteratee:
+            | TSESTree.FunctionExpression
+            | TSESTree.ArrowFunctionExpression
+            | TSESTree.FunctionDeclaration,
+          { method },
+        ) => {
           if (isCollectionMethod(method) && funcInfos.has(iteratee)) {
             const { hasReturn } = funcInfos.get(iteratee);
 
