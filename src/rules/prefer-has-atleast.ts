@@ -1,173 +1,201 @@
 /**
- * @file Rule to check if an array.length comparison should be a call to R.hasAtLeast.
+ * @file Rule to check if array.length comparisons or negated isEmpty calls should be replaced with R.hasAtLeast.
  */
 
+import type { isEmpty } from "lodash-es";
+import { ESLintUtils, type TSESTree } from "@typescript-eslint/utils";
 import { getDocsUrl } from "../util/getDocsUrl";
-import { isCallToRemedaMethod } from "../util/remedaUtil";
+import { getRemedaContext, isCallToRemedaMethod } from "../util/remedaUtil";
 
-const MESSAGE_ID = "prefer-has-atleast";
-const MESSAGE_ID_EMPTY = "prefer-has-atleast-over-negated-isempty";
+export const RULE_NAME = "prefer-has-atleast";
+const LENGTH_COMPARISON_MESSAGE =
+  "Prefer R.hasAtLeast over array.length comparison";
+const NEGATED_ISEMPTY_MESSAGE =
+  "Prefer R.hasAtLeast(data, 1) over negated R.isEmpty for better type narrowing";
 
-const meta = {
-  type: "suggestion",
-  docs: {
-    description:
-      "Prefer R.hasAtLeast over array.length comparison or negated isEmpty",
-    url: getDocsUrl("prefer-has-atleast"),
+export type MessageIds =
+  | "prefer-has-atleast"
+  | "prefer-has-atleast-over-negated-isempty";
+export type Options = [];
+
+export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
+  name: RULE_NAME,
+  meta: {
+    type: "problem",
+    docs: {
+      description:
+        "Prefer R.hasAtLeast over array.length comparison or negated R.isEmpty.",
+      recommended: "error",
+    },
+    fixable: "code",
+    schema: [],
+    messages: {
+      "prefer-has-atleast": LENGTH_COMPARISON_MESSAGE,
+      "prefer-has-atleast-over-negated-isempty": NEGATED_ISEMPTY_MESSAGE,
+    },
   },
-  fixable: "code",
-  schema: [],
-  messages: {
-    [MESSAGE_ID]: "Prefer R.hasAtLeast over array.length comparison",
-    [MESSAGE_ID_EMPTY]:
-      "Prefer R.hasAtLeast(data, 1) over negated R.isEmpty for better type narrowing",
-  },
-} as const;
+  defaultOptions: [],
+  create(context) {
+    const remedaContext = getRemedaContext(context);
 
-function create(context) {
-  const remedaContext = { getImportedRemedaMethod: () => null };
+    function isRemedaIsEmptyCall(
+      node: TSESTree.Node,
+    ): node is TSESTree.CallExpression {
+      return (
+        node.type === "CallExpression" &&
+        isCallToRemedaMethod(node, "isEmpty", remedaContext)
+      );
+    }
 
-  function isRemedaIsEmptyCall(node) {
-    return (
-      node.type === "CallExpression" &&
-      (isCallToRemedaMethod(node, "isEmpty", remedaContext) ||
-        (node.callee.type === "MemberExpression" &&
-          node.callee.object.type === "Identifier" &&
-          node.callee.object.name === "R" &&
-          node.callee.property.type === "Identifier" &&
-          node.callee.property.name === "isEmpty"))
-    );
-  }
+    function isArrayLengthProperty(
+      node: TSESTree.Node,
+    ): node is TSESTree.MemberExpression {
+      return (
+        node.type === "MemberExpression" &&
+        node.property.type === "Identifier" &&
+        node.property.name === "length"
+      );
+    }
 
-  return {
-    /**
-     * Check for array.length comparisons.
-     */
-    BinaryExpression(node) {
-      // Check for R.isEmpty() === false or R.isEmpty() !== true
-      if (
-        (node.operator === "===" &&
-          ((isRemedaIsEmptyCall(node.left) &&
-            node.right.type === "Literal" &&
-            node.right.value === false) ||
-            (isRemedaIsEmptyCall(node.right) &&
-              node.left.type === "Literal" &&
-              node.left.value === false))) ||
-        (node.operator === "!==" &&
-          ((isRemedaIsEmptyCall(node.left) &&
-            node.right.type === "Literal" &&
-            node.right.value === true) ||
-            (isRemedaIsEmptyCall(node.right) &&
-              node.left.type === "Literal" &&
-              node.left.value === true)))
-      ) {
-        const isEmptyCall = isRemedaIsEmptyCall(node.left)
-          ? node.left
-          : node.right;
-        const arrayArg = isEmptyCall.arguments[0];
+    function isNumberLiteral(node: TSESTree.Node): node is TSESTree.Literal {
+      return node.type === "Literal" && typeof node.value === "number";
+    }
 
-        if (arrayArg) {
-          context.report({
-            node,
-            messageId: MESSAGE_ID_EMPTY,
-            fix(fixer) {
-              const arrayCode = context.getSourceCode().getText(arrayArg);
+    function getNumberValue(node: TSESTree.Node): number | null {
+      if (isNumberLiteral(node)) {
+        return node.value as number;
+      }
 
-              return fixer.replaceText(node, `R.hasAtLeast(${arrayCode}, 1)`);
-            },
-          });
-        }
+      return null;
+    }
 
+    function reportArrayLengthComparison(
+      node: TSESTree.BinaryExpression,
+      arrayNode: TSESTree.Expression,
+      numberNode: TSESTree.Expression,
+      operator: string,
+    ) {
+      const numberValue = getNumberValue(numberNode);
+
+      if (numberValue === null) {
         return;
       }
 
-      // Original array.length checks
-      if (node.operator === ">=" || node.operator === ">") {
-        // Check for array.length >= n
-        if (
-          node.left.type === "MemberExpression" &&
-          node.left.property.type === "Identifier" &&
-          node.left.property.name === "length" &&
-          node.right.type === "Literal" &&
-          typeof node.right.value === "number"
-        ) {
-          const comparison =
-            node.operator === ">=" ? node.right.value : node.right.value + 1;
+      let targetNumber: number;
 
-          context.report({
-            node,
-            messageId: MESSAGE_ID,
-            fix(fixer) {
-              const arrayCode = context
-                .getSourceCode()
-                .getText(node.left.object);
+      switch (operator) {
+        case ">=": {
+          targetNumber = numberValue;
 
-              return fixer.replaceText(
-                node,
-                `R.hasAtLeast(${arrayCode}, ${comparison})`,
-              );
-            },
-          });
+          break;
         }
+        case ">": {
+          targetNumber = numberValue + 1;
 
-        // Check for n <= array.length
-        if (
-          node.right.type === "MemberExpression" &&
-          node.right.property.type === "Identifier" &&
-          node.right.property.name === "length" &&
-          node.left.type === "Literal" &&
-          typeof node.left.value === "number"
-        ) {
-          // Swap the comparison since the order is reversed
-          const comparison =
-            node.operator === ">=" ? node.left.value : node.left.value + 1;
+          break;
+        }
+        case "<=": {
+          targetNumber = numberValue;
 
-          context.report({
-            node,
-            messageId: MESSAGE_ID,
-            fix(fixer) {
-              const arrayCode = context
-                .getSourceCode()
-                .getText(node.right.object);
+          break;
+        }
+        case "<": {
+          targetNumber = numberValue - 1;
 
-              return fixer.replaceText(
-                node,
-                `R.hasAtLeast(${arrayCode}, ${comparison})`,
-              );
-            },
-          });
+          break;
+        }
+        default: {
+          return;
         }
       }
-    },
 
-    /**
-     * Check for !R.isEmpty(data).
-     */
-    UnaryExpression(node) {
-      if (node.operator === "!" && isRemedaIsEmptyCall(node.argument)) {
-        const isEmptyCall = node.argument;
-        const arrayArg = isEmptyCall.arguments[0];
+      context.report({
+        node,
+        messageId: "prefer-has-atleast",
+        fix(fixer) {
+          const sourceCode = context.getSourceCode();
 
-        if (arrayArg) {
-          context.report({
+          return fixer.replaceText(
             node,
-            messageId: MESSAGE_ID_EMPTY,
-            fix(fixer) {
-              const arrayCode = context.getSourceCode().getText(arrayArg);
+            `R.hasAtLeast(${sourceCode.getText(arrayNode)}, ${targetNumber})`,
+          );
+        },
+      });
+    }
 
-              return fixer.replaceText(node, `R.hasAtLeast(${arrayCode}, 1)`);
-            },
-          });
+    return {
+      BinaryExpression(node) {
+        if (
+          node.operator === ">=" &&
+          isArrayLengthProperty(node.left) &&
+          isNumberLiteral(node.right)
+        ) {
+          reportArrayLengthComparison(node, node.left.object, node.right, ">=");
+        } else if (
+          node.operator === "<=" &&
+          isNumberLiteral(node.left) &&
+          isArrayLengthProperty(node.right)
+        ) {
+          reportArrayLengthComparison(node, node.right.object, node.left, "<=");
+        } else if (
+          node.operator === ">" &&
+          isArrayLengthProperty(node.left) &&
+          isNumberLiteral(node.right)
+        ) {
+          reportArrayLengthComparison(node, node.left.object, node.right, ">");
+        } else if (
+          node.operator === "<" &&
+          isNumberLiteral(node.left) &&
+          isArrayLengthProperty(node.right)
+        ) {
+          reportArrayLengthComparison(node, node.right.object, node.left, "<");
+        } else if (
+          (node.operator === "===" || node.operator === "!==") &&
+          ((node.left.type === "Literal" && node.left.value === false) ||
+            (node.right.type === "Literal" && node.right.value === false))
+        ) {
+          const isEmptyCall = isRemedaIsEmptyCall(node.left)
+            ? node.left
+            : isRemedaIsEmptyCall(node.right)
+              ? node.right
+              : null;
+
+          if (isEmptyCall && !isEmpty(isEmptyCall.arguments)) {
+            context.report({
+              node,
+              messageId: "prefer-has-atleast-over-negated-isempty",
+              fix(fixer) {
+                const sourceCode = context.getSourceCode();
+
+                return fixer.replaceText(
+                  node,
+                  `R.hasAtLeast(${sourceCode.getText(isEmptyCall.arguments[0])}, 1)`,
+                );
+              },
+            });
+          }
         }
-      }
-    },
-  };
-}
+      },
+      UnaryExpression(node) {
+        if (node.operator === "!" && isRemedaIsEmptyCall(node.argument)) {
+          const isEmptyCall = node.argument;
 
-const rule = {
-  create,
-  meta,
-};
+          if (!isEmpty(isEmptyCall.arguments)) {
+            context.report({
+              node,
+              messageId: "prefer-has-atleast-over-negated-isempty",
+              fix(fixer) {
+                const sourceCode = context.getSourceCode();
 
-export const RULE_NAME = "prefer-has-atleast";
-export default rule;
+                return fixer.replaceText(
+                  node,
+                  `R.hasAtLeast(${sourceCode.getText(isEmptyCall.arguments[0])}, 1)`,
+                );
+              },
+            });
+          }
+        }
+      },
+    };
+  },
+});
