@@ -2,9 +2,7 @@ import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/prefer-do-nothing";
 import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-const toErrorObject = fromMessage(
-  "Prefer R.doNothing() or R.constant(undefined) over an empty function",
-);
+const toErrorObject = fromMessage(rule.meta.messages["prefer-do-nothing"]);
 
 run({
   name: "prefer-do-nothing",
