@@ -1,13 +1,19 @@
 import { assignWith, mapValues, over } from "lodash-es";
 
-function combineVisitorObjects(...objects: Record<string, unknown>[]) {
-  const accumForAllVisitors = assignWith(
+type VisitorFunction = (...args: unknown[]) => unknown;
+
+function combineVisitorObjects(
+  ...objects: Record<string, unknown>[]
+): Record<string, (...args: unknown[]) => unknown[]> {
+  const accumForAllVisitors = assignWith<Record<string, VisitorFunction[]>>(
     {},
     ...objects,
-    (objValue, sourceValue) => (objValue || []).concat(sourceValue),
+    (objValue: VisitorFunction[] | undefined, sourceValue: unknown) => {
+      return [...(objValue ?? []), sourceValue as VisitorFunction];
+    },
   );
 
-  return mapValues(accumForAllVisitors, over);
+  return mapValues(accumForAllVisitors, (fns: VisitorFunction[]) => over(fns));
 }
 
 export { combineVisitorObjects };
