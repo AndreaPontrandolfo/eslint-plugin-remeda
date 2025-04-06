@@ -20,7 +20,7 @@ function methodSupportsShorthand(method: string, shorthandType?: string) {
  *
  * @param method - The method to check.
  */
-function isCollectionMethod(method) {
+function isCollectionMethod(method: string) {
   return (
     methodSupportsShorthand(method) ||
     includes(["reduce", "reduceRight"], method)
