@@ -16,16 +16,14 @@ import {
 /**
  * Gets the object that called the method in a CallExpression.
  *
- * @param {Object} node
- * @returns {Object|undefined}
+ * @param node - The node to check.
  */
 const getCaller = property("callee.object");
 
 /**
  * Gets the name of a method in a CallExpression.
  *
- * @param {Object} node
- * @returns {string|undefined}
+ * @param node - The node to check.
  */
 const getMethodName = property("callee.property.name");
 
@@ -47,8 +45,7 @@ const isFunctionExpression = overSome(
 /**
  * Returns whether the node is a function declaration that has a block.
  *
- * @param {Object} node
- * @returns {boolean}
+ * @param node - The node to check.
  */
 const isFunctionDefinitionWithBlock = overSome(
   isFunctionExpression,
@@ -61,8 +58,7 @@ const isFunctionDefinitionWithBlock = overSome(
 /**
  * If the node specified is a function, returns the node corresponding with the first statement/expression in that function.
  *
- * @param {Object} node
- * @returns {node|undefined}
+ * @param node - The node to check.
  */
 const getFirstFunctionLine = cond([
   [isFunctionDefinitionWithBlock, property("body.body[0]")],
@@ -70,8 +66,7 @@ const getFirstFunctionLine = cond([
 ]);
 
 /**
- * @param {Object} node
- * @returns {boolean|undefined}
+ * @param node - The node to check.
  */
 const isPropAccess = overSome(
   matches({ computed: false }),
@@ -86,12 +81,8 @@ interface IsMemberExpOfOptions {
 /**
  * Returns whether the node is a member expression starting with the same object, up to the specified length.
  *
- * @param node
- * @param objectName
- * @param [options]
- * @param [options.maxLength]
- * @param [options.allowComputed]
- * @returns
+ * @param node - The node to check.
+ * @param objectName - The object name to check against.
  */
 function isMemberExpOf(
   node: Record<string, unknown>,
@@ -122,24 +113,21 @@ function isMemberExpOf(
 /**
  * Returns the name of the first parameter of a function, if it exists.
  *
- * @param {Object} func
- * @returns {string|undefined}
+ * @param func - The function to check.
  */
 const getFirstParamName = property("params[0].name");
 
 /**
  * Returns whether or not the expression is a return statement.
  *
- * @param {Object} exp
- * @returns {boolean|undefined}
+ * @param exp - The expression to check.
  */
 const isReturnStatement = matchesProperty("type", "ReturnStatement");
 
 /**
  * Returns whether the node specified has only one statement.
  *
- * @param func
- * @returns
+ * @param func - The function to check.
  */
 function hasOnlyOneStatement(func) {
   if (isFunctionDefinitionWithBlock(func)) {
@@ -153,8 +141,7 @@ function hasOnlyOneStatement(func) {
 /**
  * Returns whether the node is an object of a method call.
  *
- * @param node
- * @returns
+ * @param node - The node to check.
  */
 function isObjectOfMethodCall(node) {
   return (
@@ -166,8 +153,7 @@ function isObjectOfMethodCall(node) {
 /**
  * Returns whether the node is a literal.
  *
- * @param node
- * @returns
+ * @param node - The node to check.
  */
 function isLiteral(node) {
   return node.type === "Literal";
@@ -208,8 +194,7 @@ function isBinaryExpWithMemberOf(
 /**
  * Returns whether the specified expression is a negation.
  *
- * @param {Object} exp
- * @returns {boolean|undefined}
+ * @param exp - The expression to check.
  */
 const isNegationExpression = matches({
   type: "UnaryExpression",
@@ -255,8 +240,7 @@ function isIdentifierWithName(
 /**
  * Returns the node of the value returned in the first line, if any.
  *
- * @param func
- * @returns
+ * @param func - The function to check.
  */
 function getValueReturnedInFirstStatement(func) {
   const firstLine: any = getFirstFunctionLine(func);
@@ -274,9 +258,8 @@ function getValueReturnedInFirstStatement(func) {
 /**
  * Returns whether the node is a call from the specified object name.
  *
- * @param node
- * @param objName
- * @returns
+ * @param node - The node to check.
+ * @param objName   - The object name to check against.
  */
 function isCallFromObject(node, objName) {
   return (
@@ -290,8 +273,7 @@ function isCallFromObject(node, objName) {
 /**
  * Returns whether the node is actually computed (x['ab'] does not count, x['a' + 'b'] does.
  *
- * @param node
- * @returns
+ * @param node - The node to check.
  */
 function isComputed(node) {
   return get(node, "computed") && node.property.type !== "Literal";
@@ -324,8 +306,7 @@ function isEquivalentMemberExp(a, b) {
 /**
  * Returns whether the expression is a strict equality comparison, ===.
  *
- * @param {Object} node
- * @returns {boolean}
+ * @param node - The node to check.
  */
 const isEqEqEq = matches({ type: "BinaryExpression", operator: "===" });
 
@@ -334,9 +315,6 @@ const isMinus = (node) =>
 
 /**
  * Enum for type of comparison to int literal.
- *
- * @readonly
- * @enum {number}
  */
 const comparisonType = {
   exact: 0,
@@ -355,10 +333,9 @@ function getIsValue(value) {
 /**
  * Returns the expression compared to the value in a binary expression, or undefined if there isn't one.
  *
- * @param node
- * @param value
- * @param [checkOver]
- * @returns
+ * @param node - The node to check.
+ * @param value - The value to compare to.
+ * @param checkOver - Whether to check for over/under.
  */
 function getExpressionComparedToInt(node, value, checkOver) {
   const isValue = getIsValue(value);
