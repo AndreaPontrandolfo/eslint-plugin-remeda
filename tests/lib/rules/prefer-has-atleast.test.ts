@@ -42,31 +42,15 @@ run({
     ]
       .map(withDefaultPragma)
       .map(toErrorObject),
-    // Negated isEmpty patterns
-    {
-      code: withDefaultPragma("!R.isEmpty(arr)"),
-      errors: [{ messageId: "prefer-has-atleast-over-negated-isempty" }],
-      output: withDefaultPragma("R.hasAtLeast(arr, 1)"),
-    },
-    {
-      code: withDefaultPragma("R.isEmpty(arr) === false"),
-      errors: [{ messageId: "prefer-has-atleast-over-negated-isempty" }],
-      output: withDefaultPragma("R.hasAtLeast(arr, 1)"),
-    },
-    {
-      code: withDefaultPragma("false === R.isEmpty(arr)"),
-      errors: [{ messageId: "prefer-has-atleast-over-negated-isempty" }],
-      output: withDefaultPragma("R.hasAtLeast(arr, 1)"),
-    },
-    {
-      code: withDefaultPragma("R.isEmpty(arr) !== true"),
-      errors: [{ messageId: "prefer-has-atleast-over-negated-isempty" }],
-      output: withDefaultPragma("R.hasAtLeast(arr, 1)"),
-    },
-    {
-      code: withDefaultPragma("true !== R.isEmpty(arr)"),
-      errors: [{ messageId: "prefer-has-atleast-over-negated-isempty" }],
-      output: withDefaultPragma("R.hasAtLeast(arr, 1)"),
-    },
+    ...[
+      // Negated isEmpty patterns
+      "!R.isEmpty(arr)",
+      "R.isEmpty(arr) === false",
+      "false === R.isEmpty(arr)",
+      "R.isEmpty(arr) !== true",
+      "true !== R.isEmpty(arr)",
+    ]
+      .map(withDefaultPragma)
+      .map(toEmptyErrorObject),
   ],
 });
