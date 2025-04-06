@@ -1,5 +1,5 @@
 /**
- * @file Rule to check if a call to R.forEach should be a call to R.filter.
+ * Rule to check if a call to R.forEach should be a call to R.filter.
  */
 
 import astUtil from "../util/astUtil";
@@ -31,16 +31,14 @@ const meta = {
   ],
 } as const;
 
+function isIfWithoutElse(statement) {
+  return statement && statement.type === "IfStatement" && !statement.alternate;
+}
+
 function create(context) {
   const DEFAULT_MAX_PROPERTY_PATH_LENGTH = 3;
   const maxLength =
     parseInt(context.options[0], 10) || DEFAULT_MAX_PROPERTY_PATH_LENGTH;
-
-  function isIfWithoutElse(statement) {
-    return (
-      statement && statement.type === "IfStatement" && !statement.alternate
-    );
-  }
 
   function canBeShorthand(exp, paramName) {
     return (
