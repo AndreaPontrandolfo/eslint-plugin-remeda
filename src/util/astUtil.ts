@@ -85,7 +85,7 @@ interface IsMemberExpOfOptions {
  * @param objectName - The object name to check against.
  */
 function isMemberExpOf(
-  node: Record<string, unknown>,
+  node: TSESTree.Node | null | undefined,
   objectName: string,
   { maxLength = Number.MAX_VALUE, allowComputed }: IsMemberExpOfOptions = {},
 ): boolean {
@@ -99,13 +99,14 @@ function isMemberExpOf(
   while (currentNode && depth) {
     if (allowComputed || isPropAccess(currentNode)) {
       if (
-        currentNode.type === "MemberExpression" &&
+        currentNode.type === AST_NODE_TYPES.MemberExpression &&
+        "name" in currentNode.object &&
         currentNode.object.name === objectName
       ) {
         return true;
       }
-      currentNode = currentNode.object;
-      depth--;
+      currentNode = "object" in currentNode ? currentNode.object : undefined;
+      depth = depth - 1;
     } else {
       return false;
     }
