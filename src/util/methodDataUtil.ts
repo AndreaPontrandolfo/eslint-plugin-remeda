@@ -1,6 +1,14 @@
 import { get, has, includes, isObject } from "lodash-es";
 import * as methodDataCatalog from "./methodData";
 
+interface MethodData {
+  wrapper: boolean;
+  shorthand: boolean;
+  chainable: boolean;
+  iteratee: boolean;
+  args: number;
+}
+
 /**
  * Returns whether the node's method call supports using shorthands.
  *
@@ -31,13 +39,12 @@ function isCollectionMethod(method: string) {
  * Gets the index of the iteratee of a method when it isn't chained, or -1 if it doesn't have one.
  */
 function getIterateeIndex(method: string) {
-  const methodData = methodDataCatalog[method];
+  const methodData: MethodData | undefined = methodDataCatalog[method];
 
   if (methodData) {
     if (has(methodData, "iterateeIndex")) {
       return methodData.iterateeIndex;
     }
-    //@ts-expect-error
     if (methodData.iteratee) {
       return 1;
     }
