@@ -1,3 +1,4 @@
+import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 import astUtil from "./astUtil";
 import {
   getMethodImportFromName,
@@ -11,9 +12,9 @@ const { isMethodCall, isCallFromObject, getCaller } = astUtil;
 /* Class representing remeda data for a given context */
 export default class {
   context: any;
-  general: any;
-  methods: any;
-  _pragma: any;
+  general: Record<string, boolean>;
+  methods: Record<string, string>;
+  _pragma: string | undefined;
   /**
    * Create a Remeda context wrapper from a file's RuleContext.
    *
@@ -103,8 +104,13 @@ export default class {
    *
    * @param node - The node to check.
    */
-  getImportedRemedaMethod(node) {
-    if (node && node.type === "CallExpression" && !isMethodCall(node)) {
+  getImportedRemedaMethod(node: TSESTree.Node | null | undefined) {
+    if (
+      node &&
+      node.type === AST_NODE_TYPES.CallExpression &&
+      !isMethodCall(node) &&
+      node.callee.type === AST_NODE_TYPES.Identifier
+    ) {
       return this.methods[node.callee.name];
     }
   }
