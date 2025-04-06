@@ -27,6 +27,7 @@ export default defineFlatConfig([
       "vitest/require-hook": 0,
       "@typescript-eslint/explicit-module-boundary-types": 0,
       "@typescript-eslint/naming-convention": 0,
+      "fsecond/prefer-destructured-optionals": 0,
     },
   },
 ]);

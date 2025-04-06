@@ -2,21 +2,8 @@ import { get, has, includes, isObject } from "lodash-es";
 import * as methodDataCatalog from "./methodData";
 
 /**
- * Gets whether the method is a collection method.
- *
- * @param method
- */
-function isCollectionMethod(method) {
-  return (
-    methodSupportsShorthand(method) ||
-    includes(["reduce", "reduceRight"], method)
-  );
-}
-
-/**
  * Returns whether the node's method call supports using shorthands.
  *
- * @returns
  */
 function methodSupportsShorthand(method: string, shorthandType?: string) {
   const methodShorthandData = get(methodDataCatalog, `${method}.shorthand`);
@@ -24,6 +11,18 @@ function methodSupportsShorthand(method: string, shorthandType?: string) {
   return isObject(methodShorthandData)
     ? Boolean(shorthandType && methodShorthandData[shorthandType])
     : Boolean(methodShorthandData);
+}
+
+/**
+ * Gets whether the method is a collection method.
+ *
+ * @param method - The method to check.
+ */
+function isCollectionMethod(method) {
+  return (
+    methodSupportsShorthand(method) ||
+    includes(["reduce", "reduceRight"], method)
+  );
 }
 
 /**
@@ -57,7 +56,6 @@ const sideEffectIterationMethods = [
 /**
  * Gets a list of side effect iteration methods.
  *
- * @returns
  */
 function getSideEffectIterationMethods() {
   return sideEffectIterationMethods;
