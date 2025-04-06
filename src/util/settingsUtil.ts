@@ -1,20 +1,33 @@
-import { chain, get } from "lodash-es";
+import { defaults, get, isNil } from "lodash-es";
 
-export function getSettings(context) {
-  return (
-    chain(context)
-      .get(["settings", "remeda"])
-      .clone()
-      //@ts-expect-error
-      .defaults({
-        version: 4,
-      })
-      .value()
-  );
+interface ESLintContext {
+  settings?: {
+    remeda?: {
+      version?: number;
+    };
+  };
+  ecmaFeatures?: Record<string, boolean>;
+  parserOptions?: {
+    ecmaVersion?: number;
+  };
 }
-export function isEcmaFeatureOn(context, featureName) {
-  return (
-    get(context, ["ecmaFeatures", featureName]) ||
-    get(context, ["parserOptions", "ecmaVersion"], 0) > 5
-  );
+
+export function getSettings(context: ESLintContext) {
+  return defaults(get(context, "settings.remeda", {}), {
+    version: 4,
+  });
+}
+
+export function isEcmaFeatureOn(
+  context: ESLintContext,
+  featureName: string,
+): boolean {
+  const featureValue = get(context, `ecmaFeatures.${featureName}`);
+  const ecmaVersion = get(context, "parserOptions.ecmaVersion", 0);
+
+  if (!isNil(featureValue)) {
+    return featureValue;
+  }
+
+  return ecmaVersion > 5;
 }
