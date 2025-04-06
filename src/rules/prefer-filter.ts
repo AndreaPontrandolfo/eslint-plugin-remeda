@@ -31,8 +31,12 @@ const meta = {
   ],
 } as const;
 
-function isIfWithoutElse(statement) {
-  return statement && statement.type === "IfStatement" && !statement.alternate;
+function isIfWithoutElse(
+  statement: { type?: string; alternate?: unknown } | null | undefined,
+): boolean {
+  return Boolean(
+    statement && statement.type === "IfStatement" && !statement.alternate,
+  );
 }
 
 function create(context) {
