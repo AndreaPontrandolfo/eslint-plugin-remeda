@@ -2,7 +2,7 @@
  * @file Rule to check if array.length comparisons or negated isEmpty calls should be replaced with R.hasAtLeast.
  */
 
-import type { isEmpty } from "lodash-es";
+import { isEmpty } from "lodash-es";
 import { ESLintUtils, type TSESTree } from "@typescript-eslint/utils";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaContext, isCallToRemedaMethod } from "../util/remedaUtil";
@@ -152,7 +152,9 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
         } else if (
           (node.operator === "===" || node.operator === "!==") &&
           ((node.left.type === "Literal" && node.left.value === false) ||
-            (node.right.type === "Literal" && node.right.value === false))
+            (node.right.type === "Literal" && node.right.value === false) ||
+            (node.left.type === "Literal" && node.left.value === true) ||
+            (node.right.type === "Literal" && node.right.value === true))
         ) {
           const isEmptyCall = isRemedaIsEmptyCall(node.left)
             ? node.left
@@ -161,18 +163,27 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
               : null;
 
           if (isEmptyCall && !isEmpty(isEmptyCall.arguments)) {
-            context.report({
-              node,
-              messageId: "prefer-has-atleast-over-negated-isempty",
-              fix(fixer) {
-                const sourceCode = context.getSourceCode();
+            // Only report if it's a negated comparison (isEmpty === false or isEmpty !== true)
+            const isNegated =
+              (node.operator === "===" && node.left.value === false) ||
+              (node.operator === "===" && node.right.value === false) ||
+              (node.operator === "!==" && node.left.value === true) ||
+              (node.operator === "!==" && node.right.value === true);
 
-                return fixer.replaceText(
-                  node,
-                  `R.hasAtLeast(${sourceCode.getText(isEmptyCall.arguments[0])}, 1)`,
-                );
-              },
-            });
+            if (isNegated) {
+              context.report({
+                node,
+                messageId: "prefer-has-atleast-over-negated-isempty",
+                fix(fixer) {
+                  const sourceCode = context.getSourceCode();
+
+                  return fixer.replaceText(
+                    node,
+                    `R.hasAtLeast(${sourceCode.getText(isEmptyCall.arguments[0])}, 1)`,
+                  );
+                },
+              });
+            }
           }
         }
       },
