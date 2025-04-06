@@ -129,13 +129,20 @@ const isReturnStatement = matchesProperty("type", "ReturnStatement");
  *
  * @param func - The function to check.
  */
-function hasOnlyOneStatement(func) {
+function hasOnlyOneStatement(func: {
+  type: string;
+  body: { body?: unknown };
+}): boolean {
   if (isFunctionDefinitionWithBlock(func)) {
-    return get(func, "body.body.length") === 1;
+    const body = get(func, "body.body");
+
+    return Array.isArray(body) && body.length === 1;
   }
   if (func.type === "ArrowFunctionExpression") {
     return !get(func, "body.body");
   }
+
+  return false;
 }
 
 /**
