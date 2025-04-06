@@ -5,7 +5,7 @@
 import { includes } from "lodash-es";
 import {
   AST_NODE_TYPES,
-  type TSESLint,
+  ESLintUtils,
   type TSESTree,
 } from "@typescript-eslint/utils";
 import astUtil from "../util/astUtil";
@@ -18,18 +18,10 @@ import { getRemedaMethodVisitors, isCallToMethod } from "../util/remedaUtil";
 
 const { getMethodName } = astUtil;
 
-const meta = {
-  type: "problem" as const,
-  schema: [] as const,
-  messages: {
-    useReturnValueId: "Use value returned from R.{{method}}",
-    dontUseReturnValueId: "Do not use value returned from R.{{method}}",
-  },
-  docs: {
-    description: "Use value returned from collection methods properly",
-    url: getDocsUrl("collection-method-value"),
-  },
-} as const;
+export const RULE_NAME = "collection-method-value";
+
+export type MessageIds = "useReturnValueId" | "dontUseReturnValueId";
+export type Options = [];
 
 function parentUsesValue(node: TSESTree.CallExpression) {
   return node.parent.type !== AST_NODE_TYPES.ExpressionStatement;
@@ -43,44 +35,47 @@ function isParentCommit(node: TSESTree.CallExpression, callType: string) {
   return callType === "chained" && isCallToMethod(node.parent.parent, "commit");
 }
 
-function create(
-  context: TSESLint.RuleContext<
-    "useReturnValueId" | "dontUseReturnValueId",
-    []
-  >,
-) {
-  return getRemedaMethodVisitors(
-    context,
-    (
-      node: TSESTree.CallExpression,
-      iteratee: TSESTree.Node,
-      { method, callType }: { method: string; callType: string },
-    ) => {
-      if (isCollectionMethod(method) && !parentUsesValue(node)) {
-        context.report({
-          node,
-          messageId: "useReturnValueId",
-          data: { method },
-        });
-      } else if (
-        isSideEffectIterationMethod(method) &&
-        parentUsesValue(node) &&
-        !isParentCommit(node, callType)
-      ) {
-        context.report({
-          node,
-          messageId: "dontUseReturnValueId",
-          data: { method: getMethodName(node) },
-        });
-      }
+export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
+  name: RULE_NAME,
+  meta: {
+    type: "problem",
+    docs: {
+      description: "enforce proper usage of collection method return values",
+      url: getDocsUrl(RULE_NAME),
     },
-  );
-}
-
-const rule = {
-  create,
-  meta,
-};
-
-export const RULE_NAME = "collection-method-value";
-export default rule;
+    schema: [],
+    messages: {
+      useReturnValueId: "Use value returned from R.{{method}}",
+      dontUseReturnValueId: "Do not use value returned from R.{{method}}",
+    },
+  },
+  defaultOptions: [],
+  create(context) {
+    return getRemedaMethodVisitors(
+      context,
+      (
+        node: TSESTree.CallExpression,
+        iteratee: TSESTree.Node,
+        { method, callType }: { method: string; callType: string },
+      ) => {
+        if (isCollectionMethod(method) && !parentUsesValue(node)) {
+          context.report({
+            node,
+            messageId: "useReturnValueId",
+            data: { method },
+          });
+        } else if (
+          isSideEffectIterationMethod(method) &&
+          parentUsesValue(node) &&
+          !isParentCommit(node, callType)
+        ) {
+          context.report({
+            node,
+            messageId: "dontUseReturnValueId",
+            data: { method: getMethodName(node) },
+          });
+        }
+      },
+    );
+  },
+});
