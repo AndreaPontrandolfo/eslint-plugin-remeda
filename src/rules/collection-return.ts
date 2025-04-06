@@ -44,21 +44,25 @@ function create(context) {
             | TSESTree.FunctionDeclaration,
           { method },
         ) => {
-          if (isCollectionMethod(method) && funcInfos.has(iteratee)) {
-            const { hasReturn } = funcInfos.get(iteratee);
-
-            if (
-              astUtil.isFunctionDefinitionWithBlock(iteratee) &&
-              !hasReturn &&
-              !iteratee.async &&
-              !iteratee.generator
-            ) {
-              context.report({
-                node,
-                message: `Do not use R.${method} without returning a value`,
-              });
-            }
+          if (!isCollectionMethod(method) || !funcInfos.has(iteratee)) {
+            return;
           }
+
+          const { hasReturn } = funcInfos.get(iteratee);
+
+          if (
+            !astUtil.isFunctionDefinitionWithBlock(iteratee) ||
+            hasReturn ||
+            iteratee.async ||
+            iteratee.generator
+          ) {
+            return;
+          }
+
+          context.report({
+            node,
+            message: `Do not use R.${method} without returning a value`,
+          });
         },
       ),
       ReturnStatement() {
