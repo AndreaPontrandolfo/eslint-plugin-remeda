@@ -40,7 +40,7 @@ Enable all of the rules that you would like to use. All rules are off by default
 | [prefer-find](docs/rules/prefer-find.md)                             | ✅  |     |
 | [prefer-flat-map](docs/rules/prefer-flat-map.md)                     | ✅  |     |
 | [prefer-is-empty](docs/rules/prefer-is-empty.md)                     | ✅  | 🔧  |
-| [prefer-is-nil](docs/rules/prefer-is-nil.md)                         | ✅  |     |
+| [prefer-is-nullish](docs/rules/prefer-is-nullish.md)                 | ✅  |     |
 | [prefer-map](docs/rules/prefer-map.md)                               | ✅  |     |
 | [prefer-nullish-coalescing](docs/rules/prefer-nullish-coalescing.md) | ✅  | 🔧  |
 | [prefer-remeda-typecheck](docs/rules/prefer-remeda-typecheck.md)     | ✅  |     |
