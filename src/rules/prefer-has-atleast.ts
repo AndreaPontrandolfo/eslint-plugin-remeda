@@ -3,7 +3,11 @@
  */
 
 import { isEmpty, isNumber } from "lodash-es";
-import { ESLintUtils, type TSESTree } from "@typescript-eslint/utils";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  type TSESTree,
+} from "@typescript-eslint/utils";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaContext, isCallToRemedaMethod } from "../util/remedaUtil";
 
@@ -22,14 +26,14 @@ function isArrayLengthProperty(
   node: TSESTree.Node,
 ): node is TSESTree.MemberExpression {
   return (
-    node.type === "MemberExpression" &&
-    node.property.type === "Identifier" &&
+    node.type === AST_NODE_TYPES.MemberExpression &&
+    node.property.type === AST_NODE_TYPES.Identifier &&
     node.property.name === "length"
   );
 }
 
 function isNumberLiteral(node: TSESTree.Node): node is TSESTree.Literal {
-  return node.type === "Literal" && isNumber(node.value);
+  return node.type === AST_NODE_TYPES.Literal && isNumber(node.value);
 }
 
 function getNumberValue(node: TSESTree.Node): number | null {
@@ -65,7 +69,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       node: TSESTree.Node,
     ): node is TSESTree.CallExpression {
       return (
-        node.type === "CallExpression" &&
+        node.type === AST_NODE_TYPES.CallExpression &&
         isCallToRemedaMethod(node, "isEmpty", remedaContext)
       );
     }
@@ -150,10 +154,14 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
           reportArrayLengthComparison(node, node.right.object, node.left, "<");
         } else if (
           (node.operator === "===" || node.operator === "!==") &&
-          ((node.left.type === "Literal" && node.left.value === false) ||
-            (node.right.type === "Literal" && node.right.value === false) ||
-            (node.left.type === "Literal" && node.left.value === true) ||
-            (node.right.type === "Literal" && node.right.value === true))
+          ((node.left.type === AST_NODE_TYPES.Literal &&
+            node.left.value === false) ||
+            (node.right.type === AST_NODE_TYPES.Literal &&
+              node.right.value === false) ||
+            (node.left.type === AST_NODE_TYPES.Literal &&
+              node.left.value === true) ||
+            (node.right.type === AST_NODE_TYPES.Literal &&
+              node.right.value === true))
         ) {
           const isEmptyCall = isRemedaIsEmptyCall(node.left)
             ? node.left
