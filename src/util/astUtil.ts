@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import {
   cond,
   flatMap,
@@ -13,23 +14,23 @@ import {
 } from "lodash-es";
 
 /**
- * Gets the object that called the method in a CallExpression
+ * Gets the object that called the method in a CallExpression.
  *
  * @param {Object} node
  * @returns {Object|undefined}
  */
-const getCaller = property(["callee", "object"]);
+const getCaller = property("callee.object");
 
 /**
- * Gets the name of a method in a CallExpression
+ * Gets the name of a method in a CallExpression.
  *
  * @param {Object} node
  * @returns {string|undefined}
  */
-const getMethodName = property(["callee", "property", "name"]);
+const getMethodName = property("callee.property.name");
 
 /**
- * Returns whether the node is a method call
+ * Returns whether the node is a method call.
  *
  * @param {Object} node
  * @returns {boolean}
@@ -44,7 +45,7 @@ const isFunctionExpression = overSome(
   matchesProperty("type", "FunctionDeclaration"),
 );
 /**
- * Returns whether the node is a function declaration that has a block
+ * Returns whether the node is a function declaration that has a block.
  *
  * @param {Object} node
  * @returns {boolean}
@@ -58,24 +59,23 @@ const isFunctionDefinitionWithBlock = overSome(
 );
 
 /**
- * If the node specified is a function, returns the node corresponding with the first statement/expression in that function
+ * If the node specified is a function, returns the node corresponding with the first statement/expression in that function.
  *
  * @param {Object} node
  * @returns {node|undefined}
  */
 const getFirstFunctionLine = cond([
-  [isFunctionDefinitionWithBlock, property(["body", "body", 0])],
+  [isFunctionDefinitionWithBlock, property("body.body[0]")],
   [matches({ type: "ArrowFunctionExpression" }), property("body")],
 ]);
 
 /**
- *
  * @param {Object} node
  * @returns {boolean|undefined}
  */
 const isPropAccess = overSome(
   matches({ computed: false }),
-  matchesProperty(["property", "type"], "Literal"),
+  matchesProperty("property.type", "Literal"),
 );
 
 interface IsMemberExpOfOptions {
@@ -84,7 +84,7 @@ interface IsMemberExpOfOptions {
 }
 
 /**
- * Returns whether the node is a member expression starting with the same object, up to the specified length
+ * Returns whether the node is a member expression starting with the same object, up to the specified length.
  *
  * @param node
  * @param objectName
@@ -94,7 +94,7 @@ interface IsMemberExpOfOptions {
  * @returns
  */
 function isMemberExpOf(
-  node: Record<string, any>,
+  node: Record<string, unknown>,
   objectName: string,
   { maxLength = Number.MAX_VALUE, allowComputed }: IsMemberExpOfOptions = {},
 ) {
@@ -120,15 +120,15 @@ function isMemberExpOf(
 }
 
 /**
- * Returns the name of the first parameter of a function, if it exists
+ * Returns the name of the first parameter of a function, if it exists.
  *
  * @param {Object} func
  * @returns {string|undefined}
  */
-const getFirstParamName = property(["params", 0, "name"]);
+const getFirstParamName = property("params[0].name");
 
 /**
- * Returns whether or not the expression is a return statement
+ * Returns whether or not the expression is a return statement.
  *
  * @param {Object} exp
  * @returns {boolean|undefined}
@@ -136,7 +136,7 @@ const getFirstParamName = property(["params", 0, "name"]);
 const isReturnStatement = matchesProperty("type", "ReturnStatement");
 
 /**
- * Returns whether the node specified has only one statement
+ * Returns whether the node specified has only one statement.
  *
  * @param func
  * @returns
@@ -151,7 +151,7 @@ function hasOnlyOneStatement(func) {
 }
 
 /**
- * Returns whether the node is an object of a method call
+ * Returns whether the node is an object of a method call.
  *
  * @param node
  * @returns
@@ -164,7 +164,7 @@ function isObjectOfMethodCall(node) {
 }
 
 /**
- * Returns whether the node is a literal
+ * Returns whether the node is a literal.
  *
  * @param node
  * @returns
@@ -180,7 +180,7 @@ interface IsBinaryExpWithMemberOfOptions {
 }
 
 /**
- * Returns whether the expression specified is a binary expression with the specified operator and one of its sides is a member expression of the specified object name
+ * Returns whether the expression specified is a binary expression with the specified operator and one of its sides is a member expression of the specified object name.
  */
 function isBinaryExpWithMemberOf(
   operator: string,
@@ -235,19 +235,25 @@ function isNegationOfMemberOf(
 }
 
 /**
+ * Checks if the given expression is an identifier with the specified name.
  *
- * @param exp
- * @param paramName
- * @returns
+ * @param expression - The expression to check.
+ * @param paramName - The name to check against.
  */
-function isIdentifierWithName(exp, paramName) {
+function isIdentifierWithName(
+  expression: { type: string; name: string },
+  paramName: string,
+) {
   return (
-    exp && paramName && exp.type === "Identifier" && exp.name === paramName
+    expression &&
+    paramName &&
+    expression.type === "Identifier" &&
+    expression.name === paramName
   );
 }
 
 /**
- * Returns the node of the value returned in the first line, if any
+ * Returns the node of the value returned in the first line, if any.
  *
  * @param func
  * @returns
@@ -266,7 +272,7 @@ function getValueReturnedInFirstStatement(func) {
 }
 
 /**
- * Returns whether the node is a call from the specified object name
+ * Returns whether the node is a call from the specified object name.
  *
  * @param node
  * @param objName
@@ -282,7 +288,7 @@ function isCallFromObject(node, objName) {
 }
 
 /**
- * Returns whether the node is actually computed (x['ab'] does not count, x['a' + 'b'] does
+ * Returns whether the node is actually computed (x['ab'] does not count, x['a' + 'b'] does.
  *
  * @param node
  * @returns
@@ -292,7 +298,7 @@ function isComputed(node) {
 }
 
 /**
- * Returns whether the two expressions refer to the same object (e.g. a['b'].c and a.b.c)
+ * Returns whether the two expressions refer to the same object (e.g. A['b'].c and a.b.c).
  *
  * @param a
  * @param b
@@ -316,7 +322,7 @@ function isEquivalentMemberExp(a, b) {
 }
 
 /**
- * Returns whether the expression is a strict equality comparison, ===
+ * Returns whether the expression is a strict equality comparison, ===.
  *
  * @param {Object} node
  * @returns {boolean}
@@ -327,7 +333,7 @@ const isMinus = (node) =>
   node.type === "UnaryExpression" && node.operator === "-";
 
 /**
- * Enum for type of comparison to int literal
+ * Enum for type of comparison to int literal.
  *
  * @readonly
  * @enum {number}
@@ -347,11 +353,11 @@ function getIsValue(value) {
 }
 
 /**
- * Returns the expression compared to the value in a binary expression, or undefined if there isn't one
+ * Returns the expression compared to the value in a binary expression, or undefined if there isn't one.
  *
  * @param node
  * @param value
- * @param [checkOver=false]
+ * @param [checkOver]
  * @returns
  */
 function getExpressionComparedToInt(node, value, checkOver) {
@@ -390,7 +396,7 @@ function getExpressionComparedToInt(node, value, checkOver) {
 }
 
 /**
- * Returns whether the node is a call to indexOf
+ * Returns whether the node is a call to indexOf.
  *
  * @param node
  * @returns
@@ -399,22 +405,23 @@ const isIndexOfCall = (node) =>
   isMethodCall(node) && getMethodName(node) === "indexOf";
 
 /**
- * Returns whether the node is a call to findIndex
+ * Returns whether the node is a call to findIndex.
  *
  * @param node
  * @returns
  */
-const isFindIndexCall = (node) =>
-  isMethodCall(node) && getMethodName(node) === "findIndex";
+const isFindIndexCall = (node) => {
+  return isMethodCall(node) && getMethodName(node) === "findIndex";
+};
 
 /**
- * Returns an array of identifier names returned in a parameter or variable definition
+ * Returns an array of identifier names returned in a parameter or variable definition.
  *
- * @param node an AST node which is a parameter or variable declaration
- * @returns List of names defined in the parameter
+ * @param node - An AST node which is a parameter or variable declaration.
+ * @returns List of names defined in the parameter.
  */
 function collectParameterValues(node) {
-  switch (node && node.type) {
+  switch (node?.type) {
     case "Identifier": {
       return [node.name];
     }
