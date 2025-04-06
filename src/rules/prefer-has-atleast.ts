@@ -3,26 +3,85 @@
  */
 
 import { getDocsUrl } from "../util/getDocsUrl";
+import { isCallToRemedaMethod } from "../util/remedaUtil";
 
 const MESSAGE_ID = "prefer-has-atleast";
+const MESSAGE_ID_EMPTY = "prefer-has-atleast-over-negated-isempty";
 
 const meta = {
   type: "suggestion",
   docs: {
-    description: "Prefer R.hasAtLeast over array.length comparison",
+    description:
+      "Prefer R.hasAtLeast over array.length comparison or negated isEmpty",
     url: getDocsUrl("prefer-has-atleast"),
   },
   fixable: "code",
   schema: [],
   messages: {
     [MESSAGE_ID]: "Prefer R.hasAtLeast over array.length comparison",
+    [MESSAGE_ID_EMPTY]:
+      "Prefer R.hasAtLeast(data, 1) over negated R.isEmpty for better type narrowing",
   },
 } as const;
 
 function create(context) {
+  const remedaContext = { getImportedRemedaMethod: () => null };
+
+  function isRemedaIsEmptyCall(node) {
+    return (
+      node.type === "CallExpression" &&
+      (isCallToRemedaMethod(node, "isEmpty", remedaContext) ||
+        (node.callee.type === "MemberExpression" &&
+          node.callee.object.type === "Identifier" &&
+          node.callee.object.name === "R" &&
+          node.callee.property.type === "Identifier" &&
+          node.callee.property.name === "isEmpty"))
+    );
+  }
+
   return {
+    /**
+     * Check for array.length comparisons.
+     */
     BinaryExpression(node) {
-      // Check for array.length >= n
+      // Check for R.isEmpty() === false or R.isEmpty() !== true
+      if (
+        (node.operator === "===" &&
+          ((isRemedaIsEmptyCall(node.left) &&
+            node.right.type === "Literal" &&
+            node.right.value === false) ||
+            (isRemedaIsEmptyCall(node.right) &&
+              node.left.type === "Literal" &&
+              node.left.value === false))) ||
+        (node.operator === "!==" &&
+          ((isRemedaIsEmptyCall(node.left) &&
+            node.right.type === "Literal" &&
+            node.right.value === true) ||
+            (isRemedaIsEmptyCall(node.right) &&
+              node.left.type === "Literal" &&
+              node.left.value === true)))
+      ) {
+        const isEmptyCall = isRemedaIsEmptyCall(node.left)
+          ? node.left
+          : node.right;
+        const arrayArg = isEmptyCall.arguments[0];
+
+        if (arrayArg) {
+          context.report({
+            node,
+            messageId: MESSAGE_ID_EMPTY,
+            fix(fixer) {
+              const arrayCode = context.getSourceCode().getText(arrayArg);
+
+              return fixer.replaceText(node, `R.hasAtLeast(${arrayCode}, 1)`);
+            },
+          });
+        }
+
+        return;
+      }
+
+      // Original array.length checks
       if (node.operator === ">=" || node.operator === ">") {
         // Check for array.length >= n
         if (
@@ -75,6 +134,28 @@ function create(context) {
                 node,
                 `R.hasAtLeast(${arrayCode}, ${comparison})`,
               );
+            },
+          });
+        }
+      }
+    },
+
+    /**
+     * Check for !R.isEmpty(data).
+     */
+    UnaryExpression(node) {
+      if (node.operator === "!" && isRemedaIsEmptyCall(node.argument)) {
+        const isEmptyCall = node.argument;
+        const arrayArg = isEmptyCall.arguments[0];
+
+        if (arrayArg) {
+          context.report({
+            node,
+            messageId: MESSAGE_ID_EMPTY,
+            fix(fixer) {
+              const arrayCode = context.getSourceCode().getText(arrayArg);
+
+              return fixer.replaceText(node, `R.hasAtLeast(${arrayCode}, 1)`);
             },
           });
         }
