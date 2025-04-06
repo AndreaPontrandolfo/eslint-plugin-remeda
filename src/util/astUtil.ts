@@ -12,6 +12,7 @@ import {
   overSome,
   property,
 } from "lodash-es";
+import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 
 /**
  * Gets the object that called the method in a CallExpression.
@@ -161,8 +162,8 @@ function isObjectOfMethodCall(node) {
  *
  * @param node - The node to check.
  */
-function isLiteral(node) {
-  return node.type === "Literal";
+function isLiteral(node: TSESTree.Node | null | undefined) {
+  return node?.type === AST_NODE_TYPES.Literal;
 }
 
 interface IsBinaryExpWithMemberOfOptions {
@@ -267,11 +268,14 @@ function getValueReturnedInFirstStatement(func) {
  * @param node - The node to check.
  * @param objName   - The object name to check against.
  */
-function isCallFromObject(node, objName) {
+function isCallFromObject(
+  node: TSESTree.Node | null | undefined,
+  objName: string,
+) {
   return (
     node &&
     objName &&
-    node.type === "CallExpression" &&
+    node.type === AST_NODE_TYPES.CallExpression &&
     get(node, "callee.object.name") === objName
   );
 }
@@ -288,9 +292,8 @@ function isComputed(node) {
 /**
  * Returns whether the two expressions refer to the same object (e.g. A['b'].c and a.b.c).
  *
- * @param a
- * @param b
- * @returns
+ * @param a - The first expression to check.
+ * @param b - The second expression to check.
  */
 function isEquivalentMemberExp(a, b) {
   return isEqualWith(a, b, (left, right, key) => {
