@@ -319,8 +319,9 @@ function isEquivalentMemberExp(a, b) {
  */
 const isEqEqEq = matches({ type: "BinaryExpression", operator: "===" });
 
-const isMinus = (node) =>
-  node.type === "UnaryExpression" && node.operator === "-";
+const isMinus = (node: TSESTree.Node | null | undefined) => {
+  return node?.type === AST_NODE_TYPES.UnaryExpression && node.operator === "-";
+};
 
 /**
  * Enum for type of comparison to int literal.
