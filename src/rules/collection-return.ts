@@ -8,10 +8,10 @@ import {
   getRemedaMethodCallExpVisitor,
 } from "../util/remedaUtil";
 
-interface FuncInfo {
-  upper: FuncInfo;
+interface FunctionAnalysis {
+  parentFunction: FunctionAnalysis;
   codePath: Record<string, unknown>;
-  hasReturn: boolean;
+  hasReturnStatement: boolean;
 }
 
 const meta = {
@@ -28,8 +28,8 @@ const meta = {
  * Rule to check that iteratees for all collection functions except forEach return a value;.
  */
 function create(context) {
-  const funcInfos = new Map();
-  let currFuncInfo: FuncInfo;
+  const functionAnalyses = new Map();
+  let currentFunctionAnalysis: FunctionAnalysis;
   const remedaContext = getRemedaContext(context);
 
   return assign(
@@ -44,15 +44,15 @@ function create(context) {
             | TSESTree.FunctionDeclaration,
           { method },
         ) => {
-          if (!isCollectionMethod(method) || !funcInfos.has(iteratee)) {
+          if (!isCollectionMethod(method) || !functionAnalyses.has(iteratee)) {
             return;
           }
 
-          const { hasReturn } = funcInfos.get(iteratee);
+          const { hasReturnStatement } = functionAnalyses.get(iteratee);
 
           if (
             !astUtil.isFunctionDefinitionWithBlock(iteratee) ||
-            hasReturn ||
+            hasReturnStatement ||
             iteratee.async ||
             iteratee.generator
           ) {
@@ -66,18 +66,18 @@ function create(context) {
         },
       ),
       ReturnStatement() {
-        currFuncInfo.hasReturn = true;
+        currentFunctionAnalysis.hasReturnStatement = true;
       },
       onCodePathStart(codePath, node) {
-        currFuncInfo = {
-          upper: currFuncInfo,
+        currentFunctionAnalysis = {
+          parentFunction: currentFunctionAnalysis,
           codePath,
-          hasReturn: false,
+          hasReturnStatement: false,
         };
-        funcInfos.set(node, currFuncInfo);
+        functionAnalyses.set(node, currentFunctionAnalysis);
       },
       onCodePathEnd() {
-        currFuncInfo = currFuncInfo.upper;
+        currentFunctionAnalysis = currentFunctionAnalysis.parentFunction;
       },
     },
     remedaContext.getImportVisitors(),
