@@ -93,8 +93,8 @@ export default class {
    *
    * @param node - The node to check.
    */
-  isImportedRemeda(node) {
-    if (node && node.type === "Identifier") {
+  isImportedRemeda(node: TSESTree.Node | null | undefined) {
+    if (node && node.type === AST_NODE_TYPES.Identifier) {
       return this.general[node.name];
     }
   }
