@@ -51,7 +51,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
     docs: {
       description:
         "enforce R.hasAtLeast over array.length comparison or negated R.isEmpty.",
-      url: getDocsUrl("prefer-has-atleast"),
+      url: getDocsUrl(RULE_NAME),
     },
     fixable: "code",
     schema: [],
@@ -203,22 +203,26 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
         }
       },
       UnaryExpression(node) {
-        if (node.operator === "!" && isRemedaIsEmptyCall(node.argument)) {
-          const isEmptyCall = node.argument;
-
-          if (!isEmpty(isEmptyCall.arguments)) {
-            context.report({
-              node,
-              messageId: "prefer-has-atleast-over-negated-isempty",
-              fix(fixer) {
-                return fixer.replaceText(
-                  node,
-                  `R.hasAtLeast(${sourceCode.getText(isEmptyCall.arguments[0])}, 1)`,
-                );
-              },
-            });
-          }
+        if (node.operator !== "!" || !isRemedaIsEmptyCall(node.argument)) {
+          return;
         }
+
+        const isEmptyCall = node.argument;
+
+        if (isEmpty(isEmptyCall.arguments)) {
+          return;
+        }
+
+        context.report({
+          node,
+          messageId: "prefer-has-atleast-over-negated-isempty",
+          fix(fixer) {
+            return fixer.replaceText(
+              node,
+              `R.hasAtLeast(${sourceCode.getText(isEmptyCall.arguments[0])}, 1)`,
+            );
+          },
+        });
       },
     };
   },
