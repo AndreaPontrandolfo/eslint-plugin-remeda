@@ -88,24 +88,26 @@ function isMemberExpOf(
   node: Record<string, unknown>,
   objectName: string,
   { maxLength = Number.MAX_VALUE, allowComputed }: IsMemberExpOfOptions = {},
-) {
-  if (objectName) {
-    let curr = node;
-    let depth = maxLength;
+): boolean {
+  if (!objectName) {
+    return false;
+  }
 
-    while (curr && depth) {
-      if (allowComputed || isPropAccess(curr)) {
-        if (
-          curr.type === "MemberExpression" &&
-          curr.object.name === objectName
-        ) {
-          return true;
-        }
-        curr = curr.object;
-        depth--;
-      } else {
-        return false;
+  let currentNode = node;
+  let depth = maxLength;
+
+  while (currentNode && depth) {
+    if (allowComputed || isPropAccess(currentNode)) {
+      if (
+        currentNode.type === "MemberExpression" &&
+        currentNode.object.name === objectName
+      ) {
+        return true;
       }
+      currentNode = currentNode.object;
+      depth--;
+    } else {
+      return false;
     }
   }
 }
