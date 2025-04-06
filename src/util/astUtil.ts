@@ -30,8 +30,7 @@ const getMethodName = property("callee.property.name");
 /**
  * Returns whether the node is a method call.
  *
- * @param {Object} node
- * @returns {boolean}
+ * @param node - The node to check.
  */
 const isMethodCall = matches({
   type: "CallExpression",
