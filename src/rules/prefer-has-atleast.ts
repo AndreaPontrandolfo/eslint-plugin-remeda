@@ -1,8 +1,8 @@
 /**
- * @file Rule to check if array.length comparisons or negated isEmpty calls should be replaced with R.hasAtLeast.
+ * Rule to check if array.length comparisons or negated isEmpty calls should be replaced with R.hasAtLeast.
  */
 
-import { isEmpty } from "lodash-es";
+import { isEmpty, isNumber } from "lodash-es";
 import { ESLintUtils, type TSESTree } from "@typescript-eslint/utils";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaContext, isCallToRemedaMethod } from "../util/remedaUtil";
@@ -24,8 +24,8 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
     type: "problem",
     docs: {
       description:
-        "Prefer R.hasAtLeast over array.length comparison or negated R.isEmpty.",
-      recommended: "error",
+        "enforce R.hasAtLeast over array.length comparison or negated R.isEmpty.",
+      url: getDocsUrl("prefer-has-atleast"),
     },
     fixable: "code",
     schema: [],
@@ -36,6 +36,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   },
   defaultOptions: [],
   create(context) {
+    const { sourceCode } = context;
     const remedaContext = getRemedaContext(context);
 
     function isRemedaIsEmptyCall(
@@ -58,7 +59,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
     }
 
     function isNumberLiteral(node: TSESTree.Node): node is TSESTree.Literal {
-      return node.type === "Literal" && typeof node.value === "number";
+      return node.type === "Literal" && isNumber(node.value);
     }
 
     function getNumberValue(node: TSESTree.Node): number | null {
@@ -113,11 +114,9 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
         node,
         messageId: "prefer-has-atleast",
         fix(fixer) {
-          const sourceCode = context.getSourceCode();
-
           return fixer.replaceText(
             node,
-            `R.hasAtLeast(${sourceCode.getText(arrayNode)}, ${targetNumber})`,
+            `R.hasAtLeast(${targetNumber.toString()}, ${sourceCode.getText(arrayNode)})`,
           );
         },
       });
