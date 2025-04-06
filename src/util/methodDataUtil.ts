@@ -6,9 +6,11 @@ import * as methodDataCatalog from "./methodData";
  *
  */
 function methodSupportsShorthand(method: string, shorthandType?: string) {
-  const methodShorthandData = get(methodDataCatalog, `${method}.shorthand`);
+  const path = `${method}.shorthand`;
+  const methodShorthandData = get(methodDataCatalog, path);
+  const isShorthandObject = isObject(methodShorthandData);
 
-  return isObject(methodShorthandData)
+  return isShorthandObject
     ? Boolean(shorthandType && methodShorthandData[shorthandType])
     : Boolean(methodShorthandData);
 }
