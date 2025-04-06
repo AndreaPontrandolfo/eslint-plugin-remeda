@@ -26,6 +26,7 @@ Object.assign(plugin.configs, {
       [`${pluginShortName}/prefer-remeda-typecheck`]: 2,
       [`${pluginShortName}/prefer-nullish-coalescing`]: 2,
       [`${pluginShortName}/prefer-filter`]: [2, 3],
+      [`${pluginShortName}/prefer-has-atleast`]: 2,
       [`${pluginShortName}/collection-method-value`]: 2,
       [`${pluginShortName}/collection-return`]: 2,
       [`${pluginShortName}/prefer-map`]: 2,
