@@ -1,4 +1,8 @@
-# Prefer constant
+# remeda/prefer-constant
+
+💼 This rule is enabled in the ✅ `recommended` config.
+
+<!-- end auto-generated rule header -->
 
 When you want a function that always returns the same value, it can be more concise to use `R.constant`.
 
@@ -8,6 +12,10 @@ This rule takes two arguments:
 
 - whether or not to check arrow functions
 - whether or not to check function declarations (named functions)
+
+## Options
+
+## Examples
 
 The following patterns are considered warnings:
 

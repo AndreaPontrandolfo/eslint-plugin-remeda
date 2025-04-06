@@ -1,4 +1,8 @@
-# Prefer map
+# remeda/prefer-map
+
+💼 This rule is enabled in the ✅ `recommended` config.
+
+<!-- end auto-generated rule header -->
 
 When using `R.forEach` that pushes into an array, it could improve readability to use `R.map` instead.
 

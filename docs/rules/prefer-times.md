@@ -1,4 +1,8 @@
-# Prefer R.times
+# remeda/prefer-times
+
+💼 This rule is enabled in the ✅ `recommended` config.
+
+<!-- end auto-generated rule header -->
 
 When using `R.map` in which the iteratee does not have any arguments, it's better to use `R.times`.
 

@@ -7,6 +7,8 @@ const meta = {
   type: "problem",
   schema: [],
   docs: {
+    description:
+      "Prefer R.doNothing() or R.constant(undefined) over an empty function",
     url: getDocsUrl("prefer-do-nothing"),
   },
 } as const;

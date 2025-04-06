@@ -1,5 +1,5 @@
 /**
- * @fileoverview Rule to check if a call to R.forEach should be a call to R.filter
+ * @file Rule to check if a call to R.forEach should be a call to R.filter.
  */
 
 import astUtil from "../util/astUtil";
@@ -20,6 +20,8 @@ const {
 const meta = {
   type: "problem",
   docs: {
+    description:
+      "Prefer R.filter or R.some over an if statement inside a R.forEach",
     url: getDocsUrl("prefer-filter"),
   },
   schema: [

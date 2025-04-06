@@ -17,6 +17,8 @@ export default defineFlatConfig([
   eslintPlugin.configs["flat/recommended"],
   {
     rules: {
+      "eslint-plugin/require-meta-docs-url": 2,
+      "eslint-plugin/require-meta-docs-description": 2,
       "func-style": 0,
       "import/no-default-export": 0,
       "@typescript-eslint/explicit-module-boundary-types": 0,

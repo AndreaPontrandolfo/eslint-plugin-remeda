@@ -1,4 +1,10 @@
-# Prefer R.isEmpty
+# remeda/prefer-is-empty
+
+💼 This rule is enabled in the ✅ `recommended` config.
+
+🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
+
+<!-- end auto-generated rule header -->
 
 When checking if a collection is empty or no, it is more concise to use R.isEmpty instead.
 

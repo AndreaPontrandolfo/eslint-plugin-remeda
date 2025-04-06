@@ -10,6 +10,8 @@ const meta = {
   type: "problem",
   schema: [],
   docs: {
+    description:
+      "Prefer using `R.is*` methods over `typeof` and `instanceof` checks when applicable.",
     url: getDocsUrl("prefer-remeda-typecheck"),
   },
 } as const;

@@ -1,4 +1,8 @@
-# Collection Return Statement
+# remeda/collection-return
+
+💼 This rule is enabled in the ✅ `recommended` config.
+
+<!-- end auto-generated rule header -->
 
 When using a Remeda collection method that isn't forEach, the iteratee should return a value, otherwise it could result in either unclear code or unexpected results.
 

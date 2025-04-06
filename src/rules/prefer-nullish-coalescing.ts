@@ -1,5 +1,5 @@
 /**
- * @fileoverview Rule to prefer nullish coalescing over checking a ternary with !isNullish.
+ * @file Rule to prefer nullish coalescing over checking a ternary with !isNullish.
  */
 
 import type { RemedaMethodVisitors } from "../types";
@@ -10,6 +10,8 @@ const meta = {
   type: "problem",
   schema: [],
   docs: {
+    description:
+      "Prefer nullish coalescing over checking a ternary with !isNullish.",
     url: getDocsUrl("prefer-nullish-coalescing"),
   },
   fixable: "code",
@@ -35,9 +37,7 @@ function create(context) {
 
     if (statement.operator === "!") {
       if (
-        statement.argument &&
-        statement.argument.callee &&
-        statement.argument.callee.name &&
+        statement.argument?.callee?.name &&
         statement.argument.callee.name === "isNullish"
       ) {
         const argument = getTextOfNode(statement.argument.arguments[0]);

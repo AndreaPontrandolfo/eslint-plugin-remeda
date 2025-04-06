@@ -2,42 +2,52 @@
 
 ESLint plugin for [Remeda](https://github.com/remeda/remeda).
 
+## Preamble
+
+This plugin was originally derived from [eslint-plugin-lodash-f](https://github.com/AndreaPontrandolfo/eslint-plugin-lodash) (fork of [eslint-plugin-lodash](https://github.com/wix-incubator/eslint-plugin-lodash)) and used that as a base to build upon.
+
 ## Installation
 
 First, you'll first need to install [ESLint](https://eslint.org/):
 
 ```sh
-npm add eslint -D
+pnpm add -D eslint
 ```
 
 Next, install `eslint-plugin-remeda`:
 
 ```sh
-npm add eslint-plugin-remeda -D
+pnpm add -D eslint-plugin-remeda
 ```
-
-## Preamble
-
-This plugin was originally derived from [eslint-plugin-lodash-f](https://github.com/AndreaPontrandolfo/eslint-plugin-lodash) (fork of [eslint-plugin-lodash](https://github.com/wix-incubator/eslint-plugin-lodash)) and used that as a base to build upon.
 
 ## Rules
 
 Enable all of the rules that you would like to use. All rules are off by default, unless you use one of the plugin's configurations which turn all relevant rules on.
 
-- [collection-method-value](docs/rules/collection-method-value.md): Use value returned from collection methods properly.
-- [collection-return](docs/rules/collection-return.md): Always return a value in iteratees of Remeda collection methods that aren't `forEach`.
-- [prefer-filter](docs/rules/prefer-filter.md): Prefer `R.filter` over `R.forEach` with an `if` statement inside.
-- [prefer-find](docs/rules/prefer-find.md): Prefer `R.find` over `R.filter` followed by selecting the first result.
-- [prefer-flat-map](docs/rules/prefer-flat-map.md): Prefer `R.flatMap` over consecutive `R.map` and `R.flat`.
-- [prefer-map](docs/rules/prefer-map.md): Prefer `R.map` over `R.forEach` with a `push` inside.
-- [prefer-nullish-coalescing](docs/rules/prefer-nullish-coalescing.md): Prefer `??` when doing a comparison with a non-nullish value as test.
-- [prefer-constant](docs/rules/prefer-constant.md): Prefer `R.constant` over functions returning literals.
-- [prefer-is-empty](docs/rules/prefer-is-empty.md): Prefer `R.isEmpty` over manual checking for length value.
-- [prefer-is-nil](docs/rules/prefer-is-nullish.md): Prefer `R.isNullish` over checks for both null and undefined.
-- [prefer-remeda-typecheck](docs/rules/prefer-remeda-typecheck.md): Prefer using `R.is*` methods over `typeof` and `instanceof` checks when applicable.
-- [prefer-do-nothing](docs/rules/prefer-do-nothing.md): Prefer `R.doNothing` over empty functions.
-- [prefer-some](docs/rules/prefer-some.md): Prefer using `R.some` over comparing `findIndex` to -1.
-- [prefer-times](docs/rules/prefer-times.md): Prefer `R.times` over `R.map` without using the iteratee's arguments.
+<!-- begin auto-generated rules list -->
+
+💼 Configurations enabled in.\
+✅ Set in the `recommended` configuration.\
+🔧 Automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/user-guide/command-line-interface#--fix).
+
+| Name                                                                 | 💼  | 🔧  |
+| :------------------------------------------------------------------- | :-- | :-- |
+| [collection-method-value](docs/rules/collection-method-value.md)     | ✅  |     |
+| [collection-return](docs/rules/collection-return.md)                 | ✅  |     |
+| [prefer-constant](docs/rules/prefer-constant.md)                     | ✅  |     |
+| [prefer-do-nothing](docs/rules/prefer-do-nothing.md)                 | ✅  |     |
+| [prefer-filter](docs/rules/prefer-filter.md)                         | ✅  |     |
+| [prefer-find](docs/rules/prefer-find.md)                             | ✅  |     |
+| [prefer-flat-map](docs/rules/prefer-flat-map.md)                     | ✅  |     |
+| [prefer-is-empty](docs/rules/prefer-is-empty.md)                     | ✅  | 🔧  |
+| [prefer-is-nullish](docs/rules/prefer-is-nullish.md)                 | ✅  |     |
+| [prefer-map](docs/rules/prefer-map.md)                               | ✅  |     |
+| [prefer-nullish-coalescing](docs/rules/prefer-nullish-coalescing.md) | ✅  | 🔧  |
+| [prefer-remeda-typecheck](docs/rules/prefer-remeda-typecheck.md)     | ✅  |     |
+| [prefer-some](docs/rules/prefer-some.md)                             | ✅  |     |
+| [prefer-times](docs/rules/prefer-times.md)                           | ✅  |     |
+
+<!-- end auto-generated rules list -->
 
 ## Contributing
 

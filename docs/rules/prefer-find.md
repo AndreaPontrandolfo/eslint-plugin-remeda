@@ -1,4 +1,8 @@
-# Prefer find
+# remeda/prefer-find
+
+💼 This rule is enabled in the ✅ `recommended` config.
+
+<!-- end auto-generated rule header -->
 
 When using R.filter and accessing the first or last result, you should probably use `R.find` or `R.findLast`, respectively.
 

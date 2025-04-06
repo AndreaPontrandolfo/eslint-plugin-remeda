@@ -1,5 +1,5 @@
 /**
- * @fileoverview Rule to check if a findIndex comparison should be a call to R.some
+ * @file Rule to check if a findIndex comparison should be a call to R.some.
  */
 
 import astUtil from "../util/astUtil";
@@ -11,6 +11,7 @@ const { getExpressionComparedToInt } = astUtil;
 const meta = {
   type: "problem",
   docs: {
+    description: "Prefer R.some over findIndex comparison to -1",
     url: getDocsUrl("prefer-some"),
   },
   schema: [],

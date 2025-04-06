@@ -17,6 +17,7 @@ const meta = {
   type: "problem",
   schema: [],
   docs: {
+    description: "Use value returned from collection methods properly",
     url: getDocsUrl("collection-method-value"),
   },
 } as const;

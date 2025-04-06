@@ -16,6 +16,8 @@
     "attw": "attw --pack .",
     "qa": "pnpm typecheck && pnpm test && pnpm knip && pnpm publint && attw",
     "nuke": "rm -rf node_modules pnpm-lock.yaml",
+    "update:eslint-docs": "eslint-doc-generator",
+    "lint:eslint-docs": "pnpm update:eslint-docs -- --check",
     "semantic-release": "pnpm build && semantic-release"
   },
   "files": [
@@ -48,7 +50,8 @@
     "eslint": "9.10.0",
     "eslint-config-sheriff": "^21.2.0",
     "eslint-define-config": "^2.1.0",
-    "eslint-plugin-eslint-plugin": "^6.2.0",
+    "eslint-doc-generator": "^2.1.2",
+    "eslint-plugin-eslint-plugin": "^6.4.0",
     "eslint-vitest-rule-tester": "^0.3.3",
     "knip": "^5.29.1",
     "prettier": "^3.3.2",

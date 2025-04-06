@@ -5,8 +5,8 @@
 import { cond, find, map, matches, property } from "lodash-es";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "../util/astUtil";
-import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaContext, isCallToRemedaMethod } from "../util/remedaUtil";
+import { getDocsUrl } from "../util/getDocsUrl";
 
 const { isNegationExpression, isEquivalentMemberExp } = astUtil;
 
@@ -14,6 +14,7 @@ const meta = {
   type: "problem",
   schema: [],
   docs: {
+    description: "Prefer R.isNullish over checks for both null and undefined.",
     url: getDocsUrl("prefer-is-nullish"),
   },
 } as const;

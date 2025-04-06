@@ -1,5 +1,5 @@
 /**
- * @fileoverview Rule to check if a call to map should be a call to times
+ * @file Rule to check if a call to map should be a call to times.
  */
 
 import { get } from "lodash-es";
@@ -10,6 +10,7 @@ const meta = {
   type: "problem",
   schema: [],
   docs: {
+    description: "Prefer R.times over R.map without using arguments",
     url: getDocsUrl("prefer-times"),
   },
 } as const;

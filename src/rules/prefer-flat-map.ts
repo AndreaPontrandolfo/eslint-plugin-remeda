@@ -1,5 +1,5 @@
 /**
- * @fileoverview Rule to check if a call to map and flatten should be a call to R.flatMap
+ * @file Rule to check if a call to map and flatten should be a call to R.flatMap.
  */
 
 import astUtil from "../util/astUtil";
@@ -16,6 +16,7 @@ const meta = {
   type: "problem",
   schema: [],
   docs: {
+    description: "Prefer R.flatMap over consecutive R.map and R.flat.",
     url: getDocsUrl("prefer-flat-map"),
   },
 } as const;

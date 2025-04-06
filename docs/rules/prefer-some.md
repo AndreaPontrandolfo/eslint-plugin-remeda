@@ -1,4 +1,8 @@
-# Prefer R.some
+# remeda/prefer-some
+
+💼 This rule is enabled in the ✅ `recommended` config.
+
+<!-- end auto-generated rule header -->
 
 When comparing the index of an item with an `findIndex` method, it can be more expressive to use `R.some`, when only the sole existence of a matching item is taken into account.
 
