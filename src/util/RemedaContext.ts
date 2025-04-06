@@ -17,7 +17,7 @@ export default class {
   /**
    * Create a Remeda context wrapper from a file's RuleContext.
    *
-   * @param context
+   * @param context - The context of the file.
    */
   constructor(context) {
     this.context = context;
@@ -90,8 +90,7 @@ export default class {
   /**
    * Returns whether the node is an imported Remeda in this context.
    *
-   * @param node
-   * @returns
+   * @param node - The node to check.
    */
   isImportedRemeda(node) {
     if (node && node.type === "Identifier") {
@@ -102,8 +101,7 @@ export default class {
   /**
    * Returns the name of the Remeda method for this node, if any.
    *
-   * @param node
-   * @returns
+   * @param node - The node to check.
    */
   getImportedRemedaMethod(node) {
     if (node && node.type === "CallExpression" && !isMethodCall(node)) {
@@ -114,8 +112,7 @@ export default class {
   /**
    * Returns whether the node is a call from a Remeda object.
    *
-   * @param node
-   * @returns
+   * @param node - The node to check.
    */
   isRemedaCall(node) {
     return (
@@ -125,7 +122,8 @@ export default class {
   }
 
   /**
-   * @returns The current Remeda pragma.
+   * Gets the current Remeda pragma.
+   *
    */
   get pragma() {
     if (!this._pragma) {
