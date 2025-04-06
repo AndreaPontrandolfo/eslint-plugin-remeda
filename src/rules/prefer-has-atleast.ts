@@ -18,6 +18,28 @@ export type MessageIds =
   | "prefer-has-atleast-over-negated-isempty";
 export type Options = [];
 
+function isArrayLengthProperty(
+  node: TSESTree.Node,
+): node is TSESTree.MemberExpression {
+  return (
+    node.type === "MemberExpression" &&
+    node.property.type === "Identifier" &&
+    node.property.name === "length"
+  );
+}
+
+function isNumberLiteral(node: TSESTree.Node): node is TSESTree.Literal {
+  return node.type === "Literal" && isNumber(node.value);
+}
+
+function getNumberValue(node: TSESTree.Node): number | null {
+  if (isNumberLiteral(node)) {
+    return node.value as number;
+  }
+
+  return null;
+}
+
 export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   name: RULE_NAME,
   meta: {
@@ -46,28 +68,6 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
         node.type === "CallExpression" &&
         isCallToRemedaMethod(node, "isEmpty", remedaContext)
       );
-    }
-
-    function isArrayLengthProperty(
-      node: TSESTree.Node,
-    ): node is TSESTree.MemberExpression {
-      return (
-        node.type === "MemberExpression" &&
-        node.property.type === "Identifier" &&
-        node.property.name === "length"
-      );
-    }
-
-    function isNumberLiteral(node: TSESTree.Node): node is TSESTree.Literal {
-      return node.type === "Literal" && isNumber(node.value);
-    }
-
-    function getNumberValue(node: TSESTree.Node): number | null {
-      if (isNumberLiteral(node)) {
-        return node.value as number;
-      }
-
-      return null;
     }
 
     function reportArrayLengthComparison(
