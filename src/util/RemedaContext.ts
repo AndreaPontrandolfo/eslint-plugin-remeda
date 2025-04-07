@@ -11,7 +11,7 @@ const { isMethodCall, isCallFromObject, getCaller } = astUtil;
 
 /* Class representing remeda data for a given context */
 export default class {
-  context: any;
+  context: unknown;
   general: Record<string, boolean>;
   methods: Record<string, string>;
   _pragma: string | undefined;
@@ -20,7 +20,7 @@ export default class {
    *
    * @param context - The context of the file.
    */
-  constructor(context) {
+  constructor(context: unknown) {
     this.context = context;
     this.general = Object.create(null);
     this.methods = Object.create(null);
