@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /**
  * Rule to check if a call to R.forEach should be a call to R.map.
  */
@@ -24,27 +27,27 @@ const meta = {
   },
 } as const;
 
+function onlyHasPush(func) {
+  const firstLine = getFirstFunctionLine(func);
+  const firstParam = get(func, "params[0]");
+  const exp =
+    func && !isFunctionDefinitionWithBlock(func)
+      ? firstLine
+      : //@ts-expect-error
+        firstLine?.expression;
+
+  return (
+    func &&
+    hasOnlyOneStatement(func) &&
+    getMethodName(exp) === "push" &&
+    !includes(
+      collectParameterValues(firstParam),
+      get(exp, "callee.object.name"),
+    )
+  );
+}
+
 function create(context) {
-  function onlyHasPush(func) {
-    const firstLine = getFirstFunctionLine(func);
-    const firstParam = get(func, "params[0]");
-    const exp =
-      func && !isFunctionDefinitionWithBlock(func)
-        ? firstLine
-        : //@ts-expect-error
-          firstLine?.expression;
-
-    return (
-      func &&
-      hasOnlyOneStatement(func) &&
-      getMethodName(exp) === "push" &&
-      !includes(
-        collectParameterValues(firstParam),
-        get(exp, "callee.object.name"),
-      )
-    );
-  }
-
   return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {
     if (method === "forEach" && onlyHasPush(iteratee)) {
       context.report({
