@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { capitalize, includes } from "lodash-es";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "./astUtil";
