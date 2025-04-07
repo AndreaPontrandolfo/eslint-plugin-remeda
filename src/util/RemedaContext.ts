@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 import type { ESLintContext } from "../types";
 import astUtil from "./astUtil";
@@ -38,23 +40,32 @@ export default class {
     return {
       ImportDeclaration({ source, specifiers }) {
         if (isFullRemedaImport(source.value)) {
-          specifiers.forEach((spec) => {
-            switch (spec.type) {
-              case "ImportNamespaceSpecifier":
-              case "ImportDefaultSpecifier": {
-                self.general[spec.local.name] = true;
-                break;
-              }
-              case "ImportSpecifier": {
-                self.methods[spec.local.name] = spec.imported.name;
-
-                if (spec.imported.name === "chain") {
+          specifiers.forEach(
+            (
+              spec:
+                | TSESTree.ImportSpecifier
+                | TSESTree.ImportNamespaceSpecifier
+                | TSESTree.ImportDefaultSpecifier,
+            ) => {
+              switch (spec.type) {
+                case AST_NODE_TYPES.ImportNamespaceSpecifier:
+                case AST_NODE_TYPES.ImportDefaultSpecifier: {
                   self.general[spec.local.name] = true;
+                  break;
                 }
-                break;
+                case AST_NODE_TYPES.ImportSpecifier: {
+                  if (spec.imported.type === AST_NODE_TYPES.Identifier) {
+                    self.methods[spec.local.name] = spec.imported.name;
+
+                    if (spec.imported.name === "chain") {
+                      self.general[spec.local.name] = true;
+                    }
+                  }
+                  break;
+                }
               }
-            }
-          });
+            },
+          );
         } else {
           const method = getMethodImportFromName(source.value);
 
@@ -66,7 +77,7 @@ export default class {
       VariableDeclarator({ init, id }) {
         const required = getNameFromCjsRequire(init);
 
-        if (isFullRemedaImport(required)) {
+        if (required && isFullRemedaImport(required)) {
           if (id.type === "Identifier") {
             self.general[id.name] = true;
           } else if (id.type === "ObjectPattern") {
