@@ -290,8 +290,8 @@ function isCallFromObject(
  *
  * @param node - The node to check.
  */
-function isComputed(node) {
-  return get(node, "computed") && node.property.type !== "Literal";
+function isComputed(node: TSESTree.MemberExpression): boolean {
+  return get(node, "computed") && node.property.type !== AST_NODE_TYPES.Literal;
 }
 
 /**
