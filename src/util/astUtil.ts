@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import {
-  cond,
   flatMap,
   get,
   includes,
@@ -243,14 +242,22 @@ interface IsNegationOfMemberOfOptions {
  * Returns whether the expression is a negation of a member of objectName, in the specified depth.
  */
 function isNegationOfMemberOf(
-  exp: any,
+  exp: TSESTree.Node | null | undefined,
   objectName: string,
   { maxLength }: IsNegationOfMemberOfOptions = {},
 ) {
-  return (
-    isNegationExpression(exp) &&
-    isMemberExpOf(exp.argument, objectName, { maxLength, allowComputed: false })
-  );
+  if (
+    !exp ||
+    exp.type !== AST_NODE_TYPES.UnaryExpression ||
+    exp.operator !== "!"
+  ) {
+    return false;
+  }
+
+  return isMemberExpOf(exp.argument, objectName, {
+    maxLength,
+    allowComputed: false,
+  });
 }
 
 /**
