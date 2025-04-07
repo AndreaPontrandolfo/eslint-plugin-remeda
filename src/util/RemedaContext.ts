@@ -120,10 +120,10 @@ export default class {
    *
    * @param node - The node to check.
    */
-  isRemedaCall(node) {
-    return (
+  isRemedaCall(node: TSESTree.Node | null | undefined): boolean {
+    return Boolean(
       (this.pragma && isCallFromObject(node, this.pragma)) ||
-      this.isImportedRemeda(getCaller(node))
+        this.isImportedRemeda(getCaller(node)),
     );
   }
 
