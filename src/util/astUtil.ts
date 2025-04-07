@@ -60,10 +60,32 @@ const isFunctionDefinitionWithBlock = overSome(
  *
  * @param node - The node to check.
  */
-const getFirstFunctionLine = cond([
-  [isFunctionDefinitionWithBlock, property("body.body[0]")],
-  [matches({ type: "ArrowFunctionExpression" }), property("body")],
-]);
+const getFirstFunctionLine = (
+  node:
+    | TSESTree.FunctionExpression
+    | TSESTree.ArrowFunctionExpression
+    | TSESTree.FunctionDeclaration
+    | null
+    | undefined,
+): TSESTree.Node | undefined => {
+  if (!node) {
+    return undefined;
+  }
+
+  if (isFunctionDefinitionWithBlock(node)) {
+    if (node.body.type === AST_NODE_TYPES.BlockStatement) {
+      return node.body.body[0];
+    }
+
+    return undefined;
+  }
+
+  if (node.type === AST_NODE_TYPES.ArrowFunctionExpression) {
+    return node.body;
+  }
+
+  return undefined;
+};
 
 /**
  * @param node - The node to check.
@@ -254,17 +276,37 @@ function isIdentifierWithName(
  *
  * @param func - The function to check.
  */
-function getValueReturnedInFirstStatement(func) {
-  const firstLine: any = getFirstFunctionLine(func);
+function getValueReturnedInFirstStatement(
+  func:
+    | TSESTree.FunctionExpression
+    | TSESTree.ArrowFunctionExpression
+    | TSESTree.FunctionDeclaration
+    | null
+    | undefined,
+): TSESTree.Node | undefined {
+  const firstLine = getFirstFunctionLine(func);
 
-  if (func) {
-    if (isFunctionDefinitionWithBlock(func)) {
-      return isReturnStatement(firstLine) ? firstLine.argument : undefined;
-    }
-    if (func.type === "ArrowFunctionExpression") {
-      return firstLine;
-    }
+  if (!func) {
+    return undefined;
   }
+
+  if (isFunctionDefinitionWithBlock(func)) {
+    if (
+      firstLine &&
+      isReturnStatement(firstLine) &&
+      firstLine.type === AST_NODE_TYPES.ReturnStatement
+    ) {
+      return firstLine.argument ?? undefined;
+    }
+
+    return undefined;
+  }
+
+  if (func.type === AST_NODE_TYPES.ArrowFunctionExpression) {
+    return firstLine;
+  }
+
+  return undefined;
 }
 
 /**
