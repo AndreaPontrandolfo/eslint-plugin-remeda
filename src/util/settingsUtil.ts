@@ -1,7 +1,12 @@
 import { defaults, get, isNil } from "lodash-es";
 import type { ESLintContext } from "../types";
 
-export function getSettings(context: ESLintContext) {
+interface RemedaSettings {
+  version: number;
+  pragma?: string;
+}
+
+export function getSettings(context: ESLintContext): RemedaSettings {
   return defaults(get(context, "settings.remeda", {}), {
     version: 4,
   });
