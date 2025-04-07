@@ -410,17 +410,19 @@ const isFindIndexCall = (node) => {
  * @param node - An AST node which is a parameter or variable declaration.
  * @returns List of names defined in the parameter.
  */
-function collectParameterValues(node) {
+function collectParameterValues(
+  node: TSESTree.Node | null | undefined,
+): string[] {
   switch (node?.type) {
-    case "Identifier": {
+    case AST_NODE_TYPES.Identifier: {
       return [node.name];
     }
-    case "ObjectPattern": {
+    case AST_NODE_TYPES.ObjectPattern: {
       return flatMap(node.properties, (prop) =>
         collectParameterValues(prop.value),
       );
     }
-    case "ArrayPattern": {
+    case AST_NODE_TYPES.ArrayPattern: {
       return flatMap(node.elements, collectParameterValues);
     }
     default: {
