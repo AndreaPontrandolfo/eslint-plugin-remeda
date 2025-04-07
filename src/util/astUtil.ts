@@ -203,7 +203,7 @@ interface IsBinaryExpWithMemberOfOptions {
  */
 function isBinaryExpWithMemberOf(
   operator: string,
-  exp: Record<string, any>,
+  exp: TSESTree.BinaryExpression,
   objectName: string,
   {
     maxLength,
@@ -349,21 +349,52 @@ function isComputed(node: TSESTree.MemberExpression): boolean {
  * @param a - The first expression to check.
  * @param b - The second expression to check.
  */
-function isEquivalentMemberExp(a, b) {
-  return isEqualWith(a, b, (left, right, key) => {
-    if (includes(["loc", "range", "computed", "start", "end", "parent"], key)) {
-      return true;
-    }
-    if (isComputed(left) || isComputed(right)) {
-      return false;
-    }
-    if (key === "property") {
-      const leftValue = left.name || left.value;
-      const rightValue = right.name || right.value;
+function isEquivalentMemberExp(
+  a: TSESTree.MemberExpression,
+  b: TSESTree.MemberExpression,
+) {
+  return isEqualWith(
+    a,
+    b,
+    (
+      left: TSESTree.Node | undefined,
+      right: TSESTree.Node | undefined,
+      key: PropertyKey | undefined,
+    ) => {
+      if (!left || !right || !key) {
+        return undefined;
+      }
+      if (
+        includes(["loc", "range", "computed", "start", "end", "parent"], key)
+      ) {
+        return true;
+      }
+      if (
+        isComputed(left as TSESTree.MemberExpression) ||
+        isComputed(right as TSESTree.MemberExpression)
+      ) {
+        return false;
+      }
+      if (key === "property") {
+        if (
+          left.type === AST_NODE_TYPES.Identifier &&
+          right.type === AST_NODE_TYPES.Identifier
+        ) {
+          return left.name === right.name;
+        }
+        if (
+          left.type === AST_NODE_TYPES.Literal &&
+          right.type === AST_NODE_TYPES.Literal
+        ) {
+          return left.value === right.value;
+        }
 
-      return leftValue === rightValue;
-    }
-  });
+        return false;
+      }
+
+      return undefined;
+    },
+  );
 }
 
 /**
@@ -401,7 +432,11 @@ function getIsValue(value) {
  * @param value - The value to compare to.
  * @param checkOver - Whether to check for over/under.
  */
-function getExpressionComparedToInt(node, value, checkOver) {
+function getExpressionComparedToInt(
+  node: TSESTree.BinaryExpression,
+  value: number,
+  checkOver: boolean,
+): TSESTree.Node | undefined {
   const isValue = getIsValue(value);
 
   if (includes(comparisonOperators, node.operator)) {
