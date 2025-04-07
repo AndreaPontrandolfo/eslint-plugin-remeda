@@ -1,4 +1,5 @@
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import type { ESLintContext } from "../types";
 import astUtil from "./astUtil";
 import {
   getMethodImportFromName,
@@ -11,7 +12,7 @@ const { isMethodCall, isCallFromObject, getCaller } = astUtil;
 
 /* Class representing remeda data for a given context */
 export default class {
-  context: unknown;
+  context: ESLintContext;
   general: Record<string, boolean>;
   methods: Record<string, string>;
   _pragma: string | undefined;
@@ -20,7 +21,7 @@ export default class {
    *
    * @param context - The context of the file.
    */
-  constructor(context: unknown) {
+  constructor(context: ESLintContext) {
     this.context = context;
     this.general = Object.create(null);
     this.methods = Object.create(null);

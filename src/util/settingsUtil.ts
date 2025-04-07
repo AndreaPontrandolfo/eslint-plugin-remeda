@@ -1,16 +1,5 @@
 import { defaults, get, isNil } from "lodash-es";
-
-interface ESLintContext {
-  settings?: {
-    remeda?: {
-      version?: number;
-    };
-  };
-  ecmaFeatures?: Record<string, boolean>;
-  parserOptions?: {
-    ecmaVersion?: number;
-  };
-}
+import type { ESLintContext } from "../types";
 
 export function getSettings(context: ESLintContext) {
   return defaults(get(context, "settings.remeda", {}), {
