@@ -1,12 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /**
- * @file Rule to prefer isNullish over manual checking for undefined or null.
+ * Rule to prefer isNullish over manual checking for undefined or null.
  */
 
 import { cond, find, map, matches, property } from "lodash-es";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "../util/astUtil";
-import { getRemedaContext, isCallToRemedaMethod } from "../util/remedaUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
+import { getRemedaContext, isCallToRemedaMethod } from "../util/remedaUtil";
 
 const { isNegationExpression, isEquivalentMemberExp } = astUtil;
 
@@ -21,40 +25,12 @@ const meta = {
 
 function create(context) {
   const remedaContext = getRemedaContext(context);
-  const nilChecks = {
-    null: {
-      isValue: matches({ type: "Literal", value: null }),
-      expressionChecks: [
-        getRemedaTypeCheckedBy("isNull"),
-        getValueComparedTo("null"),
-      ],
-    },
-    undefined: {
-      isValue: matches({ type: "Identifier", name: "undefined" }),
-      expressionChecks: [
-        getRemedaTypeCheckedBy("isUndefined"),
-        getValueComparedTo("undefined"),
-        getValueWithTypeofUndefinedComparison,
-      ],
-    },
-  };
 
   function getRemedaTypeCheckedBy(typecheck) {
     return function (node) {
       return (
         isCallToRemedaMethod(node, typecheck, remedaContext) &&
         node.arguments[0]
-      );
-    };
-  }
-
-  function getValueComparedTo(nil) {
-    return function (node, operator) {
-      return (
-        node.type === "BinaryExpression" &&
-        node.operator === operator &&
-        ((nilChecks[nil].isValue(node.right) && node.left) ||
-          (nilChecks[nil].isValue(node.left) && node.right))
       );
     };
   }
@@ -80,8 +56,33 @@ function create(context) {
     );
   }
 
+  const nilChecksIsValue = {
+    null: matches({ type: "Literal", value: null }),
+    undefined: matches({ type: "Identifier", name: "undefined" }),
+  };
+
+  function getValueComparedTo(nil) {
+    return function (node, operator) {
+      return (
+        node.type === "BinaryExpression" &&
+        node.operator === operator &&
+        ((nilChecksIsValue[nil](node.right) && node.left) ||
+          (nilChecksIsValue[nil](node.left) && node.right))
+      );
+    };
+  }
+
+  const nilChecksExpressionChecks = {
+    null: [getRemedaTypeCheckedBy("isNull"), getValueComparedTo("null")],
+    undefined: [
+      getRemedaTypeCheckedBy("isUndefined"),
+      getValueComparedTo("undefined"),
+      getValueWithTypeofUndefinedComparison,
+    ],
+  };
+
   function checkExpression(nil, operator, node) {
-    const mappedValues = map(nilChecks[nil].expressionChecks, (check) =>
+    const mappedValues = map(nilChecksExpressionChecks[nil], (check) =>
       check(node, operator),
     );
 
