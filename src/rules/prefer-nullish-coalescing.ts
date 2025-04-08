@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /**
- * @file Rule to prefer nullish coalescing over checking a ternary with !isNullish.
+ * Rule to prefer nullish coalescing over checking a ternary with !isNullish.
  */
 
 import type { RemedaMethodVisitors } from "../types";
