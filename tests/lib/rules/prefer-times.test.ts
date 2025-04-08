@@ -1,10 +1,8 @@
 import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/prefer-times";
-import { fromMessage,withDefaultPragma } from "../testUtil/optionsUtil";
+import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-const toErrorObject = fromMessage(
-  "Prefer R.times over R.map without using arguments",
-);
+const toErrorObject = fromMessage(rule.meta.messages["prefer-times"]);
 
 run({
   name: "prefer-times",

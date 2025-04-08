@@ -1,19 +1,24 @@
 import { assign, defaultsDeep, isString } from "lodash-es";
 
-function fromMessage(message) {
-  return fromOptions({ errors: [{ message }] });
-}
+type TestCase = string | Record<string, unknown>;
+type TestOptions = Record<string, Record<string, unknown>[]>;
 
-function fromMessageId(messageId) {
-  return fromOptions({ errors: [{ messageId }] });
-}
-
-function fromOptions(options) {
-  return function (testCase) {
+function fromOptions(
+  options: TestOptions,
+): (testCase: TestCase) => Record<string, unknown> {
+  return function (testCase: TestCase) {
     return isString(testCase)
       ? assign({ code: testCase }, options)
       : defaultsDeep(testCase, options);
   };
+}
+
+function fromMessage(message: string) {
+  return fromOptions({ errors: [{ message }] });
+}
+
+function fromMessageId(messageId: string) {
+  return fromOptions({ errors: [{ messageId }] });
 }
 
 const withDefaultPragma = fromOptions({
