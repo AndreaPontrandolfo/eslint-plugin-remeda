@@ -23,6 +23,7 @@ export default defineFlatConfig([
       "import/no-anonymous-default-export": 0,
       "no-restricted-syntax": 0,
       "func-style": 0,
+      "sonarjs/no-duplicate-string": 0,
       "import/no-default-export": 0,
       "lodash-f/matches-shorthand": 0,
       "lodash-f/matches-prop-shorthand": 0,
