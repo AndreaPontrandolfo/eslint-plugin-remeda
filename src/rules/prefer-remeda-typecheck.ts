@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /**
- * @file Rule to check if there's a method in the chain start that can be in the chain.
+ * Rule to check if there's a method in the chain start that can be in the chain.
  */
 
 import { some } from "lodash-es";
@@ -16,21 +19,19 @@ const meta = {
   },
 } as const;
 
+function isTypeOf(node) {
+  return node && node.type === "UnaryExpression" && node.operator === "typeof";
+}
+
+function isStrictComparison(node) {
+  return node.operator === "===" || node.operator === "!==";
+}
+
 function create(context) {
   const otherSides = {
     left: "right",
     right: "left",
   };
-
-  function isTypeOf(node) {
-    return (
-      node && node.type === "UnaryExpression" && node.operator === "typeof"
-    );
-  }
-
-  function isStrictComparison(node) {
-    return node.operator === "===" || node.operator === "!==";
-  }
 
   function isDeclaredVariable(node) {
     const sourceCode = context.sourceCode ?? context.getSourceCode();
