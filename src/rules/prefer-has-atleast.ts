@@ -70,6 +70,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
     ): node is TSESTree.CallExpression {
       return (
         node.type === AST_NODE_TYPES.CallExpression &&
+        // @ts-expect-error
         isCallToRemedaMethod(node, "isEmpty", remedaContext)
       );
     }

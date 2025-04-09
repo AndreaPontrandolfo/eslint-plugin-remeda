@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { assign } from "lodash-es";
 import type { TSESTree } from "@typescript-eslint/utils";
 import astUtil from "../util/astUtil";
