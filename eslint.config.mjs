@@ -1,18 +1,19 @@
 import sheriff from "eslint-config-sheriff";
-import { defineFlatConfig } from "eslint-define-config";
 import eslintPlugin from "eslint-plugin-eslint-plugin";
 
 const sheriffOptions = {
   react: false,
   lodash: true,
+  remeda: false,
   next: false,
   astro: false,
   playwright: false,
+  storybook: false,
   jest: false,
   vitest: true,
 };
 
-export default defineFlatConfig([
+export default [
   ...sheriff(sheriffOptions),
   eslintPlugin.configs["flat/recommended"],
   {
@@ -42,4 +43,4 @@ export default defineFlatConfig([
       "fsecond/prefer-destructured-optionals": 0,
     },
   },
-]);
+];
