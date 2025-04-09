@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { assign } from "lodash-es";
-import type { TSESTree } from "@typescript-eslint/utils";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  type TSESTree,
+} from "@typescript-eslint/utils";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { isCollectionMethod } from "../util/methodDataUtil";
@@ -11,32 +12,31 @@ import {
   getRemedaMethodCallExpVisitor,
 } from "../util/remedaUtil";
 
-interface FunctionAnalysis {
-  parentFunction: FunctionAnalysis;
-  codePath: Record<string, unknown>;
-  hasReturnStatement: boolean;
-}
+export const RULE_NAME = "collection-return";
+const NO_RETURN_MESSAGE = "Do not use R.{{method}} without returning a value";
 
-const meta = {
-  type: "problem",
-  schema: [],
-  docs: {
-    description:
-      "Always return a value in iteratees of Remeda collection methods that aren't `forEach`",
-    url: getDocsUrl("collection-return"),
+export type MessageIds = "no-return";
+export type Options = [];
+
+export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
+  name: RULE_NAME,
+  meta: {
+    type: "problem",
+    docs: {
+      description:
+        "enforce returning a value in iteratees of Remeda collection methods that aren't `forEach`",
+      url: getDocsUrl(RULE_NAME),
+    },
+    schema: [],
+    messages: {
+      "no-return": NO_RETURN_MESSAGE,
+    },
   },
-} as const;
+  defaultOptions: [],
+  create(context) {
+    const remedaContext = getRemedaContext(context);
 
-/**
- * Rule to check that iteratees for all collection functions except forEach return a value;.
- */
-function create(context) {
-  const functionAnalyses = new Map();
-  let currentFunctionAnalysis: FunctionAnalysis;
-  const remedaContext = getRemedaContext(context);
-
-  return assign(
-    {
+    return {
       "CallExpression:exit": getRemedaMethodCallExpVisitor(
         remedaContext,
         (
@@ -47,50 +47,37 @@ function create(context) {
             | TSESTree.FunctionDeclaration,
           { method },
         ) => {
-          if (!isCollectionMethod(method) || !functionAnalyses.has(iteratee)) {
+          if (!isCollectionMethod(method)) {
             return;
           }
 
-          const { hasReturnStatement } = functionAnalyses.get(iteratee);
-
           if (
             !astUtil.isFunctionDefinitionWithBlock(iteratee) ||
-            hasReturnStatement ||
             iteratee.async ||
             iteratee.generator
           ) {
             return;
           }
 
-          context.report({
-            node,
-            message: `Do not use R.${method} without returning a value`,
-          });
+          // Check if the function has a return statement
+          const hasReturnStatement =
+            iteratee.body.type === AST_NODE_TYPES.BlockStatement &&
+            iteratee.body.body.some(
+              (statement): statement is TSESTree.ReturnStatement => {
+                return statement.type === AST_NODE_TYPES.ReturnStatement;
+              },
+            );
+
+          if (!hasReturnStatement) {
+            context.report({
+              node,
+              messageId: "no-return",
+              data: { method },
+            });
+          }
         },
       ),
-      ReturnStatement() {
-        currentFunctionAnalysis.hasReturnStatement = true;
-      },
-      onCodePathStart(codePath, node) {
-        currentFunctionAnalysis = {
-          parentFunction: currentFunctionAnalysis,
-          codePath,
-          hasReturnStatement: false,
-        };
-        functionAnalyses.set(node, currentFunctionAnalysis);
-      },
-      onCodePathEnd() {
-        currentFunctionAnalysis = currentFunctionAnalysis.parentFunction;
-      },
-    },
-    remedaContext.getImportVisitors(),
-  );
-}
-
-const rule = {
-  create,
-  meta,
-};
-
-export const RULE_NAME = "collection-return";
-export default rule;
+      ...remedaContext.getImportVisitors(),
+    };
+  },
+});
