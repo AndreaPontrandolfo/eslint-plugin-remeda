@@ -7,6 +7,7 @@
  */
 
 import { cond, find, map, matches, property } from "lodash-es";
+import { ESLintUtils } from "@typescript-eslint/utils";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
@@ -14,144 +15,151 @@ import { getRemedaContext, isCallToRemedaMethod } from "../util/remedaUtil";
 
 const { isNegationExpression, isEquivalentMemberExp } = astUtil;
 
-const meta = {
-  type: "problem",
-  schema: [],
-  docs: {
-    description: "Prefer R.isNullish over checks for both null and undefined.",
-    url: getDocsUrl("prefer-is-nullish"),
+export const RULE_NAME = "prefer-is-nullish";
+const PREFER_IS_NULLISH_MESSAGE =
+  "Prefer isNullish over checking for undefined or null.";
+
+export type MessageIds = "prefer-is-nullish";
+export type Options = [];
+
+export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
+  name: RULE_NAME,
+  meta: {
+    type: "problem",
+    docs: {
+      description:
+        "enforce R.isNullish over checks for both null and undefined.",
+      url: getDocsUrl(RULE_NAME),
+    },
+    schema: [],
+    messages: {
+      "prefer-is-nullish": PREFER_IS_NULLISH_MESSAGE,
+    },
   },
-} as const;
+  defaultOptions: [],
+  create(context) {
+    const remedaContext = getRemedaContext(context);
 
-function create(context) {
-  const remedaContext = getRemedaContext(context);
+    function getRemedaTypeCheckedBy(typecheck) {
+      return function (node) {
+        return (
+          // @ts-expect-error
+          isCallToRemedaMethod(node, typecheck, remedaContext) &&
+          node.arguments[0]
+        );
+      };
+    }
 
-  function getRemedaTypeCheckedBy(typecheck) {
-    return function (node) {
-      return (
-        isCallToRemedaMethod(node, typecheck, remedaContext) &&
-        node.arguments[0]
-      );
-    };
-  }
+    const getTypeofArgument = cond([
+      [
+        matches({ type: "UnaryExpression", operator: "typeof" }),
+        property("argument"),
+      ],
+    ]);
 
-  const getTypeofArgument = cond([
-    [
-      matches({ type: "UnaryExpression", operator: "typeof" }),
-      property("argument"),
-    ],
-  ]);
+    const isUndefinedString = matches({
+      type: "Literal",
+      value: "undefined",
+    });
 
-  const isUndefinedString = matches({
-    type: "Literal",
-    value: "undefined",
-  });
-
-  function getValueWithTypeofUndefinedComparison(node, operator) {
-    return (
-      node.type === "BinaryExpression" &&
-      node.operator === operator &&
-      ((isUndefinedString(node.right) && getTypeofArgument(node.left)) ||
-        (isUndefinedString(node.left) && getTypeofArgument(node.right)))
-    );
-  }
-
-  const nilChecksIsValue = {
-    null: matches({ type: "Literal", value: null }),
-    undefined: matches({ type: "Identifier", name: "undefined" }),
-  };
-
-  function getValueComparedTo(nil) {
-    return function (node, operator) {
+    function getValueWithTypeofUndefinedComparison(node, operator) {
       return (
         node.type === "BinaryExpression" &&
         node.operator === operator &&
-        ((nilChecksIsValue[nil](node.right) && node.left) ||
-          (nilChecksIsValue[nil](node.left) && node.right))
+        ((isUndefinedString(node.right) && getTypeofArgument(node.left)) ||
+          (isUndefinedString(node.left) && getTypeofArgument(node.right)))
       );
+    }
+
+    const nilChecksIsValue = {
+      null: matches({ type: "Literal", value: null }),
+      undefined: matches({ type: "Identifier", name: "undefined" }),
     };
-  }
 
-  const nilChecksExpressionChecks = {
-    null: [getRemedaTypeCheckedBy("isNull"), getValueComparedTo("null")],
-    undefined: [
-      getRemedaTypeCheckedBy("isUndefined"),
-      getValueComparedTo("undefined"),
-      getValueWithTypeofUndefinedComparison,
-    ],
-  };
+    function getValueComparedTo(nil) {
+      return function (node, operator) {
+        return (
+          node.type === "BinaryExpression" &&
+          node.operator === operator &&
+          ((nilChecksIsValue[nil](node.right) && node.left) ||
+            (nilChecksIsValue[nil](node.left) && node.right))
+        );
+      };
+    }
 
-  function checkExpression(nil, operator, node) {
-    const mappedValues = map(nilChecksExpressionChecks[nil], (check) =>
-      check(node, operator),
-    );
+    const nilChecksExpressionChecks = {
+      null: [getRemedaTypeCheckedBy("isNull"), getValueComparedTo("null")],
+      undefined: [
+        getRemedaTypeCheckedBy("isUndefined"),
+        getValueComparedTo("undefined"),
+        getValueWithTypeofUndefinedComparison,
+      ],
+    };
 
-    return find(mappedValues);
-  }
+    function checkExpression(nil, operator, node) {
+      const mappedValues = map(nilChecksExpressionChecks[nil], (check) =>
+        check(node, operator),
+      );
 
-  function checkNegatedExpression(nil, node) {
-    return (
-      (isNegationExpression(node) &&
-        checkExpression(nil, "===", node.argument)) ||
-      checkExpression(nil, "!==", node)
-    );
-  }
+      return find(mappedValues);
+    }
 
-  function isEquivalentExistingExpression(node, leftNil, rightNil) {
-    const leftExp = checkExpression(leftNil, "===", node.left);
+    function checkNegatedExpression(nil, node) {
+      return (
+        (isNegationExpression(node) &&
+          checkExpression(nil, "===", node.argument)) ||
+        checkExpression(nil, "!==", node)
+      );
+    }
 
-    return (
-      leftExp &&
-      isEquivalentMemberExp(
-        leftExp,
-        checkExpression(rightNil, "===", node.right),
-      )
-    );
-  }
+    function isEquivalentExistingExpression(node, leftNil, rightNil) {
+      const leftExp = checkExpression(leftNil, "===", node.left);
 
-  function isEquivalentExistingNegation(node, leftNil, rightNil) {
-    const leftExp = checkNegatedExpression(leftNil, node.left);
+      return (
+        leftExp &&
+        isEquivalentMemberExp(
+          leftExp,
+          checkExpression(rightNil, "===", node.right),
+        )
+      );
+    }
 
-    return (
-      leftExp &&
-      isEquivalentMemberExp(
-        leftExp,
-        checkNegatedExpression(rightNil, node.right),
-      )
-    );
-  }
+    function isEquivalentExistingNegation(node, leftNil, rightNil) {
+      const leftExp = checkNegatedExpression(leftNil, node.left);
 
-  const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
+      return (
+        leftExp &&
+        isEquivalentMemberExp(
+          leftExp,
+          checkNegatedExpression(rightNil, node.right),
+        )
+      );
+    }
 
-  visitors.LogicalExpression = function (node) {
-    if (node.operator === "||") {
-      if (
-        isEquivalentExistingExpression(node, "undefined", "null") ||
-        isEquivalentExistingExpression(node, "null", "undefined")
+    const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
+
+    visitors.LogicalExpression = function (node) {
+      if (node.operator === "||") {
+        if (
+          isEquivalentExistingExpression(node, "undefined", "null") ||
+          isEquivalentExistingExpression(node, "null", "undefined")
+        ) {
+          context.report({
+            node,
+            messageId: "prefer-is-nullish",
+          });
+        }
+      } else if (
+        isEquivalentExistingNegation(node, "undefined", "null") ||
+        isEquivalentExistingNegation(node, "null", "undefined")
       ) {
         context.report({
           node,
-          message: "Prefer isNullish over checking for undefined or null.",
+          messageId: "prefer-is-nullish",
         });
       }
-    } else if (
-      isEquivalentExistingNegation(node, "undefined", "null") ||
-      isEquivalentExistingNegation(node, "null", "undefined")
-    ) {
-      context.report({
-        node,
-        message: "Prefer isNullish over checking for undefined or null.",
-      });
-    }
-  };
+    };
 
-  return visitors;
-}
-
-const rule = {
-  create,
-  meta,
-};
-
-export const RULE_NAME = "prefer-is-nullish";
-export default rule;
+    return visitors;
+  },
+});
