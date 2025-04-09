@@ -8,17 +8,17 @@ run({
   name: "prefer-do-nothing",
   rule,
   valid: [
-    "x = function() { return 2}",
-    "x = function(x) {return x}",
-    "x = a => a.b",
-    "class A { m() {}}",
-    "var x = function * () {}",
+    { code: "x = function() { return 2}" },
+    { code: "x = function(x) {return x}" },
+    { code: "x = a => a.b" },
+    { code: "class A { m() {}}" },
+    { code: "var x = function * () {}" },
     { code: "var x = async function () {}", parserOptions: { ecmaVersion: 8 } },
   ].map(withDefaultPragma),
   invalid: [
-    "functionWithCb(function() {})",
-    "x = function(){/* */}",
-    "CallCb(()=> {})",
+    { code: "functionWithCb(function() {})" },
+    { code: "x = function(){/* */}" },
+    { code: "CallCb(()=> {})" },
   ]
     .map(toErrorObject)
     .map(withDefaultPragma),

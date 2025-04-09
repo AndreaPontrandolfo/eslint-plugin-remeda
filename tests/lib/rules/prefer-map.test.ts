@@ -2,9 +2,7 @@ import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/prefer-map";
 import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-const toErrorObject = fromMessage(
-  "Prefer R.map over a R.forEach with a push to an array inside",
-);
+const toErrorObject = fromMessage(rule.meta.messages["prefer-map"]);
 
 run({
   name: "prefer-map",

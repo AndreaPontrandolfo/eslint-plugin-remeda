@@ -2,12 +2,9 @@ import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/prefer-has-atleast";
 import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-const toErrorObject = fromMessage(
-  "Prefer R.hasAtLeast over array.length comparison",
-);
-
+const toErrorObject = fromMessage(rule.meta.messages["prefer-has-atleast"]);
 const toEmptyErrorObject = fromMessage(
-  "Prefer R.hasAtLeast(data, 1) over negated R.isEmpty for better type narrowing",
+  rule.meta.messages["prefer-has-atleast-over-negated-isempty"],
 );
 
 run({

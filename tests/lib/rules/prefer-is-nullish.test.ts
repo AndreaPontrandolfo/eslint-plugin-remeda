@@ -2,9 +2,7 @@ import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/prefer-is-nullish";
 import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-const toErrorObject = fromMessage(
-  "Prefer isNullish over checking for undefined or null.",
-);
+const toErrorObject = fromMessage(rule.meta.messages["prefer-is-nullish"]);
 
 run({
   name: "prefer-is-nullish",

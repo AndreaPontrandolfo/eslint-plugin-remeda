@@ -1,15 +1,21 @@
-import { assign, defaultsDeep, isString } from "lodash-es";
+import { isString } from "lodash-es";
 
-type TestCase = string | Record<string, unknown>;
-type TestOptions = Record<string, Record<string, unknown>[]>;
+type TestCase = string | { code: string; [key: string]: unknown };
+type TestOptions = Record<string, unknown>;
+interface TestCaseResult {
+  code: string;
+  [key: string]: unknown;
+}
 
 function fromOptions(
   options: TestOptions,
-): (testCase: TestCase) => Record<string, unknown> {
-  return function (testCase: TestCase) {
-    return isString(testCase)
-      ? assign({ code: testCase }, options)
-      : defaultsDeep(testCase, options);
+): (testCase: TestCase) => TestCaseResult {
+  return function (testCase: TestCase): TestCaseResult {
+    if (isString(testCase)) {
+      return { code: testCase, ...options };
+    }
+
+    return { ...testCase, ...options };
   };
 }
 
