@@ -1,5 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @regru/prefer-early-return/prefer-early-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /**
- * @file Rule to check if a call to `R.filter` should be a call to `R.find`.
+ * Rule to check if a call to `R.filter` should be a call to `R.find`.
  */
 
 import { getDocsUrl } from "../util/getDocsUrl";
@@ -19,15 +23,15 @@ const meta = {
   },
 } as const;
 
+function isZeroIndexAccess(node) {
+  return node.type === "MemberExpression" && node.property.value === 0;
+}
+
+function isChainedBeforeMethod(callType, node, method) {
+  return callType === "chained" && isCallToMethod(node.parent.parent, method);
+}
+
 function create(context) {
-  function isZeroIndexAccess(node) {
-    return node.type === "MemberExpression" && node.property.value === 0;
-  }
-
-  function isChainedBeforeMethod(callType, node, method) {
-    return callType === "chained" && isCallToMethod(node.parent.parent, method);
-  }
-
   return getRemedaMethodVisitors(
     context,
     (node, iteratee, { method, callType, remedaContext }) => {
