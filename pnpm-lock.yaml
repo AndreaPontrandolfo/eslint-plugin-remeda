@@ -7,13 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@typescript-eslint/utils':
-        specifier: ^8.29.0
-        version: 8.29.0(eslint@9.24.0(jiti@2.4.2))(typescript@5.5.4)
-      lodash-es:
-        specifier: ^4.17.21
-        version: 4.17.21
     devDependencies:
       '@arethetypeswrong/cli':
         specifier: ^0.17.4
@@ -27,6 +20,9 @@ importers:
       '@types/node':
         specifier: ^22.14.0
         version: 22.14.0
+      '@typescript-eslint/utils':
+        specifier: ^8.29.0
+        version: 8.29.0(eslint@9.24.0(jiti@2.4.2))(typescript@5.5.4)
       '@vitest/coverage-v8':
         specifier: ^3.1.1
         version: 3.1.1(vitest@3.1.1(@types/node@22.14.0)(@vitest/ui@3.1.1)(jiti@2.4.2))
@@ -51,6 +47,9 @@ importers:
       knip:
         specifier: ^5.49.0
         version: 5.49.0(@types/node@22.14.0)(typescript@5.5.4)
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
       prettier:
         specifier: ^3.3.2
         version: 3.3.3
