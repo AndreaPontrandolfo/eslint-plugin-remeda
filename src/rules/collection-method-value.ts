@@ -20,8 +20,8 @@ const { getMethodName } = astUtil;
 
 export const RULE_NAME = "collection-method-value";
 
-export type MessageIds = "useReturnValueId" | "dontUseReturnValueId";
-export type Options = [];
+type MessageIds = "useReturnValueId" | "dontUseReturnValueId";
+type Options = [];
 
 function parentUsesValue(node: TSESTree.CallExpression) {
   return node.parent.type !== AST_NODE_TYPES.ExpressionStatement;

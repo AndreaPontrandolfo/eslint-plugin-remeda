@@ -12,16 +12,16 @@ export function getSettings(context: ESLintContext): RemedaSettings {
   });
 }
 
-export function isEcmaFeatureOn(
-  context: ESLintContext,
-  featureName: string,
-): boolean {
-  const featureValue = get(context, `ecmaFeatures.${featureName}`);
-  const ecmaVersion = get(context, "parserOptions.ecmaVersion", 0);
+// export function isEcmaFeatureOn(
+//   context: ESLintContext,
+//   featureName: string,
+// ): boolean {
+//   const featureValue = get(context, `ecmaFeatures.${featureName}`);
+//   const ecmaVersion = get(context, "parserOptions.ecmaVersion", 0);
 
-  if (!isNil(featureValue)) {
-    return featureValue;
-  }
+//   if (!isNil(featureValue)) {
+//     return featureValue;
+//   }
 
-  return ecmaVersion > 5;
-}
+//   return ecmaVersion > 5;
+// }

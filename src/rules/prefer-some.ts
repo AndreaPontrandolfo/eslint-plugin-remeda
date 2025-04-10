@@ -14,8 +14,8 @@ const { getExpressionComparedToInt } = astUtil;
 export const RULE_NAME = "prefer-some";
 const MESSAGE = "Prefer R.some over findIndex comparison to -1";
 
-export type MessageIds = "prefer-some";
-export type Options = [];
+type MessageIds = "prefer-some";
+type Options = [];
 
 export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   name: RULE_NAME,

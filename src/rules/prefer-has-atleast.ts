@@ -17,10 +17,10 @@ const LENGTH_COMPARISON_MESSAGE =
 const NEGATED_ISEMPTY_MESSAGE =
   "Prefer R.hasAtLeast(data, 1) over negated R.isEmpty for better type narrowing";
 
-export type MessageIds =
+type MessageIds =
   | "prefer-has-atleast"
   | "prefer-has-atleast-over-negated-isempty";
-export type Options = [];
+type Options = [];
 
 function isArrayLengthProperty(
   node: TSESTree.Node,

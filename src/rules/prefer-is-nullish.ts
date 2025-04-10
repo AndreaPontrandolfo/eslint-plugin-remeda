@@ -19,8 +19,8 @@ export const RULE_NAME = "prefer-is-nullish";
 const PREFER_IS_NULLISH_MESSAGE =
   "Prefer isNullish over checking for undefined or null.";
 
-export type MessageIds = "prefer-is-nullish";
-export type Options = [];
+type MessageIds = "prefer-is-nullish";
+type Options = [];
 
 export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   name: RULE_NAME,

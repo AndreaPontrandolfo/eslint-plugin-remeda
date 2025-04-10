@@ -9,8 +9,8 @@ import { getRemedaMethodVisitors } from "../util/remedaUtil";
 
 export const RULE_NAME = "prefer-times";
 
-export type MessageIds = "prefer-times";
-export type Options = [];
+type MessageIds = "prefer-times";
+type Options = [];
 
 export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   name: RULE_NAME,

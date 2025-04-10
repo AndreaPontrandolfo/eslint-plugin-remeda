@@ -15,8 +15,8 @@ export const RULE_NAME = "prefer-nullish-coalescing";
 const MESSAGE =
   "Prefer nullish coalescing over checking a ternary with !isNullish.";
 
-export type MessageIds = "prefer-nullish-coalescing";
-export type Options = [];
+type MessageIds = "prefer-nullish-coalescing";
+type Options = [];
 
 function getTextOfNode(
   node: TSESTree.Node | null | undefined,

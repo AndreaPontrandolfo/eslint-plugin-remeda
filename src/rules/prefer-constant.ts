@@ -15,8 +15,8 @@ const { getValueReturnedInFirstStatement } = astUtil;
 export const RULE_NAME = "prefer-constant";
 const MESSAGE_ID = "prefer-constant";
 
-export type MessageIds = typeof MESSAGE_ID;
-export type Options = [boolean?, boolean?];
+type MessageIds = typeof MESSAGE_ID;
+type Options = [boolean?, boolean?];
 
 function isCompletelyLiteral(node: TSESTree.Node): boolean {
   switch (node.type) {

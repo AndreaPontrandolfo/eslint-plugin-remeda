@@ -15,8 +15,8 @@ import {
 export const RULE_NAME = "collection-return";
 const NO_RETURN_MESSAGE = "Do not use R.{{method}} without returning a value";
 
-export type MessageIds = "no-return";
-export type Options = [];
+type MessageIds = "no-return";
+type Options = [];
 
 export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   name: RULE_NAME,

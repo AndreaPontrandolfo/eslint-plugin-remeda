@@ -23,12 +23,12 @@ function fromMessage(message: string) {
   return fromOptions({ errors: [{ message }] });
 }
 
-function fromMessageId(messageId: string) {
-  return fromOptions({ errors: [{ messageId }] });
-}
+// function fromMessageId(messageId: string) {
+//   return fromOptions({ errors: [{ messageId }] });
+// }
 
 const withDefaultPragma = fromOptions({
   settings: { remeda: { pragma: "R" } },
 });
 
-export { fromMessage, fromMessageId, fromOptions, withDefaultPragma };
+export { fromMessage, withDefaultPragma };

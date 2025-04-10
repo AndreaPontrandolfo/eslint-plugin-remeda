@@ -26,8 +26,8 @@ export const RULE_NAME = "prefer-filter";
 const MESSAGE =
   "Prefer R.filter or R.some over an if statement inside a R.forEach";
 
-export type MessageIds = "prefer-filter";
-export type Options = [
+type MessageIds = "prefer-filter";
+type Options = [
   {
     maxPropertyPathLength?: number;
   },

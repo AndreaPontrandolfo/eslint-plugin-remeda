@@ -16,8 +16,8 @@ const { getCaller } = astUtil;
 
 export const RULE_NAME = "prefer-flat-map";
 
-export type MessageIds = "prefer-flat-map";
-export type Options = [];
+type MessageIds = "prefer-flat-map";
+type Options = [];
 
 function isChainedMapFlatten(node: TSESTree.Node): boolean {
   return isCallToMethod(getCaller(node), "map");

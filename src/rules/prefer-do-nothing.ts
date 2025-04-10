@@ -12,8 +12,8 @@ export const RULE_NAME = "prefer-do-nothing";
 const MESSAGE =
   "enforce using R.doNothing() or R.constant(undefined) over an empty function";
 
-export type MessageIds = "prefer-do-nothing";
-export type Options = [];
+type MessageIds = "prefer-do-nothing";
+type Options = [];
 
 export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   name: RULE_NAME,

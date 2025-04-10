@@ -13,8 +13,8 @@ import { getIsTypeMethod } from "../util/remedaUtil";
 
 export const RULE_NAME = "prefer-remeda-typecheck";
 
-export type MessageIds = "prefer-remeda-typecheck";
-export type Options = [];
+type MessageIds = "prefer-remeda-typecheck";
+type Options = [];
 
 function isTypeOf(node: TSESTree.Node): node is TSESTree.UnaryExpression {
   return (

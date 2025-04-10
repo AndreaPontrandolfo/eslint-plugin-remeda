@@ -19,8 +19,8 @@ const {
 } = astUtil;
 
 export const RULE_NAME = "prefer-map";
-export type MessageIds = "prefer-map";
-export type Options = [];
+type MessageIds = "prefer-map";
+type Options = [];
 
 function onlyHasPush(func) {
   const firstLine = getFirstFunctionLine(func);

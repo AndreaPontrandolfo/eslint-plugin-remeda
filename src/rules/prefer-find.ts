@@ -24,8 +24,8 @@ const PREFER_FIND_MESSAGE =
 const PREFER_FIND_LAST_MESSAGE =
   "Prefer using `R.findLast` over selecting the last item of a filtered result";
 
-export type MessageIds = "prefer-find" | "prefer-find-last";
-export type Options = [];
+type MessageIds = "prefer-find" | "prefer-find-last";
+type Options = [];
 
 function isZeroIndexAccess(
   node: TSESTree.Node,
