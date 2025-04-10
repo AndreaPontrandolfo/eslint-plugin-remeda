@@ -2,7 +2,11 @@
  * Rule to check if a call to R.forEach should be a call to R.filter.
  */
 
-import { ESLintUtils, type TSESTree } from "@typescript-eslint/utils";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  type TSESTree,
+} from "@typescript-eslint/utils";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaMethodVisitors } from "../util/remedaUtil";
@@ -30,11 +34,9 @@ export type Options = [
 ];
 
 function isIfWithoutElse(
-  statement: { type?: string; alternate?: unknown } | null | undefined,
+  statement: TSESTree.IfStatement | null | undefined,
 ): boolean {
-  return Boolean(
-    statement && statement.type === "IfStatement" && !statement.alternate,
-  );
+  return Boolean(statement && !statement.alternate);
 }
 
 export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
@@ -53,11 +55,13 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
           maxPropertyPathLength: {
             type: "integer",
             minimum: 1,
+            description: "Maximum length of property paths to check",
           },
         },
         additionalProperties: false,
       },
     ],
+    defaultOptions: [{ maxPropertyPathLength: 3 }],
     messages: {
       "prefer-filter": MESSAGE,
     },
@@ -70,11 +74,14 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
 
     function canBeShorthand(exp: TSESTree.Node, paramName: string): boolean {
       return (
-        isIdentifierWithName(exp, paramName) ||
+        (exp.type === AST_NODE_TYPES.Identifier &&
+          isIdentifierWithName(exp, paramName)) ||
         isMemberExpOf(exp, paramName, { maxLength }) ||
         isNegationOfMemberOf(exp, paramName, { maxLength }) ||
-        isEqEqEqToMemberOf(exp, paramName, { maxLength }) ||
-        isNotEqEqToMemberOf(exp, paramName, { maxLength })
+        (exp.type === AST_NODE_TYPES.BinaryExpression &&
+          isEqEqEqToMemberOf(exp, paramName, { maxLength })) ||
+        (exp.type === AST_NODE_TYPES.BinaryExpression &&
+          isNotEqEqToMemberOf(exp, paramName, { maxLength }))
       );
     }
 
@@ -85,9 +92,12 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
         | TSESTree.IfStatement
         | undefined;
       const paramName = getFirstParamName(func) as string | undefined;
-      const hasOneStatement = hasOnlyOneStatement(func);
+      const hasOneStatement =
+        func.type === AST_NODE_TYPES.ArrowFunctionExpression
+          ? func.body.type !== AST_NODE_TYPES.BlockStatement
+          : hasOnlyOneStatement(func);
 
-      if (!paramName || !firstLine || hasOneStatement === undefined) {
+      if (!paramName || !firstLine) {
         return false;
       }
 
