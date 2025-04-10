@@ -1,7 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @regru/prefer-early-return/prefer-early-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /**
- * @file Rule to check if a call to `R.filter` should be a call to `R.find`.
+ * Rule to check if a call to `R.filter` should be a call to `R.find`.
  */
 
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  type TSESTree,
+} from "@typescript-eslint/utils";
 import { getDocsUrl } from "../util/getDocsUrl";
 import {
   getRemedaMethodVisitors,
@@ -9,59 +17,76 @@ import {
   isCallToRemedaMethod,
 } from "../util/remedaUtil";
 
-const meta = {
-  type: "problem",
-  schema: [],
-  docs: {
-    description:
-      "Prefer using `R.find` over selecting the first item of a filtered result",
-    url: getDocsUrl("prefer-find"),
-  },
-} as const;
+export const RULE_NAME = "prefer-find";
 
-function create(context) {
-  function isZeroIndexAccess(node) {
-    return node.type === "MemberExpression" && node.property.value === 0;
-  }
+const PREFER_FIND_MESSAGE =
+  "Prefer using `R.find` over selecting the first item of a filtered result";
+const PREFER_FIND_LAST_MESSAGE =
+  "Prefer using `R.findLast` over selecting the last item of a filtered result";
 
-  function isChainedBeforeMethod(callType, node, method) {
-    return callType === "chained" && isCallToMethod(node.parent.parent, method);
-  }
+type MessageIds = "prefer-find" | "prefer-find-last";
+type Options = [];
 
-  return getRemedaMethodVisitors(
-    context,
-    (node, iteratee, { method, callType, remedaContext }) => {
-      if (method === "filter") {
-        if (
-          isZeroIndexAccess(node.parent) ||
-          isCallToRemedaMethod(node.parent, "first", remedaContext) ||
-          isChainedBeforeMethod(callType, node, "first")
-        ) {
-          context.report({
-            node,
-            message:
-              "Prefer using `R.find` over selecting the first item of a filtered result",
-          });
-        }
-        if (
-          isCallToRemedaMethod(node.parent, "last", remedaContext) ||
-          isChainedBeforeMethod(callType, node, "last")
-        ) {
-          context.report({
-            node,
-            message:
-              "Prefer using `R.findLast` over selecting the last item of a filtered result",
-          });
-        }
-      }
-    },
+function isZeroIndexAccess(
+  node: TSESTree.Node,
+): node is TSESTree.MemberExpression {
+  return (
+    node.type === AST_NODE_TYPES.MemberExpression &&
+    node.property.type === AST_NODE_TYPES.Literal &&
+    node.property.value === 0
   );
 }
 
-const rule = {
-  create,
-  meta,
-};
+function isChainedBeforeMethod(
+  callType: string,
+  node: TSESTree.Node,
+  method: string,
+): boolean {
+  return callType === "chained" && isCallToMethod(node.parent?.parent, method);
+}
 
-export const RULE_NAME = "prefer-find";
-export default rule;
+export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
+  name: RULE_NAME,
+  meta: {
+    type: "problem",
+    docs: {
+      description:
+        "enforce using `R.find` over selecting the first item of a filtered result",
+      url: getDocsUrl(RULE_NAME),
+    },
+    schema: [],
+    messages: {
+      "prefer-find": PREFER_FIND_MESSAGE,
+      "prefer-find-last": PREFER_FIND_LAST_MESSAGE,
+    },
+  },
+  defaultOptions: [],
+  create(context) {
+    return getRemedaMethodVisitors(
+      context,
+      (node, iteratee, { method, callType, remedaContext }) => {
+        if (method === "filter") {
+          if (
+            isZeroIndexAccess(node.parent) ||
+            isCallToRemedaMethod(node.parent, "first", remedaContext) ||
+            isChainedBeforeMethod(callType, node, "first")
+          ) {
+            context.report({
+              node,
+              messageId: "prefer-find",
+            });
+          }
+          if (
+            isCallToRemedaMethod(node.parent, "last", remedaContext) ||
+            isChainedBeforeMethod(callType, node, "last")
+          ) {
+            context.report({
+              node,
+              messageId: "prefer-find-last",
+            });
+          }
+        }
+      },
+    );
+  },
+});

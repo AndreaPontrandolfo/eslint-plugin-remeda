@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import {
-  cond,
   flatMap,
   get,
   includes,
@@ -11,28 +11,39 @@ import {
   overSome,
   property,
 } from "lodash-es";
+import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 
 /**
- * Gets the object that called the method in a CallExpression
+ * Gets the object that called the method in a CallExpression.
  *
- * @param {Object} node
- * @returns {Object|undefined}
+ * @param node - The node to check.
  */
-const getCaller = property(["callee", "object"]);
+const getCaller = (
+  node: TSESTree.Node | null | undefined,
+): TSESTree.Node | null | undefined => {
+  if (
+    !node ||
+    node.type !== AST_NODE_TYPES.CallExpression ||
+    !node.callee ||
+    node.callee.type !== AST_NODE_TYPES.MemberExpression
+  ) {
+    return null;
+  }
+
+  return node.callee.object;
+};
 
 /**
- * Gets the name of a method in a CallExpression
+ * Gets the name of a method in a CallExpression.
  *
- * @param {Object} node
- * @returns {string|undefined}
+ * @param node - The node to check.
  */
-const getMethodName = property(["callee", "property", "name"]);
+const getMethodName = property("callee.property.name");
 
 /**
- * Returns whether the node is a method call
+ * Returns whether the node is a method call.
  *
- * @param {Object} node
- * @returns {boolean}
+ * @param node - The node to check.
  */
 const isMethodCall = matches({
   type: "CallExpression",
@@ -44,10 +55,9 @@ const isFunctionExpression = overSome(
   matchesProperty("type", "FunctionDeclaration"),
 );
 /**
- * Returns whether the node is a function declaration that has a block
+ * Returns whether the node is a function declaration that has a block.
  *
- * @param {Object} node
- * @returns {boolean}
+ * @param node - The node to check.
  */
 const isFunctionDefinitionWithBlock = overSome(
   isFunctionExpression,
@@ -58,24 +68,43 @@ const isFunctionDefinitionWithBlock = overSome(
 );
 
 /**
- * If the node specified is a function, returns the node corresponding with the first statement/expression in that function
+ * If the node specified is a function, returns the node corresponding with the first statement/expression in that function.
  *
- * @param {Object} node
- * @returns {node|undefined}
+ * @param node - The node to check.
  */
-const getFirstFunctionLine = cond([
-  [isFunctionDefinitionWithBlock, property(["body", "body", 0])],
-  [matches({ type: "ArrowFunctionExpression" }), property("body")],
-]);
+const getFirstFunctionLine = (
+  node:
+    | TSESTree.FunctionExpression
+    | TSESTree.ArrowFunctionExpression
+    | TSESTree.FunctionDeclaration
+    | null
+    | undefined,
+): TSESTree.Node | undefined => {
+  if (!node) {
+    return undefined;
+  }
+
+  if (isFunctionDefinitionWithBlock(node)) {
+    if (node.body.type === AST_NODE_TYPES.BlockStatement) {
+      return node.body.body[0];
+    }
+
+    return undefined;
+  }
+
+  if (node.type === AST_NODE_TYPES.ArrowFunctionExpression) {
+    return node.body;
+  }
+
+  return undefined;
+};
 
 /**
- *
- * @param {Object} node
- * @returns {boolean|undefined}
+ * @param node - The node to check.
  */
 const isPropAccess = overSome(
   matches({ computed: false }),
-  matchesProperty(["property", "type"], "Literal"),
+  matchesProperty("property.type", "Literal"),
 );
 
 interface IsMemberExpOfOptions {
@@ -84,77 +113,81 @@ interface IsMemberExpOfOptions {
 }
 
 /**
- * Returns whether the node is a member expression starting with the same object, up to the specified length
+ * Returns whether the node is a member expression starting with the same object, up to the specified length.
  *
- * @param node
- * @param objectName
- * @param [options]
- * @param [options.maxLength]
- * @param [options.allowComputed]
- * @returns
+ * @param node - The node to check.
+ * @param objectName - The object name to check against.
  */
 function isMemberExpOf(
-  node: Record<string, any>,
+  node: TSESTree.Node | null | undefined,
   objectName: string,
   { maxLength = Number.MAX_VALUE, allowComputed }: IsMemberExpOfOptions = {},
-) {
-  if (objectName) {
-    let curr = node;
-    let depth = maxLength;
+): boolean {
+  if (!objectName) {
+    return false;
+  }
 
-    while (curr && depth) {
-      if (allowComputed || isPropAccess(curr)) {
-        if (
-          curr.type === "MemberExpression" &&
-          curr.object.name === objectName
-        ) {
-          return true;
-        }
-        curr = curr.object;
-        depth--;
-      } else {
-        return false;
+  let currentNode = node;
+  let depth = maxLength;
+
+  while (currentNode && depth) {
+    if (allowComputed || isPropAccess(currentNode)) {
+      if (
+        currentNode.type === AST_NODE_TYPES.MemberExpression &&
+        "name" in currentNode.object &&
+        currentNode.object.name === objectName
+      ) {
+        return true;
       }
+      currentNode = "object" in currentNode ? currentNode.object : undefined;
+      depth = depth - 1;
+    } else {
+      return false;
     }
   }
+
+  return false;
 }
 
 /**
- * Returns the name of the first parameter of a function, if it exists
+ * Returns the name of the first parameter of a function, if it exists.
  *
- * @param {Object} func
- * @returns {string|undefined}
+ * @param func - The function to check.
  */
-const getFirstParamName = property(["params", 0, "name"]);
+const getFirstParamName = property("params[0].name");
 
 /**
- * Returns whether or not the expression is a return statement
+ * Returns whether or not the expression is a return statement.
  *
- * @param {Object} exp
- * @returns {boolean|undefined}
+ * @param exp - The expression to check.
  */
 const isReturnStatement = matchesProperty("type", "ReturnStatement");
 
 /**
- * Returns whether the node specified has only one statement
+ * Returns whether the node specified has only one statement.
  *
- * @param func
- * @returns
+ * @param func - The function to check.
  */
-function hasOnlyOneStatement(func) {
+function hasOnlyOneStatement(func: {
+  type: string;
+  body: { body?: unknown };
+}): boolean {
   if (isFunctionDefinitionWithBlock(func)) {
-    return get(func, "body.body.length") === 1;
+    const body = get(func, "body.body");
+
+    return Array.isArray(body) && body.length === 1;
   }
   if (func.type === "ArrowFunctionExpression") {
     return !get(func, "body.body");
   }
+
+  return false;
 }
 
 /**
- * Returns whether the node is an object of a method call
+ * Returns whether the node is an object of a method call.
  *
- * @param node
- * @returns
+ * @param node - The node to check.
  */
 function isObjectOfMethodCall(node) {
   return (
@@ -164,13 +197,12 @@ function isObjectOfMethodCall(node) {
 }
 
 /**
- * Returns whether the node is a literal
+ * Returns whether the node is a literal.
  *
- * @param node
- * @returns
+ * @param node - The node to check.
  */
-function isLiteral(node) {
-  return node.type === "Literal";
+function isLiteral(node: TSESTree.Node | null | undefined) {
+  return node?.type === AST_NODE_TYPES.Literal;
 }
 
 interface IsBinaryExpWithMemberOfOptions {
@@ -180,11 +212,11 @@ interface IsBinaryExpWithMemberOfOptions {
 }
 
 /**
- * Returns whether the expression specified is a binary expression with the specified operator and one of its sides is a member expression of the specified object name
+ * Returns whether the expression specified is a binary expression with the specified operator and one of its sides is a member expression of the specified object name.
  */
 function isBinaryExpWithMemberOf(
   operator: string,
-  exp: Record<string, any>,
+  exp: TSESTree.BinaryExpression,
   objectName: string,
   {
     maxLength,
@@ -208,8 +240,7 @@ function isBinaryExpWithMemberOf(
 /**
  * Returns whether the specified expression is a negation.
  *
- * @param {Object} exp
- * @returns {boolean|undefined}
+ * @param exp - The expression to check.
  */
 const isNegationExpression = matches({
   type: "UnaryExpression",
@@ -224,113 +255,174 @@ interface IsNegationOfMemberOfOptions {
  * Returns whether the expression is a negation of a member of objectName, in the specified depth.
  */
 function isNegationOfMemberOf(
-  exp: any,
+  exp: TSESTree.Node | null | undefined,
   objectName: string,
   { maxLength }: IsNegationOfMemberOfOptions = {},
 ) {
-  return (
-    isNegationExpression(exp) &&
-    isMemberExpOf(exp.argument, objectName, { maxLength, allowComputed: false })
-  );
-}
-
-/**
- *
- * @param exp
- * @param paramName
- * @returns
- */
-function isIdentifierWithName(exp, paramName) {
-  return (
-    exp && paramName && exp.type === "Identifier" && exp.name === paramName
-  );
-}
-
-/**
- * Returns the node of the value returned in the first line, if any
- *
- * @param func
- * @returns
- */
-function getValueReturnedInFirstStatement(func) {
-  const firstLine: any = getFirstFunctionLine(func);
-
-  if (func) {
-    if (isFunctionDefinitionWithBlock(func)) {
-      return isReturnStatement(firstLine) ? firstLine.argument : undefined;
-    }
-    if (func.type === "ArrowFunctionExpression") {
-      return firstLine;
-    }
+  if (
+    !exp ||
+    exp.type !== AST_NODE_TYPES.UnaryExpression ||
+    exp.operator !== "!"
+  ) {
+    return false;
   }
+
+  return isMemberExpOf(exp.argument, objectName, {
+    maxLength,
+    allowComputed: false,
+  });
 }
 
 /**
- * Returns whether the node is a call from the specified object name
+ * Checks if the given expression is an identifier with the specified name.
  *
- * @param node
- * @param objName
- * @returns
+ * @param expression - The expression to check.
+ * @param paramName - The name to check against.
  */
-function isCallFromObject(node, objName) {
+function isIdentifierWithName(
+  expression: { type: string; name: string },
+  paramName: string,
+) {
+  return (
+    expression &&
+    paramName &&
+    expression.type === "Identifier" &&
+    expression.name === paramName
+  );
+}
+
+/**
+ * Returns the node of the value returned in the first line, if any.
+ *
+ * @param func - The function to check.
+ */
+function getValueReturnedInFirstStatement(
+  func:
+    | TSESTree.FunctionExpression
+    | TSESTree.ArrowFunctionExpression
+    | TSESTree.FunctionDeclaration
+    | null
+    | undefined,
+): TSESTree.Node | undefined {
+  const firstLine = getFirstFunctionLine(func);
+
+  if (!func) {
+    return undefined;
+  }
+
+  if (isFunctionDefinitionWithBlock(func)) {
+    if (
+      firstLine &&
+      isReturnStatement(firstLine) &&
+      firstLine.type === AST_NODE_TYPES.ReturnStatement
+    ) {
+      return firstLine.argument ?? undefined;
+    }
+
+    return undefined;
+  }
+
+  if (func.type === AST_NODE_TYPES.ArrowFunctionExpression) {
+    return firstLine;
+  }
+
+  return undefined;
+}
+
+/**
+ * Returns whether the node is a call from the specified object name.
+ *
+ * @param node - The node to check.
+ * @param objName   - The object name to check against.
+ */
+function isCallFromObject(
+  node: TSESTree.Node | null | undefined,
+  objName: string,
+) {
   return (
     node &&
     objName &&
-    node.type === "CallExpression" &&
+    node.type === AST_NODE_TYPES.CallExpression &&
     get(node, "callee.object.name") === objName
   );
 }
 
 /**
- * Returns whether the node is actually computed (x['ab'] does not count, x['a' + 'b'] does
+ * Returns whether the node is actually computed (x['ab'] does not count, x['a' + 'b'] does.
  *
- * @param node
- * @returns
+ * @param node - The node to check.
  */
-function isComputed(node) {
-  return get(node, "computed") && node.property.type !== "Literal";
+function isComputed(node: TSESTree.MemberExpression): boolean {
+  return get(node, "computed") && node.property.type !== AST_NODE_TYPES.Literal;
 }
 
 /**
- * Returns whether the two expressions refer to the same object (e.g. a['b'].c and a.b.c)
+ * Returns whether the two expressions refer to the same object (e.g. A['b'].c and a.b.c).
  *
- * @param a
- * @param b
- * @returns
+ * @param a - The first expression to check.
+ * @param b - The second expression to check.
  */
-function isEquivalentMemberExp(a, b) {
-  return isEqualWith(a, b, (left, right, key) => {
-    if (includes(["loc", "range", "computed", "start", "end", "parent"], key)) {
-      return true;
-    }
-    if (isComputed(left) || isComputed(right)) {
-      return false;
-    }
-    if (key === "property") {
-      const leftValue = left.name || left.value;
-      const rightValue = right.name || right.value;
+function isEquivalentMemberExp(
+  a: TSESTree.MemberExpression,
+  b: TSESTree.MemberExpression,
+) {
+  return isEqualWith(
+    a,
+    b,
+    (
+      left: TSESTree.Node | undefined,
+      right: TSESTree.Node | undefined,
+      key: PropertyKey | undefined,
+    ) => {
+      if (!left || !right || !key) {
+        return undefined;
+      }
+      if (
+        includes(["loc", "range", "computed", "start", "end", "parent"], key)
+      ) {
+        return true;
+      }
+      if (
+        isComputed(left as TSESTree.MemberExpression) ||
+        isComputed(right as TSESTree.MemberExpression)
+      ) {
+        return false;
+      }
+      if (key === "property") {
+        if (
+          left.type === AST_NODE_TYPES.Identifier &&
+          right.type === AST_NODE_TYPES.Identifier
+        ) {
+          return left.name === right.name;
+        }
+        if (
+          left.type === AST_NODE_TYPES.Literal &&
+          right.type === AST_NODE_TYPES.Literal
+        ) {
+          return left.value === right.value;
+        }
 
-      return leftValue === rightValue;
-    }
-  });
+        return false;
+      }
+
+      return undefined;
+    },
+  );
 }
 
 /**
- * Returns whether the expression is a strict equality comparison, ===
+ * Returns whether the expression is a strict equality comparison, ===.
  *
- * @param {Object} node
- * @returns {boolean}
+ * @param node - The node to check.
  */
 const isEqEqEq = matches({ type: "BinaryExpression", operator: "===" });
 
-const isMinus = (node) =>
-  node.type === "UnaryExpression" && node.operator === "-";
+const isMinus = (node: TSESTree.Node | null | undefined) => {
+  return node?.type === AST_NODE_TYPES.UnaryExpression && node.operator === "-";
+};
 
 /**
- * Enum for type of comparison to int literal
- *
- * @readonly
- * @enum {number}
+ * Enum for type of comparison to int literal.
  */
 const comparisonType = {
   exact: 0,
@@ -347,14 +439,17 @@ function getIsValue(value) {
 }
 
 /**
- * Returns the expression compared to the value in a binary expression, or undefined if there isn't one
+ * Returns the expression compared to the value in a binary expression, or undefined if there isn't one.
  *
- * @param node
- * @param value
- * @param [checkOver=false]
- * @returns
+ * @param node - The node to check.
+ * @param value - The value to compare to.
+ * @param checkOver - Whether to check for over/under.
  */
-function getExpressionComparedToInt(node, value, checkOver) {
+function getExpressionComparedToInt(
+  node: TSESTree.BinaryExpression,
+  value: number,
+  checkOver: boolean,
+): TSESTree.Node | undefined {
   const isValue = getIsValue(value);
 
   if (includes(comparisonOperators, node.operator)) {
@@ -390,40 +485,41 @@ function getExpressionComparedToInt(node, value, checkOver) {
 }
 
 /**
- * Returns whether the node is a call to indexOf
+ * Returns whether the node is a call to indexOf.
  *
- * @param node
- * @returns
+ * @param node - The node to check.
  */
 const isIndexOfCall = (node) =>
   isMethodCall(node) && getMethodName(node) === "indexOf";
 
 /**
- * Returns whether the node is a call to findIndex
+ * Returns whether the node is a call to findIndex.
  *
- * @param node
- * @returns
+ * @param node - The node to check.
  */
-const isFindIndexCall = (node) =>
-  isMethodCall(node) && getMethodName(node) === "findIndex";
+const isFindIndexCall = (node) => {
+  return isMethodCall(node) && getMethodName(node) === "findIndex";
+};
 
 /**
- * Returns an array of identifier names returned in a parameter or variable definition
+ * Returns an array of identifier names returned in a parameter or variable definition.
  *
- * @param node an AST node which is a parameter or variable declaration
- * @returns List of names defined in the parameter
+ * @param node - An AST node which is a parameter or variable declaration.
+ * @returns List of names defined in the parameter.
  */
-function collectParameterValues(node) {
-  switch (node && node.type) {
-    case "Identifier": {
+function collectParameterValues(
+  node: TSESTree.Node | null | undefined,
+): string[] {
+  switch (node?.type) {
+    case AST_NODE_TYPES.Identifier: {
       return [node.name];
     }
-    case "ObjectPattern": {
+    case AST_NODE_TYPES.ObjectPattern: {
       return flatMap(node.properties, (prop) =>
         collectParameterValues(prop.value),
       );
     }
-    case "ArrayPattern": {
+    case AST_NODE_TYPES.ArrayPattern: {
       return flatMap(node.elements, collectParameterValues);
     }
     default: {

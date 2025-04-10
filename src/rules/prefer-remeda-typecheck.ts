@@ -1,101 +1,116 @@
 /**
- * @file Rule to check if there's a method in the chain start that can be in the chain.
+ * Rule to check if there's a method in the chain start that can be in the chain.
  */
 
 import { some } from "lodash-es";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  type TSESTree,
+} from "@typescript-eslint/utils";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getIsTypeMethod } from "../util/remedaUtil";
 
-const meta = {
-  type: "problem",
-  schema: [],
-  docs: {
-    description:
-      "Prefer using `R.is*` methods over `typeof` and `instanceof` checks when applicable.",
-    url: getDocsUrl("prefer-remeda-typecheck"),
-  },
-} as const;
+export const RULE_NAME = "prefer-remeda-typecheck";
 
-function create(context) {
-  const otherSides = {
-    left: "right",
-    right: "left",
-  };
+type MessageIds = "prefer-remeda-typecheck";
+type Options = [];
 
-  function isTypeOf(node) {
-    return (
-      node && node.type === "UnaryExpression" && node.operator === "typeof"
-    );
-  }
-
-  function isStrictComparison(node) {
-    return node.operator === "===" || node.operator === "!==";
-  }
-
-  function isDeclaredVariable(node) {
-    const sourceCode = context.sourceCode ?? context.getSourceCode();
-    const scope = sourceCode?.getScope?.(node);
-    const definedVariables = scope.variables;
-
-    return some(definedVariables, { name: node.name });
-  }
-
-  function getValueForSide(node, side) {
-    const otherSide = otherSides[side];
-
-    if (
-      isTypeOf(node[side]) &&
-      (node[otherSide].value !== "undefined" ||
-        node[side].argument.type !== "Identifier" ||
-        isDeclaredVariable(node[side].argument))
-    ) {
-      return node[otherSide].value;
-    }
-  }
-
-  function getTypeofCompareType(node) {
-    if (isStrictComparison(node)) {
-      return getValueForSide(node, "left") || getValueForSide(node, "right");
-    }
-  }
-
-  const REPORT_MESSAGE = "Prefer 'R.{{method}}' over {{actual}}.";
-
-  return {
-    BinaryExpression(node) {
-      const typeofCompareType = getTypeofCompareType(node);
-
-      if (typeofCompareType) {
-        context.report({
-          node,
-          message: REPORT_MESSAGE,
-          data: {
-            method: getIsTypeMethod(typeofCompareType),
-            actual: "'typeof' comparison",
-          },
-        });
-      } else if (node.operator === "instanceof") {
-        const remedaEquivalent = getIsTypeMethod(node.right.name);
-
-        if (node.right.type === "Identifier" && remedaEquivalent) {
-          context.report({
-            node,
-            message: REPORT_MESSAGE,
-            data: {
-              method: remedaEquivalent,
-              actual: `'instanceof ${node.right.name}'`,
-            },
-          });
-        }
-      }
-    },
-  };
+function isTypeOf(node: TSESTree.Node): node is TSESTree.UnaryExpression {
+  return (
+    node.type === AST_NODE_TYPES.UnaryExpression && node.operator === "typeof"
+  );
 }
 
-const rule = {
-  create,
-  meta,
-};
+function isStrictComparison(node: TSESTree.BinaryExpression): boolean {
+  return node.operator === "===" || node.operator === "!==";
+}
 
-export const RULE_NAME = "prefer-remeda-typecheck";
-export default rule;
+export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
+  name: RULE_NAME,
+  meta: {
+    type: "problem",
+    docs: {
+      description:
+        "enforce using `R.is*` methods over `typeof` and `instanceof` checks when applicable.",
+      url: getDocsUrl(RULE_NAME),
+    },
+    schema: [],
+    messages: {
+      "prefer-remeda-typecheck": "Prefer 'R.{{method}}' over {{actual}}.",
+    },
+  },
+  defaultOptions: [],
+  create(context) {
+    const otherSides = {
+      left: "right",
+      right: "left",
+    } as const;
+
+    function isDeclaredVariable(node: TSESTree.Identifier): boolean {
+      const { sourceCode } = context;
+      const scope = sourceCode.getScope(node);
+      const definedVariables = scope.variables;
+
+      return some(definedVariables, { name: node.name });
+    }
+
+    function getValueForSide(
+      node: TSESTree.BinaryExpression,
+      side: "left" | "right",
+    ): string | undefined {
+      const otherSide = otherSides[side];
+
+      if (
+        isTypeOf(node[side]) &&
+        node[otherSide].type === AST_NODE_TYPES.Literal &&
+        (node[otherSide].value !== "undefined" ||
+          node[side].argument.type !== AST_NODE_TYPES.Identifier ||
+          isDeclaredVariable(node[side].argument))
+      ) {
+        return String(node[otherSide].value);
+      }
+    }
+
+    function getTypeofCompareType(
+      node: TSESTree.BinaryExpression,
+    ): string | undefined {
+      if (isStrictComparison(node)) {
+        return getValueForSide(node, "left") || getValueForSide(node, "right");
+      }
+    }
+
+    return {
+      BinaryExpression(node) {
+        const typeofCompareType = getTypeofCompareType(node);
+
+        if (typeofCompareType) {
+          context.report({
+            node,
+            messageId: "prefer-remeda-typecheck",
+            data: {
+              method: getIsTypeMethod(typeofCompareType),
+              actual: "'typeof' comparison",
+            },
+          });
+        } else if (
+          node.operator === "instanceof" &&
+          node.right.type === AST_NODE_TYPES.Identifier
+        ) {
+          const remedaEquivalent = getIsTypeMethod(node.right.name);
+
+          if (remedaEquivalent) {
+            context.report({
+              node,
+              messageId: "prefer-remeda-typecheck",
+              data: {
+                method: remedaEquivalent,
+                actual: `'instanceof ${node.right.name}'`,
+              },
+            });
+          }
+        }
+      },
+    };
+  },
+});

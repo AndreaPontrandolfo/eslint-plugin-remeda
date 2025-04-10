@@ -1,23 +1,34 @@
-import { assign, defaultsDeep, isString } from "lodash-es";
+import { isString } from "lodash-es";
 
-function fromMessage(message) {
+type TestCase = string | { code: string; [key: string]: unknown };
+type TestOptions = Record<string, unknown>;
+interface TestCaseResult {
+  code: string;
+  [key: string]: unknown;
+}
+
+function fromOptions(
+  options: TestOptions,
+): (testCase: TestCase) => TestCaseResult {
+  return function (testCase: TestCase): TestCaseResult {
+    if (isString(testCase)) {
+      return { code: testCase, ...options };
+    }
+
+    return { ...testCase, ...options };
+  };
+}
+
+function fromMessage(message: string) {
   return fromOptions({ errors: [{ message }] });
 }
 
-function fromMessageId(messageId) {
-  return fromOptions({ errors: [{ messageId }] });
-}
-
-function fromOptions(options) {
-  return function (testCase) {
-    return isString(testCase)
-      ? assign({ code: testCase }, options)
-      : defaultsDeep(testCase, options);
-  };
-}
+// function fromMessageId(messageId: string) {
+//   return fromOptions({ errors: [{ messageId }] });
+// }
 
 const withDefaultPragma = fromOptions({
   settings: { remeda: { pragma: "R" } },
 });
 
-export { fromMessage, fromMessageId, fromOptions, withDefaultPragma };
+export { fromMessage, withDefaultPragma };

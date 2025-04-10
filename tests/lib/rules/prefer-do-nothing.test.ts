@@ -2,25 +2,23 @@ import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/prefer-do-nothing";
 import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-const toErrorObject = fromMessage(
-  "Prefer R.doNothing() or R.constant(undefined) over an empty function",
-);
+const toErrorObject = fromMessage(rule.meta.messages["prefer-do-nothing"]);
 
 run({
   name: "prefer-do-nothing",
   rule,
   valid: [
-    "x = function() { return 2}",
-    "x = function(x) {return x}",
-    "x = a => a.b",
-    "class A { m() {}}",
-    "var x = function * () {}",
+    { code: "x = function() { return 2}" },
+    { code: "x = function(x) {return x}" },
+    { code: "x = a => a.b" },
+    { code: "class A { m() {}}" },
+    { code: "var x = function * () {}" },
     { code: "var x = async function () {}", parserOptions: { ecmaVersion: 8 } },
   ].map(withDefaultPragma),
   invalid: [
-    "functionWithCb(function() {})",
-    "x = function(){/* */}",
-    "CallCb(()=> {})",
+    { code: "functionWithCb(function() {})" },
+    { code: "x = function(){/* */}" },
+    { code: "CallCb(()=> {})" },
   ]
     .map(toErrorObject)
     .map(withDefaultPragma),

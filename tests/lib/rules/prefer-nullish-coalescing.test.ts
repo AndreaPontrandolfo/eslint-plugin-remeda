@@ -1,9 +1,9 @@
 import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/prefer-nullish-coalescing";
-import { fromMessage,withDefaultPragma } from "../testUtil/optionsUtil";
+import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
 const toErrorObject = fromMessage(
-  "Prefer nullish coalescing over checking a ternary with !isNullish.",
+  rule.meta.messages["prefer-nullish-coalescing"],
 );
 
 run({

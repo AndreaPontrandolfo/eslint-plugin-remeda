@@ -1,4 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "entry": ["src/rules/**/*.js", "tests/lib/rules/*.js"]
+  "entry": ["src/rules/**/*.js", "tests/lib/rules/*.js"],
+  "ignore": [".eslint-doc-generatorrc.mjs"],
+  "ignoreDependencies": ["@sherifforg/cli", "prettier"]
 }

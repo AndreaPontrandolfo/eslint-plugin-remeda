@@ -2,9 +2,7 @@ import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/prefer-filter";
 import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-const toErrorObject = fromMessage(
-  "Prefer R.filter or R.some over an if statement inside a R.forEach",
-);
+const toErrorObject = fromMessage(rule.meta.messages["prefer-filter"]);
 
 run({
   name: "prefer-filter",

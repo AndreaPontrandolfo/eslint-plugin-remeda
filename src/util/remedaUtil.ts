@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { capitalize, includes } from "lodash-es";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "./astUtil";
@@ -7,9 +10,9 @@ import RemedaContext from "./RemedaContext";
 /**
  * Returns whether the node is a call to the specified method.
  *
- * @param node
- * @param method
- * @returns
+ * @param node - The node to check.
+ * @param method - The method to check against.
+ * @returns Whether the node is a call to the specified method.
  */
 function isCallToMethod(node, method) {
   return method === astUtil.getMethodName(node);
@@ -18,8 +21,7 @@ function isCallToMethod(node, method) {
 /**
  * Gets the 'isX' method for a specified type, e.g. IsObject.
  *
- * @param name
- * @returns
+ * @param name - The name of the type to get the 'isX' method for.
  */
 function getIsTypeMethod(name) {
   const types = [
@@ -42,9 +44,9 @@ function getIsTypeMethod(name) {
 /**
  * Gets the context's Remeda settings and a function and returns a visitor that calls the function for every Remeda or chain call.
  *
- * @param remedaContext
- * @param reporter
- * @returns
+ * @param remedaContext - The Remeda context.
+ * @param reporter - The reporter to use.
+ * @returns A visitor that calls the function for every Remeda or chain call.
  */
 function getRemedaMethodCallExpVisitor(remedaContext, reporter) {
   return function (node) {
@@ -75,11 +77,22 @@ function getRemedaMethodCallExpVisitor(remedaContext, reporter) {
   };
 }
 
-function isRemedaCallToMethod(node, method, remedaContext) {
+function isRemedaCallToMethod(
+  node: { type?: string } | null | undefined,
+  method: string,
+  remedaContext: { isRemedaCall: (node: unknown) => boolean },
+): boolean {
   return remedaContext.isRemedaCall(node) && isCallToMethod(node, method);
 }
 
-function isCallToRemedaMethod(node, method, remedaContext) {
+function isCallToRemedaMethod(
+  node: { type?: string } | null | undefined,
+  method: string,
+  remedaContext: {
+    getImportedRemedaMethod: (node: unknown) => string;
+    isRemedaCall: (node: unknown) => boolean;
+  },
+): boolean {
   if (!node || node.type !== "CallExpression") {
     return false;
   }
@@ -103,7 +116,9 @@ function getRemedaMethodVisitors(context, remedaCallExpVisitor) {
 }
 
 /**
- * @param context
+ * Gets a RemedaContext for a given context.
+ *
+ * @param context - The context to get the Remeda context for.
  * @returns A RemedaContext for a given context.
  */
 function getRemedaContext(context) {

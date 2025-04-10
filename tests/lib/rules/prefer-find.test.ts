@@ -2,12 +2,7 @@ import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/prefer-find";
 import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-const toFindError = fromMessage(
-  "Prefer using `R.find` over selecting the first item of a filtered result",
-);
-const toFindLastError = fromMessage(
-  "Prefer using `R.findLast` over selecting the last item of a filtered result",
-);
+const toFindError = fromMessage(rule.meta.messages["prefer-find"]);
 
 run({
   name: "prefer-find",

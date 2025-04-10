@@ -1,10 +1,8 @@
 import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/prefer-constant";
-import { fromMessage,withDefaultPragma } from "../testUtil/optionsUtil";
+import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-const toErrorObject = fromMessage(
-  "Prefer R.constant over a function returning a literal",
-);
+const toErrorObject = fromMessage(rule.meta.messages["prefer-constant"]);
 
 run({
   name: "prefer-constant",

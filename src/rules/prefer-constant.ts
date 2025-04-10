@@ -1,97 +1,121 @@
 /**
- * @file Rule to check if the expression could be better expressed as a R.constant.
+ * Rule to check if the expression could be better expressed as a R.constant.
  */
 
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  type TSESTree,
+} from "@typescript-eslint/utils";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 
 const { getValueReturnedInFirstStatement } = astUtil;
 
-const meta = {
-  type: "problem",
-  docs: {
-    description: "Prefer R.constant over functions returning literals",
-    url: getDocsUrl("prefer-constant"),
-  },
-  schema: [
-    {
-      type: "boolean",
-    },
-    {
-      type: "boolean",
-    },
-  ],
-} as const;
+export const RULE_NAME = "prefer-constant";
+const MESSAGE_ID = "prefer-constant";
 
-function create(context) {
-  const shouldCheckArrowFunctions =
-    context.options[0] !== undefined ? context.options[0] : true;
-  const shouldCheckFunctionDeclarations =
-    context.options[1] !== undefined ? context.options[1] : false;
+type MessageIds = typeof MESSAGE_ID;
+type Options = [boolean?, boolean?];
 
-  function isCompletelyLiteral(node) {
-    switch (node.type) {
-      case "Literal": {
-        return true;
-      }
-      case "BinaryExpression": {
-        return (
-          isCompletelyLiteral(node.left) && isCompletelyLiteral(node.right)
-        );
-      }
-      case "UnaryExpression": {
-        return isCompletelyLiteral(node.argument);
-      }
-      case "ConditionalExpression": {
-        return (
-          isCompletelyLiteral(node.test) &&
-          isCompletelyLiteral(node.consequent) &&
-          isCompletelyLiteral(node.alternate)
-        );
-      }
-      default: {
-        return false;
-      }
+function isCompletelyLiteral(node: TSESTree.Node): boolean {
+  switch (node.type) {
+    case AST_NODE_TYPES.Literal: {
+      return true;
+    }
+    case AST_NODE_TYPES.BinaryExpression: {
+      return isCompletelyLiteral(node.left) && isCompletelyLiteral(node.right);
+    }
+    case AST_NODE_TYPES.UnaryExpression: {
+      return isCompletelyLiteral(node.argument);
+    }
+    case AST_NODE_TYPES.ConditionalExpression: {
+      return (
+        isCompletelyLiteral(node.test) &&
+        isCompletelyLiteral(node.consequent) &&
+        isCompletelyLiteral(node.alternate)
+      );
+    }
+    default: {
+      return false;
     }
   }
-
-  function reportIfLikeConstant(func, node) {
-    const valueReturnedInFirstLine = func(node);
-
-    if (
-      valueReturnedInFirstLine &&
-      isCompletelyLiteral(valueReturnedInFirstLine)
-    ) {
-      context.report({
-        node,
-        message: "Prefer R.constant over a function returning a literal",
-      });
-    }
-  }
-
-  function handleFunctionDefinition(node) {
-    reportIfLikeConstant(getValueReturnedInFirstStatement, node);
-  }
-
-  return {
-    FunctionExpression: handleFunctionDefinition,
-    FunctionDeclaration(node) {
-      if (shouldCheckFunctionDeclarations) {
-        handleFunctionDefinition(node);
-      }
-    },
-    ArrowFunctionExpression(node) {
-      if (shouldCheckArrowFunctions) {
-        handleFunctionDefinition(node);
-      }
-    },
-  };
 }
 
-const rule = {
-  create,
-  meta,
-};
+export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
+  name: RULE_NAME,
+  meta: {
+    type: "problem",
+    docs: {
+      description: "enforce using R.constant over functions returning literals",
+      url: getDocsUrl(RULE_NAME),
+    },
+    schema: [
+      {
+        type: "boolean",
+      },
+      {
+        type: "boolean",
+      },
+    ],
+    defaultOptions: [],
+    messages: {
+      [MESSAGE_ID]: "Prefer R.constant over a function returning a literal",
+    },
+  },
+  defaultOptions: [true, false],
+  create(context) {
+    const shouldCheckArrowFunctions = context.options[0] ?? true;
+    const shouldCheckFunctionDeclarations = context.options[1] ?? false;
 
-export const RULE_NAME = "prefer-constant";
-export default rule;
+    function reportIfLikeConstant(
+      node:
+        | TSESTree.FunctionExpression
+        | TSESTree.ArrowFunctionExpression
+        | TSESTree.FunctionDeclaration,
+      func: (
+        node:
+          | TSESTree.FunctionExpression
+          | TSESTree.ArrowFunctionExpression
+          | TSESTree.FunctionDeclaration
+          | null
+          | undefined,
+      ) => TSESTree.Node | undefined,
+    ) {
+      const valueReturnedInFirstLine = func(node);
+
+      if (
+        valueReturnedInFirstLine &&
+        isCompletelyLiteral(valueReturnedInFirstLine)
+      ) {
+        context.report({
+          node,
+          messageId: MESSAGE_ID,
+        });
+      }
+    }
+
+    function handleFunctionDefinition(
+      node:
+        | TSESTree.FunctionExpression
+        | TSESTree.ArrowFunctionExpression
+        | TSESTree.FunctionDeclaration,
+    ) {
+      reportIfLikeConstant(node, getValueReturnedInFirstStatement);
+    }
+
+    return {
+      FunctionExpression: handleFunctionDefinition,
+      FunctionDeclaration(node) {
+        if (shouldCheckFunctionDeclarations) {
+          handleFunctionDefinition(node);
+        }
+      },
+      ArrowFunctionExpression(node) {
+        if (shouldCheckArrowFunctions) {
+          handleFunctionDefinition(node);
+        }
+      },
+    };
+  },
+});

@@ -1,4 +1,9 @@
-import { assign } from "lodash-es";
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  type TSESTree,
+} from "@typescript-eslint/utils";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { isCollectionMethod } from "../util/methodDataUtil";
@@ -7,75 +12,72 @@ import {
   getRemedaMethodCallExpVisitor,
 } from "../util/remedaUtil";
 
-interface FuncInfo {
-  upper: FuncInfo;
-  codePath: any;
-  hasReturn: boolean;
-}
+export const RULE_NAME = "collection-return";
+const NO_RETURN_MESSAGE = "Do not use R.{{method}} without returning a value";
 
-const meta = {
-  type: "problem",
-  schema: [],
-  docs: {
-    description:
-      "Always return a value in iteratees of Remeda collection methods that aren't `forEach`",
-    url: getDocsUrl("collection-return"),
+type MessageIds = "no-return";
+type Options = [];
+
+export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
+  name: RULE_NAME,
+  meta: {
+    type: "problem",
+    docs: {
+      description:
+        "enforce returning a value in iteratees of Remeda collection methods that aren't `forEach`",
+      url: getDocsUrl(RULE_NAME),
+    },
+    schema: [],
+    messages: {
+      "no-return": NO_RETURN_MESSAGE,
+    },
   },
-} as const;
+  defaultOptions: [],
+  create(context) {
+    const remedaContext = getRemedaContext(context);
 
-/**
- * Rule to check that iteratees for all collection functions except forEach return a value;.
- */
-function create(context) {
-  const funcInfos = new Map();
-  let currFuncInfo: FuncInfo;
-  const remedaContext = getRemedaContext(context);
-
-  return assign(
-    {
+    return {
       "CallExpression:exit": getRemedaMethodCallExpVisitor(
         remedaContext,
-        (node, iteratee, { method }) => {
-          if (isCollectionMethod(method) && funcInfos.has(iteratee)) {
-            const { hasReturn } = funcInfos.get(iteratee);
+        (
+          node,
+          iteratee:
+            | TSESTree.FunctionExpression
+            | TSESTree.ArrowFunctionExpression
+            | TSESTree.FunctionDeclaration,
+          { method },
+        ) => {
+          if (!isCollectionMethod(method)) {
+            return;
+          }
 
-            if (
-              astUtil.isFunctionDefinitionWithBlock(iteratee) &&
-              !hasReturn &&
-              !iteratee.async &&
-              !iteratee.generator
-            ) {
-              context.report({
-                node,
-                message: `Do not use R.${method} without returning a value`,
-              });
-            }
+          if (
+            !astUtil.isFunctionDefinitionWithBlock(iteratee) ||
+            iteratee.async ||
+            iteratee.generator
+          ) {
+            return;
+          }
+
+          // Check if the function has a return statement
+          const hasReturnStatement =
+            iteratee.body.type === AST_NODE_TYPES.BlockStatement &&
+            iteratee.body.body.some(
+              (statement): statement is TSESTree.ReturnStatement => {
+                return statement.type === AST_NODE_TYPES.ReturnStatement;
+              },
+            );
+
+          if (!hasReturnStatement) {
+            context.report({
+              node,
+              messageId: "no-return",
+              data: { method },
+            });
           }
         },
       ),
-      ReturnStatement() {
-        currFuncInfo.hasReturn = true;
-      },
-      onCodePathStart(codePath, node) {
-        currFuncInfo = {
-          upper: currFuncInfo,
-          codePath,
-          hasReturn: false,
-        };
-        funcInfos.set(node, currFuncInfo);
-      },
-      onCodePathEnd() {
-        currFuncInfo = currFuncInfo.upper;
-      },
-    },
-    remedaContext.getImportVisitors(),
-  );
-}
-
-const rule = {
-  create,
-  meta,
-};
-
-export const RULE_NAME = "collection-return";
-export default rule;
+      ...remedaContext.getImportVisitors(),
+    };
+  },
+});
