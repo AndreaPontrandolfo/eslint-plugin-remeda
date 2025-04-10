@@ -7,7 +7,6 @@ import {
   ESLintUtils,
   type TSESTree,
 } from "@typescript-eslint/utils";
-import type { RuleContext } from "@typescript-eslint/utils/ts-eslint";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaContext } from "../util/remedaUtil";
 
@@ -17,21 +16,6 @@ const MESSAGE =
 
 type MessageIds = "prefer-nullish-coalescing";
 type Options = [];
-
-function getTextOfNode(
-  node: TSESTree.Node | null | undefined,
-  context: Readonly<RuleContext<MessageIds, Options>>,
-): string | undefined {
-  if (!node) {
-    return undefined;
-  }
-
-  if (node.type === AST_NODE_TYPES.Identifier) {
-    return node.name;
-  }
-
-  return context.sourceCode.getText(node);
-}
 
 export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   name: RULE_NAME,
@@ -50,6 +34,20 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   },
   defaultOptions: [],
   create(context) {
+    function getTextOfNode(
+      node: TSESTree.Node | null | undefined,
+    ): string | undefined {
+      if (!node) {
+        return undefined;
+      }
+
+      if (node.type === AST_NODE_TYPES.Identifier) {
+        return node.name;
+      }
+
+      return context.sourceCode.getText(node);
+    }
+
     const remedaContext = getRemedaContext(context);
 
     const visitors = remedaContext.getImportVisitors();
@@ -67,12 +65,9 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
         statement.argument.callee.type === AST_NODE_TYPES.Identifier &&
         statement.argument.callee.name === "isNullish"
       ) {
-        const argument = getTextOfNode(
-          statement.argument.arguments[0],
-          context,
-        );
-        const consequent = getTextOfNode(node.consequent, context);
-        const alternate = getTextOfNode(node.alternate, context);
+        const argument = getTextOfNode(statement.argument.arguments[0]);
+        const consequent = getTextOfNode(node.consequent);
+        const alternate = getTextOfNode(node.alternate);
 
         if (argument && consequent && alternate && argument === consequent) {
           context.report({
