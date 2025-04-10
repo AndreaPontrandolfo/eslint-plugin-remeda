@@ -53,12 +53,14 @@
     "eslint-doc-generator": "^2.1.2",
     "eslint-plugin-eslint-plugin": "^6.4.0",
     "eslint-vitest-rule-tester": "^2.2.0",
+    "lodash-es": "^4.17.21",
     "knip": "^5.49.0",
     "prettier": "^3.3.2",
     "publint": "^0.3.10",
     "semantic-release": "^24.0.0",
-    "tsup": "^8.2.4",
+    "tsup": "^8.4.0",
     "typescript": "^5.5.2",
+    "@typescript-eslint/utils": "^8.29.0",
     "vitest": "^3.1.1"
   },
   "engines": {
@@ -77,9 +79,5 @@
     "functional",
     "fp"
   ],
-  "license": "MIT",
-  "dependencies": {
-    "@typescript-eslint/utils": "^8.29.0",
-    "lodash-es": "^4.17.21"
-  }
+  "license": "MIT"
 }
