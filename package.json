@@ -42,7 +42,7 @@
     "eslint": ">=9.0.0"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.15.4",
+    "@arethetypeswrong/cli": "^0.17.4",
     "@sherifforg/cli": "^8.2.0",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.14.0",
