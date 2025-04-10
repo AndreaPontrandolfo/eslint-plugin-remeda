@@ -58,6 +58,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
         type: "boolean",
       },
     ],
+    defaultOptions: [],
     messages: {
       [MESSAGE_ID]: "Prefer R.constant over a function returning a literal",
     },
@@ -68,8 +69,18 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
     const shouldCheckFunctionDeclarations = context.options[1] ?? false;
 
     function reportIfLikeConstant(
-      func: (node: TSESTree.Node) => TSESTree.Node | null,
-      node: TSESTree.Node,
+      node:
+        | TSESTree.FunctionExpression
+        | TSESTree.ArrowFunctionExpression
+        | TSESTree.FunctionDeclaration,
+      func: (
+        node:
+          | TSESTree.FunctionExpression
+          | TSESTree.ArrowFunctionExpression
+          | TSESTree.FunctionDeclaration
+          | null
+          | undefined,
+      ) => TSESTree.Node | undefined,
     ) {
       const valueReturnedInFirstLine = func(node);
 
@@ -84,8 +95,13 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       }
     }
 
-    function handleFunctionDefinition(node: TSESTree.Node) {
-      reportIfLikeConstant(getValueReturnedInFirstStatement, node);
+    function handleFunctionDefinition(
+      node:
+        | TSESTree.FunctionExpression
+        | TSESTree.ArrowFunctionExpression
+        | TSESTree.FunctionDeclaration,
+    ) {
+      reportIfLikeConstant(node, getValueReturnedInFirstStatement);
     }
 
     return {
