@@ -69,7 +69,13 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
         const consequent = getTextOfNode(node.consequent);
         const alternate = getTextOfNode(node.alternate);
 
-        if (argument && consequent && alternate && argument === consequent) {
+        if (
+          argument &&
+          consequent &&
+          alternate &&
+          argument === consequent &&
+          argument !== alternate
+        ) {
           context.report({
             node,
             messageId: "prefer-nullish-coalescing",
