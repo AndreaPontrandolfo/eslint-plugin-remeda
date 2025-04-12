@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { capitalize, includes } from "lodash-es";
+import type { TSESTree } from "@typescript-eslint/utils";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "./astUtil";
 import * as methodDataUtil from "./methodDataUtil";
@@ -14,7 +13,7 @@ import RemedaContext from "./RemedaContext";
  * @param method - The method to check against.
  * @returns Whether the node is a call to the specified method.
  */
-function isCallToMethod(node, method) {
+function isCallToMethod(node: TSESTree.Node, method: string) {
   return method === astUtil.getMethodName(node);
 }
 
@@ -23,7 +22,7 @@ function isCallToMethod(node, method) {
  *
  * @param name - The name of the type to get the 'isX' method for.
  */
-function getIsTypeMethod(name) {
+function getIsTypeMethod(name: string) {
   const types = [
     "number",
     "boolean",
@@ -48,8 +47,15 @@ function getIsTypeMethod(name) {
  * @param reporter - The reporter to use.
  * @returns A visitor that calls the function for every Remeda or chain call.
  */
-function getRemedaMethodCallExpVisitor(remedaContext, reporter) {
-  return function (node) {
+function getRemedaMethodCallExpVisitor(
+  remedaContext: RemedaContext,
+  reporter: (
+    node: TSESTree.CallExpression,
+    iteratee: TSESTree.Node,
+    { method, callType }: { method: string; callType: string },
+  ) => void,
+) {
+  return function (node: TSESTree.CallExpression) {
     let iterateeIndex;
 
     if (remedaContext.isRemedaCall(node)) {
