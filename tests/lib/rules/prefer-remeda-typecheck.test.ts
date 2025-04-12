@@ -8,7 +8,7 @@ const errors = {
   instanceof: [{ message: "Prefer 'R.isArray' over 'instanceof Array'." }],
 };
 
-run({
+await run({
   name: "prefer-remeda-typecheck",
   rule,
   valid: [

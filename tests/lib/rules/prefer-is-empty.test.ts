@@ -1,12 +1,10 @@
 import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/prefer-is-empty";
-import { fromMessage,withDefaultPragma } from "../testUtil/optionsUtil";
+import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-const toErrorObject = fromMessage(
-  "Prefer isEmpty over manually checking for length value.",
-);
+const toErrorObject = fromMessage(rule.meta.messages.preferIsEmpty);
 
-run({
+await run({
   name: "prefer-is-empty",
   rule,
   valid: [
@@ -57,6 +55,14 @@ run({
         const yprop = "y"
         const myLengthWithOCWithProp = !isEmpty(myvar[xprop].mySecondprop.myThirdProp[yprop]);
         `,
+    },
+    {
+      code: "function checkLength(arr) { return arr.length === 0; }",
+      output: "function checkLength(arr) { return isEmpty(arr); }",
+    },
+    {
+      code: "const result = myVar.length === 0 ? 'empty' : 'not empty';",
+      output: "const result = isEmpty(myVar) ? 'empty' : 'not empty';",
     },
   ]
     .map(withDefaultPragma)

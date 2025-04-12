@@ -13,7 +13,7 @@ const plugin = {
 
 const pluginShortName = last(plugin.meta.name.split("-")) as string;
 
-Object.assign(plugin.configs, {
+const configs = {
   recommended: {
     plugins: {
       [pluginShortName]: plugin,
@@ -26,6 +26,7 @@ Object.assign(plugin.configs, {
       [`${pluginShortName}/prefer-remeda-typecheck`]: 2,
       [`${pluginShortName}/prefer-nullish-coalescing`]: 2,
       [`${pluginShortName}/prefer-filter`]: [2, 3],
+      [`${pluginShortName}/prefer-has-atleast`]: 2,
       [`${pluginShortName}/collection-method-value`]: 2,
       [`${pluginShortName}/collection-return`]: 2,
       [`${pluginShortName}/prefer-map`]: 2,
@@ -35,6 +36,12 @@ Object.assign(plugin.configs, {
       [`${pluginShortName}/prefer-do-nothing`]: 2,
     },
   },
-});
+};
 
-export default plugin;
+Object.assign(plugin.configs, configs);
+
+type Plugin = typeof plugin & {
+  configs: typeof configs;
+};
+
+export default plugin as Plugin;

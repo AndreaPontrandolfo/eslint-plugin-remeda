@@ -1,12 +1,34 @@
 import { get, has, includes, isObject } from "lodash-es";
 import * as methodDataCatalog from "./methodData";
 
+interface MethodData {
+  wrapper: boolean;
+  shorthand: boolean;
+  chainable: boolean;
+  iteratee: boolean;
+  args: number;
+}
+
+/**
+ * Returns whether the node's method call supports using shorthands.
+ *
+ */
+function methodSupportsShorthand(method: string, shorthandType?: string) {
+  const path = `${method}.shorthand`;
+  const methodShorthandData = get(methodDataCatalog, path);
+  const isShorthandObject = isObject(methodShorthandData);
+
+  return isShorthandObject
+    ? Boolean(shorthandType && methodShorthandData[shorthandType])
+    : Boolean(methodShorthandData);
+}
+
 /**
  * Gets whether the method is a collection method.
  *
- * @param method
+ * @param method - The method to check.
  */
-function isCollectionMethod(method) {
+function isCollectionMethod(method: string) {
   return (
     methodSupportsShorthand(method) ||
     includes(["reduce", "reduceRight"], method)
@@ -14,29 +36,15 @@ function isCollectionMethod(method) {
 }
 
 /**
- * Returns whether the node's method call supports using shorthands.
- *
- * @returns
- */
-function methodSupportsShorthand(method: string, shorthandType?: string) {
-  const methodShorthandData = get(methodDataCatalog, `${method}.shorthand`);
-
-  return isObject(methodShorthandData)
-    ? Boolean(shorthandType && methodShorthandData[shorthandType])
-    : Boolean(methodShorthandData);
-}
-
-/**
  * Gets the index of the iteratee of a method when it isn't chained, or -1 if it doesn't have one.
  */
 function getIterateeIndex(method: string) {
-  const methodData = methodDataCatalog[method];
+  const methodData: MethodData | undefined = methodDataCatalog[method];
 
   if (methodData) {
     if (has(methodData, "iterateeIndex")) {
       return methodData.iterateeIndex;
     }
-    //@ts-expect-error
     if (methodData.iteratee) {
       return 1;
     }
@@ -57,7 +65,6 @@ const sideEffectIterationMethods = [
 /**
  * Gets a list of side effect iteration methods.
  *
- * @returns
  */
 function getSideEffectIterationMethods() {
   return sideEffectIterationMethods;

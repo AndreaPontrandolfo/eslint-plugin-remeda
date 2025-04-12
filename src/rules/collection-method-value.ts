@@ -1,8 +1,13 @@
 /**
- * @file Rule to enforce usage of collection method values.
+ * Rule to enforce usage of collection method values.
  */
 
 import { includes } from "lodash-es";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  type TSESTree,
+} from "@typescript-eslint/utils";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import {
@@ -13,56 +18,64 @@ import { getRemedaMethodVisitors, isCallToMethod } from "../util/remedaUtil";
 
 const { getMethodName } = astUtil;
 
-const meta = {
-  type: "problem",
-  schema: [],
-  docs: {
-    description: "Use value returned from collection methods properly",
-    url: getDocsUrl("collection-method-value"),
-  },
-} as const;
+export const RULE_NAME = "collection-method-value";
 
-function create(context) {
-  function parentUsesValue(node) {
-    return node.parent.type !== "ExpressionStatement";
-  }
+type MessageIds = "useReturnValueId" | "dontUseReturnValueId";
+type Options = [];
 
-  function isSideEffectIterationMethod(method) {
-    return includes(getSideEffectIterationMethods(), method);
-  }
-
-  function isParentCommit(node, callType) {
-    return (
-      callType === "chained" && isCallToMethod(node.parent.parent, "commit")
-    );
-  }
-
-  return getRemedaMethodVisitors(
-    context,
-    (node, iteratee, { method, callType }) => {
-      if (isCollectionMethod(method) && !parentUsesValue(node)) {
-        context.report({
-          node,
-          message: `Use value returned from R.${method}`,
-        });
-      } else if (
-        isSideEffectIterationMethod(method) &&
-        parentUsesValue(node) &&
-        !isParentCommit(node, callType)
-      ) {
-        context.report({
-          node,
-          message: `Do not use value returned from R.${getMethodName(node)}`,
-        });
-      }
-    },
-  );
+function parentUsesValue(node: TSESTree.CallExpression) {
+  return node.parent.type !== AST_NODE_TYPES.ExpressionStatement;
 }
 
-const rule = {
-  create,
-  meta,
-};
+function isSideEffectIterationMethod(method: string) {
+  return includes(getSideEffectIterationMethods(), method);
+}
 
-export const RULE_NAME = "collection-method-value";
-export default rule;
+function isParentCommit(node: TSESTree.CallExpression, callType: string) {
+  return callType === "chained" && isCallToMethod(node.parent.parent, "commit");
+}
+
+export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
+  name: RULE_NAME,
+  meta: {
+    type: "problem",
+    docs: {
+      description: "enforce proper usage of collection method return values",
+      url: getDocsUrl(RULE_NAME),
+    },
+    schema: [],
+    messages: {
+      useReturnValueId: "Use value returned from R.{{method}}",
+      dontUseReturnValueId: "Do not use value returned from R.{{method}}",
+    },
+  },
+  defaultOptions: [],
+  create(context) {
+    return getRemedaMethodVisitors(
+      context,
+      (
+        node: TSESTree.CallExpression,
+        iteratee: TSESTree.Node,
+        { method, callType }: { method: string; callType: string },
+      ) => {
+        if (isCollectionMethod(method) && !parentUsesValue(node)) {
+          context.report({
+            node,
+            messageId: "useReturnValueId",
+            data: { method },
+          });
+        } else if (
+          isSideEffectIterationMethod(method) &&
+          parentUsesValue(node) &&
+          !isParentCommit(node, callType)
+        ) {
+          context.report({
+            node,
+            messageId: "dontUseReturnValueId",
+            data: { method: getMethodName(node) },
+          });
+        }
+      },
+    );
+  },
+});

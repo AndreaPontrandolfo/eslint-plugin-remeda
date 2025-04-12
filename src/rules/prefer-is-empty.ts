@@ -1,148 +1,133 @@
 /**
- * @file Rule to prefer isEmpty over manually checking for length value.
+ * Rule to prefer isEmpty over manually checking for length value.
  */
 
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  type TSESTree,
+} from "@typescript-eslint/utils";
 import type { RemedaMethodVisitors } from "../types";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaContext } from "../util/remedaUtil";
 
-const meta = {
-  type: "problem",
-  schema: [],
-  docs: {
-    description: "Prefer R.isEmpty over manually checking for length value.",
-    url: getDocsUrl("prefer-is-empty"),
+const MESSAGE_ID = "preferIsEmpty";
+
+type MessageIds = typeof MESSAGE_ID;
+type Options = [];
+
+const createRule = ESLintUtils.RuleCreator(getDocsUrl);
+
+const rule = createRule<Options, MessageIds>({
+  name: "prefer-is-empty",
+  meta: {
+    type: "problem",
+    docs: {
+      description: "enforce isEmpty over manually checking for length value.",
+      url: getDocsUrl("prefer-is-empty"),
+    },
+    fixable: "code",
+    schema: [],
+    messages: {
+      [MESSAGE_ID]: "Prefer isEmpty over manually checking for length value.",
+    },
   },
-  fixable: "code",
-} as const;
+  defaultOptions: [],
+  create(context) {
+    const remedaContext = getRemedaContext(context);
+    const { sourceCode } = context;
 
-function create(context) {
-  const remedaContext = getRemedaContext(context);
-
-  function getTextOfNode(node) {
-    if (node) {
-      if (node.type === "Identifier") {
+    function getTextOfNode(node: TSESTree.Expression): string {
+      if (node.type === AST_NODE_TYPES.Identifier) {
         return node.name;
       }
 
-      return context.getSourceCode().getText(node);
+      return sourceCode.getText(node);
     }
-  }
 
-  const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
+    const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
 
-  visitors.BinaryExpression = function (node) {
-    if (node.operator === "===") {
-      if (node.left) {
-        if (node.left.property && node.right) {
-          const leftExpressionMember = node.left.property.name;
-          const rightExpressionMember = node.right.value;
+    visitors.BinaryExpression = function (node: TSESTree.BinaryExpression) {
+      const { left, right, operator } = node;
 
-          if (
-            leftExpressionMember === "length" &&
-            rightExpressionMember === 0
-          ) {
-            const subjectObject = node.left.object;
+      // Check for === 0
+      if (
+        operator === "===" &&
+        right.type === AST_NODE_TYPES.Literal &&
+        right.value === 0
+      ) {
+        let subjectObject: TSESTree.Expression | null = null;
 
-            context.report({
-              node,
-              message:
-                "Prefer isEmpty over manually checking for length value.",
-              fix(fixer) {
-                return fixer.replaceText(
-                  node,
-                  `isEmpty(${getTextOfNode(subjectObject)})`,
-                );
-              },
-            });
-          }
-        } else if (
-          node.left.expression &&
-          node.right &&
-          node.left.expression.property
+        if (
+          left.type === AST_NODE_TYPES.MemberExpression &&
+          left.property.type === AST_NODE_TYPES.Identifier &&
+          left.property.name === "length"
         ) {
-          const leftExpressionMember = node.left.expression.property.name;
-          const rightExpressionMember = node.right.value;
+          subjectObject = left.object;
+        } else if (
+          left.type === AST_NODE_TYPES.ChainExpression &&
+          left.expression.type === AST_NODE_TYPES.MemberExpression &&
+          left.expression.property.type === AST_NODE_TYPES.Identifier &&
+          left.expression.property.name === "length"
+        ) {
+          subjectObject = left.expression.object;
+        }
 
-          if (
-            leftExpressionMember === "length" &&
-            rightExpressionMember === 0
-          ) {
-            const subjectObject = node.left.expression.object;
+        if (subjectObject) {
+          context.report({
+            node,
+            messageId: MESSAGE_ID,
+            fix(fixer) {
+              const subjectText = getTextOfNode(subjectObject);
 
-            context.report({
-              node,
-              message:
-                "Prefer isEmpty over manually checking for length value.",
-              fix(fixer) {
-                return fixer.replaceText(
-                  node,
-                  `isEmpty(${getTextOfNode(subjectObject)})`,
-                );
-              },
-            });
-          }
+              // Assuming R is imported or available globally/via context
+              return fixer.replaceText(node, `isEmpty(${subjectText})`);
+            },
+          });
         }
       }
-    }
-    if (node.operator === ">") {
-      if (node.left) {
-        if (node.left.property && node.right) {
-          const leftExpressionMember = node.left.property.name;
-          const rightExpressionMember = node.right.value;
 
-          if (
-            leftExpressionMember === "length" &&
-            rightExpressionMember === 0
-          ) {
-            const subjectObject = node.left.object;
+      // Check for > 0
+      if (
+        operator === ">" &&
+        right.type === AST_NODE_TYPES.Literal &&
+        right.value === 0
+      ) {
+        let subjectObject: TSESTree.Expression | null = null;
 
-            context.report({
-              node,
-              message:
-                "Prefer isEmpty over manually checking for length value.",
-              fix(fixer) {
-                return fixer.replaceText(
-                  node,
-                  `!isEmpty(${getTextOfNode(subjectObject)})`,
-                );
-              },
-            });
-          }
-        } else if (node.left.expression && node.right) {
-          const leftExpressionMember = node.left.expression.property.name;
-          const rightExpressionMember = node.right.value;
+        if (
+          left.type === AST_NODE_TYPES.MemberExpression &&
+          left.property.type === AST_NODE_TYPES.Identifier &&
+          left.property.name === "length"
+        ) {
+          subjectObject = left.object;
+        } else if (
+          left.type === AST_NODE_TYPES.ChainExpression &&
+          left.expression.type === AST_NODE_TYPES.MemberExpression &&
+          left.expression.property.type === AST_NODE_TYPES.Identifier &&
+          left.expression.property.name === "length"
+        ) {
+          subjectObject = left.expression.object;
+        }
 
-          if (
-            leftExpressionMember === "length" &&
-            rightExpressionMember === 0
-          ) {
-            const subjectObject = node.left.expression.object;
+        if (subjectObject) {
+          context.report({
+            node,
+            messageId: MESSAGE_ID,
+            fix(fixer) {
+              const subjectText = getTextOfNode(subjectObject);
 
-            context.report({
-              node,
-              message:
-                "Prefer isEmpty over manually checking for length value.",
-              fix(fixer) {
-                return fixer.replaceText(
-                  node,
-                  `!isEmpty(${getTextOfNode(subjectObject)})`,
-                );
-              },
-            });
-          }
+              // Assuming R is imported or available globally/via context
+              return fixer.replaceText(node, `!isEmpty(${subjectText})`);
+            },
+          });
         }
       }
-    }
-  };
+    };
 
-  return visitors;
-}
-
-const rule = {
-  create,
-  meta,
-};
+    return visitors;
+  },
+});
 
 export const RULE_NAME = "prefer-is-empty";
 export default rule;

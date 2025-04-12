@@ -2,9 +2,7 @@ import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/prefer-flat-map";
 import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-const toErrorObject = fromMessage(
-  "Prefer R.flatMap over consecutive R.map and R.flat.",
-);
+const toErrorObject = fromMessage(rule.meta.messages["prefer-flat-map"]);
 
 run({
   name: "prefer-flat-map",
@@ -13,18 +11,16 @@ run({
     withDefaultPragma,
   ),
   invalid: [
-    "t = R.flat(R.map(a, f));",
-    // "t = R.pipe(arr, R.map(f), R.flat(1))", // TODO: make this pass
-    // "t = pipe(arr, map(f), flat(1))", // TODO: make this pass
-  ]
-    .map(withDefaultPragma)
-    .concat([
-      {
-        code: 'import f from "remeda/flat"; import m from "remeda/map"; f(m(x, g))',
-        parserOptions: {
-          sourceType: "module",
-        },
+    ...[
+      "t = R.flat(R.map(a, f));",
+      // "t = R.pipe(arr, R.map(f), R.flat(1))", // TODO: make this pass
+      // "t = pipe(arr, map(f), flat(1))", // TODO: make this pass
+    ].map(withDefaultPragma),
+    {
+      code: 'import f from "remeda/flat"; import m from "remeda/map"; f(m(x, g))',
+      parserOptions: {
+        sourceType: "module",
       },
-    ])
-    .map(toErrorObject),
+    },
+  ].map(toErrorObject),
 });

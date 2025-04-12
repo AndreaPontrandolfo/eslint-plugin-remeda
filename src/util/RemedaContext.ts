@@ -1,34 +1,39 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import type { ESLintContext } from "../types";
 import astUtil from "./astUtil";
-import { getSettings } from "./settingsUtil";
-const { isMethodCall, isCallFromObject, getCaller } = astUtil;
-
 import {
   getMethodImportFromName,
   getNameFromCjsRequire,
   isFullRemedaImport,
 } from "./importUtil";
+import { getSettings } from "./settingsUtil";
+
+const { isMethodCall, isCallFromObject, getCaller } = astUtil;
 
 /* Class representing remeda data for a given context */
 export default class {
-  context: any;
-  general: any;
-  methods: any;
-  _pragma: any;
+  context: ESLintContext;
+  general: Record<string, boolean>;
+  methods: Record<string, string>;
+  _pragma: string | undefined;
   /**
-   * Create a Remeda context wrapper from a file's RuleContext
+   * Create a Remeda context wrapper from a file's RuleContext.
    *
-   * @param context
+   * @param context - The context of the file.
    */
-  constructor(context) {
+  constructor(context: ESLintContext) {
     this.context = context;
     this.general = Object.create(null);
     this.methods = Object.create(null);
   }
 
   /**
-   * Gets visitors to collect Remeda declarations in the context
+   * Gets visitors to collect Remeda declarations in the context.
    *
-   * @returns visitors for everywhere Remeda can be declared
+   * @returns Visitors for everywhere Remeda can be declared.
    */
   getImportVisitors() {
     const self = this;
@@ -36,23 +41,32 @@ export default class {
     return {
       ImportDeclaration({ source, specifiers }) {
         if (isFullRemedaImport(source.value)) {
-          specifiers.forEach((spec) => {
-            switch (spec.type) {
-              case "ImportNamespaceSpecifier":
-              case "ImportDefaultSpecifier": {
-                self.general[spec.local.name] = true;
-                break;
-              }
-              case "ImportSpecifier": {
-                self.methods[spec.local.name] = spec.imported.name;
-
-                if (spec.imported.name === "chain") {
+          specifiers.forEach(
+            (
+              spec:
+                | TSESTree.ImportSpecifier
+                | TSESTree.ImportNamespaceSpecifier
+                | TSESTree.ImportDefaultSpecifier,
+            ) => {
+              switch (spec.type) {
+                case AST_NODE_TYPES.ImportNamespaceSpecifier:
+                case AST_NODE_TYPES.ImportDefaultSpecifier: {
                   self.general[spec.local.name] = true;
+                  break;
                 }
-                break;
+                case AST_NODE_TYPES.ImportSpecifier: {
+                  if (spec.imported.type === AST_NODE_TYPES.Identifier) {
+                    self.methods[spec.local.name] = spec.imported.name;
+
+                    if (spec.imported.name === "chain") {
+                      self.general[spec.local.name] = true;
+                    }
+                  }
+                  break;
+                }
               }
-            }
-          });
+            },
+          );
         } else {
           const method = getMethodImportFromName(source.value);
 
@@ -64,7 +78,7 @@ export default class {
       VariableDeclarator({ init, id }) {
         const required = getNameFromCjsRequire(init);
 
-        if (isFullRemedaImport(required)) {
+        if (required && isFullRemedaImport(required)) {
           if (id.type === "Identifier") {
             self.general[id.name] = true;
           } else if (id.type === "ObjectPattern") {
@@ -88,45 +102,47 @@ export default class {
   }
 
   /**
-   * Returns whether the node is an imported Remeda in this context
+   * Returns whether the node is an imported Remeda in this context.
    *
-   * @param node
-   * @returns
+   * @param node - The node to check.
    */
-  isImportedRemeda(node) {
-    if (node && node.type === "Identifier") {
+  isImportedRemeda(node: TSESTree.Node | null | undefined) {
+    if (node && node.type === AST_NODE_TYPES.Identifier) {
       return this.general[node.name];
     }
   }
 
   /**
-   * Returns the name of the Remeda method for this node, if any
+   * Returns the name of the Remeda method for this node, if any.
    *
-   * @param node
-   * @returns
+   * @param node - The node to check.
    */
-  getImportedRemedaMethod(node) {
-    if (node && node.type === "CallExpression" && !isMethodCall(node)) {
+  getImportedRemedaMethod(node: TSESTree.Node | null | undefined) {
+    if (
+      node &&
+      node.type === AST_NODE_TYPES.CallExpression &&
+      !isMethodCall(node) &&
+      node.callee.type === AST_NODE_TYPES.Identifier
+    ) {
       return this.methods[node.callee.name];
     }
   }
 
   /**
-   * Returns whether the node is a call from a Remeda object
+   * Returns whether the node is a call from a Remeda object.
    *
-   * @param node
-   * @returns
+   * @param node - The node to check.
    */
-  isRemedaCall(node) {
-    return (
+  isRemedaCall(node: TSESTree.Node | null | undefined): boolean {
+    return Boolean(
       (this.pragma && isCallFromObject(node, this.pragma)) ||
-      this.isImportedRemeda(getCaller(node))
+        this.isImportedRemeda(getCaller(node)),
     );
   }
 
   /**
+   * Gets the current Remeda pragma.
    *
-   * @returns the current Remeda pragma
    */
   get pragma() {
     if (!this._pragma) {

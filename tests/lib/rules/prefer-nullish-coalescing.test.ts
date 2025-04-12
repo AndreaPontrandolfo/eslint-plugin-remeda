@@ -1,12 +1,12 @@
 import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/prefer-nullish-coalescing";
-import { fromMessage,withDefaultPragma } from "../testUtil/optionsUtil";
+import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
 const toErrorObject = fromMessage(
-  "Prefer nullish coalescing over checking a ternary with !isNullish.",
+  rule.meta.messages["prefer-nullish-coalescing"],
 );
 
-run({
+await run({
   name: "prefer-nullish-coalescing",
   rule,
   valid: [
@@ -17,6 +17,8 @@ run({
     "const myExpression = (myVar ?? myOtherVar) ? doThis() : doThat();",
     "const myExpression = (myVar?.thisProp ?? myOtherVar[thatProp]) ? doThis() : doThat();",
     "myVar ?? myOtherVar;",
+    "const myExpression = isNullish(myVar) ? myOtherVar : myVar;",
+    "const myExpression = !isNullish(myVar) ? myVar : myVar;",
   ].map(withDefaultPragma),
   invalid: [
     {
@@ -26,6 +28,22 @@ run({
     {
       code: "!isNullish(myVar) ? myVar : myOtherVar;",
       output: "myVar ?? myOtherVar;",
+    },
+    {
+      code: "const myExpression = !isNullish(myVar.prop) ? myVar.prop : myOtherVar;",
+      output: "const myExpression = myVar.prop ?? myOtherVar;",
+    },
+    {
+      code: "const myExpression = !isNullish(myVar[0]) ? myVar[0] : myOtherVar;",
+      output: "const myExpression = myVar[0] ?? myOtherVar;",
+    },
+    {
+      code: "const myExpression = !isNullish(myVar?.prop) ? myVar?.prop : myOtherVar;",
+      output: "const myExpression = myVar?.prop ?? myOtherVar;",
+    },
+    {
+      code: "const myExpression = !isNullish(myVar()) ? myVar() : myOtherVar;",
+      output: "const myExpression = myVar() ?? myOtherVar;",
     },
   ]
     .map(withDefaultPragma)

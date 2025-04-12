@@ -1,35 +1,39 @@
 /**
- * @file Rule to check if a call to map should be a call to times.
+ * Rule to check if a call to map should be a call to times.
  */
 
 import { get } from "lodash-es";
+import { ESLintUtils } from "@typescript-eslint/utils";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaMethodVisitors } from "../util/remedaUtil";
 
-const meta = {
-  type: "problem",
-  schema: [],
-  docs: {
-    description: "Prefer R.times over R.map without using arguments",
-    url: getDocsUrl("prefer-times"),
-  },
-} as const;
-
-function create(context) {
-  return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {
-    if (method === "map" && get(iteratee, "params.length") === 0) {
-      context.report({
-        node,
-        message: "Prefer R.times over R.map without using arguments",
-      });
-    }
-  });
-}
-
-const rule = {
-  create,
-  meta,
-};
-
 export const RULE_NAME = "prefer-times";
-export default rule;
+
+type MessageIds = "prefer-times";
+type Options = [];
+
+export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
+  name: RULE_NAME,
+  meta: {
+    type: "problem",
+    docs: {
+      description: "enforce using R.times over R.map without using arguments",
+      url: getDocsUrl(RULE_NAME),
+    },
+    schema: [],
+    messages: {
+      "prefer-times": "Prefer R.times over R.map without using arguments",
+    },
+  },
+  defaultOptions: [],
+  create(context) {
+    return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {
+      if (method === "map" && get(iteratee, "params.length") === 0) {
+        context.report({
+          node,
+          messageId: "prefer-times",
+        });
+      }
+    });
+  },
+});

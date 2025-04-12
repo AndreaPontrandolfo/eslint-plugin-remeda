@@ -2,11 +2,9 @@ import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/prefer-map";
 import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-const toErrorObject = fromMessage(
-  "Prefer R.map over a R.forEach with a push to an array inside",
-);
+const toErrorObject = fromMessage(rule.meta.messages["prefer-map"]);
 
-run({
+await run({
   name: "prefer-map",
   rule,
   valid: [
@@ -20,15 +18,11 @@ run({
     "R.forEach(arr, function(x) { a.push(x)})",
     "R.forEach(arr, function(x) { a.push(f(x))})",
     "R.forEach(arr, x => a.push(f(x)))",
+    // "forEach(arr, function(x) { a.push(x)})",
+    // "forEach(arr, function(x) { a.push(f(x))})",
+    // "forEach(arr, x => a.push(f(x)))",
+    // "forEach(arr, x => a.push(x))",
   ]
     .map(withDefaultPragma)
-    // .concat([
-    //   {
-    //     code: 'import fe from "remeda/forEach"; fe(arr, x => {a.push(x)})',
-    //     parserOptions: {
-    //       sourceType: "module",
-    //     },
-    //   },
-    // ])
     .map(toErrorObject),
 });
