@@ -53,12 +53,16 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
     schema: [
       {
         type: "boolean",
+        description:
+          "Whether to check arrow functions for literals in return statements. Default: true.",
       },
       {
         type: "boolean",
+        description:
+          "Whether to check function declarations for literals in return statements. Default: false.",
       },
     ],
-    defaultOptions: [],
+    defaultOptions: [true, false],
     messages: {
       [MESSAGE_ID]: "Prefer R.constant over a function returning a literal",
     },

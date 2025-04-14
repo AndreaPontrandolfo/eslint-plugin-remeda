@@ -109,20 +109,27 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       );
     }
 
-    return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {
-      if (
-        method === "forEach" &&
-        onlyHasSimplifiableIf(
-          iteratee as
-            | TSESTree.FunctionExpression
-            | TSESTree.ArrowFunctionExpression,
-        )
-      ) {
-        context.report({
-          node,
-          messageId: "prefer-filter",
-        });
-      }
-    });
+    return getRemedaMethodVisitors(
+      context,
+      (
+        node: TSESTree.CallExpression,
+        iteratee: TSESTree.Node,
+        { method }: { method: string },
+      ) => {
+        if (
+          method === "forEach" &&
+          onlyHasSimplifiableIf(
+            iteratee as
+              | TSESTree.FunctionExpression
+              | TSESTree.ArrowFunctionExpression,
+          )
+        ) {
+          context.report({
+            node,
+            messageId: "prefer-filter",
+          });
+        }
+      },
+    );
   },
 });

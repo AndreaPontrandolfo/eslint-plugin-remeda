@@ -20,7 +20,9 @@ type MessageIds = "prefer-flat-map";
 type Options = [];
 
 function isChainedMapFlatten(node: TSESTree.Node): boolean {
-  return isCallToMethod(getCaller(node), "map");
+  const caller = getCaller(node);
+
+  return caller ? isCallToMethod(caller, "map") : false;
 }
 
 export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
@@ -40,6 +42,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   create(context) {
     return getRemedaMethodVisitors(
       context,
+      // @ts-expect-error
       (node, iteratee, { method, remedaContext }) => {
         if (
           method === "flat" &&

@@ -189,10 +189,10 @@ function hasOnlyOneStatement(func: {
  *
  * @param node - The node to check.
  */
-function isObjectOfMethodCall(node) {
+function isObjectOfMethodCall(node: TSESTree.Node | null | undefined) {
   return (
     get(node, "parent.object") === node &&
-    get(node, "parent.parent.type") === "CallExpression"
+    get(node, "parent.parent.type") === AST_NODE_TYPES.CallExpression
   );
 }
 
@@ -432,7 +432,7 @@ const comparisonType = {
 };
 const comparisonOperators = ["==", "!=", "===", "!=="];
 
-function getIsValue(value) {
+function getIsValue(value: number) {
   return value < 0
     ? overEvery(isMinus, matches({ argument: { value: -value } }))
     : matches({ value });
@@ -489,15 +489,16 @@ function getExpressionComparedToInt(
  *
  * @param node - The node to check.
  */
-const isIndexOfCall = (node) =>
-  isMethodCall(node) && getMethodName(node) === "indexOf";
+const isIndexOfCall = (node: TSESTree.Node | null | undefined) => {
+  return isMethodCall(node) && getMethodName(node) === "indexOf";
+};
 
 /**
  * Returns whether the node is a call to findIndex.
  *
  * @param node - The node to check.
  */
-const isFindIndexCall = (node) => {
+const isFindIndexCall = (node: TSESTree.Node | null | undefined) => {
   return isMethodCall(node) && getMethodName(node) === "findIndex";
 };
 

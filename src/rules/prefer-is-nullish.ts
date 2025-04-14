@@ -7,7 +7,11 @@
  */
 
 import { cond, find, map, matches, property } from "lodash-es";
-import { ESLintUtils } from "@typescript-eslint/utils";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  type TSESTree,
+} from "@typescript-eslint/utils";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
@@ -21,6 +25,15 @@ const PREFER_IS_NULLISH_MESSAGE =
 
 type MessageIds = "prefer-is-nullish";
 type Options = [];
+
+// function isLogicalOrUnaryExpression(
+//   node: TSESTree.Node,
+// ): node is TSESTree.LogicalExpression | TSESTree.UnaryExpression {
+//   return (
+//     node.type === AST_NODE_TYPES.LogicalExpression ||
+//     node.type === AST_NODE_TYPES.UnaryExpression
+//   );
+// }
 
 export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   name: RULE_NAME,
@@ -96,7 +109,11 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       ],
     };
 
-    function checkExpression(nil, operator, node) {
+    function checkExpression(
+      nil: "null" | "undefined",
+      operator: string,
+      node: TSESTree.Node,
+    ) {
       const mappedValues = map(nilChecksExpressionChecks[nil], (check) =>
         check(node, operator),
       );
@@ -104,7 +121,10 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       return find(mappedValues);
     }
 
-    function checkNegatedExpression(nil, node) {
+    function checkNegatedExpression(
+      nil: "null" | "undefined",
+      node: TSESTree.LogicalExpression | TSESTree.UnaryExpression,
+    ) {
       return (
         (isNegationExpression(node) &&
           checkExpression(nil, "===", node.argument)) ||
@@ -112,7 +132,14 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       );
     }
 
-    function isEquivalentExistingExpression(node, leftNil, rightNil) {
+    function isEquivalentExistingExpression(
+      node: TSESTree.LogicalExpression | TSESTree.UnaryExpression,
+      leftNil: "null" | "undefined",
+      rightNil: "null" | "undefined",
+    ) {
+      if (node.type !== AST_NODE_TYPES.LogicalExpression) {
+        return false;
+      }
       const leftExp = checkExpression(leftNil, "===", node.left);
 
       return (
@@ -124,7 +151,11 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       );
     }
 
-    function isEquivalentExistingNegation(node, leftNil, rightNil) {
+    function isEquivalentExistingNegation(
+      node: TSESTree.LogicalExpression | TSESTree.UnaryExpression,
+      leftNil: "null" | "undefined",
+      rightNil: "null" | "undefined",
+    ) {
       const leftExp = checkNegatedExpression(leftNil, node.left);
 
       return (
