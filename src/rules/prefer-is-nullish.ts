@@ -7,7 +7,7 @@
  */
 
 import { cond, find, map, matches, property } from "lodash-es";
-import { ESLintUtils } from "@typescript-eslint/utils";
+import { ESLintUtils, type TSESTree } from "@typescript-eslint/utils";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
@@ -104,7 +104,10 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       return find(mappedValues);
     }
 
-    function checkNegatedExpression(nil, node) {
+    function checkNegatedExpression(
+      nil: string,
+      node: TSESTree.LogicalExpression | TSESTree.UnaryExpression,
+    ) {
       return (
         (isNegationExpression(node) &&
           checkExpression(nil, "===", node.argument)) ||
@@ -124,7 +127,11 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       );
     }
 
-    function isEquivalentExistingNegation(node, leftNil, rightNil) {
+    function isEquivalentExistingNegation(
+      node: TSESTree.LogicalExpression,
+      leftNil: string,
+      rightNil: string,
+    ) {
       const leftExp = checkNegatedExpression(leftNil, node.left);
 
       return (
