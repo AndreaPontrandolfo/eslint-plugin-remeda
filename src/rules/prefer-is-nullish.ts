@@ -63,26 +63,26 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       };
     }
 
-    const getTypeofArgument = cond([
-      [
-        matches({ type: "UnaryExpression", operator: "typeof" }),
-        property("argument"),
-      ],
-    ]);
+    // const getTypeofArgument = cond([
+    //   [
+    //     matches({ type: "UnaryExpression", operator: "typeof" }),
+    //     property("argument"),
+    //   ],
+    // ]);
 
-    const isUndefinedString = matches({
-      type: "Literal",
-      value: "undefined",
-    });
+    // const isUndefinedString = matches({
+    //   type: "Literal",
+    //   value: "undefined",
+    // });
 
-    function getValueWithTypeofUndefinedComparison(node, operator) {
-      return (
-        node.type === "BinaryExpression" &&
-        node.operator === operator &&
-        ((isUndefinedString(node.right) && getTypeofArgument(node.left)) ||
-          (isUndefinedString(node.left) && getTypeofArgument(node.right)))
-      );
-    }
+    // function getValueWithTypeofUndefinedComparison(node, operator) {
+    //   return (
+    //     node.type === "BinaryExpression" &&
+    //     node.operator === operator &&
+    //     ((isUndefinedString(node.right) && getTypeofArgument(node.left)) ||
+    //       (isUndefinedString(node.left) && getTypeofArgument(node.right)))
+    //   );
+    // }
 
     const nilChecksIsValue = {
       null: matches({ type: "Literal", value: null }),
@@ -105,7 +105,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       undefined: [
         getRemedaTypeCheckedBy("isUndefined"),
         getValueComparedTo("undefined"),
-        getValueWithTypeofUndefinedComparison,
+        // getValueWithTypeofUndefinedComparison
       ],
     };
 
