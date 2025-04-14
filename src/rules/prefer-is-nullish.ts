@@ -137,6 +137,9 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       leftNil: "null" | "undefined",
       rightNil: "null" | "undefined",
     ) {
+      if (node.type !== AST_NODE_TYPES.LogicalExpression) {
+        return false;
+      }
       const leftExp = checkExpression(leftNil, "===", node.left);
 
       return (
@@ -148,7 +151,14 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       );
     }
 
-    function isEquivalentExistingNegation(node, leftNil, rightNil) {
+    function isEquivalentExistingNegation(
+      node: TSESTree.LogicalExpression | TSESTree.UnaryExpression,
+      leftNil: "null" | "undefined",
+      rightNil: "null" | "undefined",
+    ) {
+      if (node.type !== AST_NODE_TYPES.LogicalExpression) {
+        return false;
+      }
       const leftExp = checkNegatedExpression(leftNil, node.left);
 
       return (
