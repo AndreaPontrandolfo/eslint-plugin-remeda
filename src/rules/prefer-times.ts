@@ -3,7 +3,7 @@
  */
 
 import { get } from "lodash-es";
-import { ESLintUtils } from "@typescript-eslint/utils";
+import { ESLintUtils, type TSESTree } from "@typescript-eslint/utils";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaMethodVisitors } from "../util/remedaUtil";
 
@@ -27,13 +27,20 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   },
   defaultOptions: [],
   create(context) {
-    return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {
-      if (method === "map" && get(iteratee, "params.length") === 0) {
-        context.report({
-          node,
-          messageId: "prefer-times",
-        });
-      }
-    });
+    return getRemedaMethodVisitors(
+      context,
+      (
+        node: TSESTree.Node,
+        iteratee: TSESTree.Node,
+        { method }: { method: string },
+      ) => {
+        if (method === "map" && get(iteratee, "params.length") === 0) {
+          context.report({
+            node,
+            messageId: "prefer-times",
+          });
+        }
+      },
+    );
   },
 });
