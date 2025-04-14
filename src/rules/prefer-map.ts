@@ -1,11 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /**
  * Rule to check if a call to R.forEach should be a call to R.map.
  */
 
 import { get, includes } from "lodash-es";
-import { ESLintUtils } from "@typescript-eslint/utils";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  type TSESTree,
+} from "@typescript-eslint/utils";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaMethodVisitors } from "../util/remedaUtil";
@@ -22,18 +24,27 @@ export const RULE_NAME = "prefer-map";
 type MessageIds = "prefer-map";
 type Options = [];
 
-function onlyHasPush(func) {
-  const firstLine = getFirstFunctionLine(func);
-  const firstParam = get(func, "params[0]");
+function onlyHasPush(
+  node:
+    | TSESTree.ArrowFunctionExpression
+    | TSESTree.FunctionDeclaration
+    | TSESTree.FunctionExpression
+    | null
+    | undefined,
+) {
+  const firstLine = getFirstFunctionLine(node);
+  const firstParam = get(node, "params[0]");
   const exp =
-    func && !isFunctionDefinitionWithBlock(func)
+    node && !isFunctionDefinitionWithBlock(node)
       ? firstLine
       : //@ts-expect-error
         firstLine?.expression;
 
   return (
-    func &&
-    hasOnlyOneStatement(func) &&
+    node &&
+    (node.type === AST_NODE_TYPES.ArrowFunctionExpression
+      ? true
+      : hasOnlyOneStatement(node)) &&
     getMethodName(exp) === "push" &&
     !includes(
       collectParameterValues(firstParam),
@@ -59,13 +70,28 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   },
   defaultOptions: [],
   create(context) {
-    return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {
-      if (method === "forEach" && onlyHasPush(iteratee)) {
-        context.report({
-          node,
-          messageId: "prefer-map",
-        });
-      }
-    });
+    return getRemedaMethodVisitors(
+      context,
+      (
+        node: TSESTree.Node,
+        iteratee: TSESTree.Node,
+        { method }: { method: string },
+      ) => {
+        if (
+          method === "forEach" &&
+          onlyHasPush(
+            iteratee as
+              | TSESTree.ArrowFunctionExpression
+              | TSESTree.FunctionDeclaration
+              | TSESTree.FunctionExpression,
+          )
+        ) {
+          context.report({
+            node,
+            messageId: "prefer-map",
+          });
+        }
+      },
+    );
   },
 });
