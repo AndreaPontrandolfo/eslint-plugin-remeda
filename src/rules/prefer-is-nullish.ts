@@ -96,7 +96,11 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       ],
     };
 
-    function checkExpression(nil, operator, node) {
+    function checkExpression(
+      nil: "null" | "undefined",
+      operator: string,
+      node: TSESTree.Node,
+    ) {
       const mappedValues = map(nilChecksExpressionChecks[nil], (check) =>
         check(node, operator),
       );
@@ -105,7 +109,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
     }
 
     function checkNegatedExpression(
-      nil: string,
+      nil: "null" | "undefined",
       node: TSESTree.LogicalExpression | TSESTree.UnaryExpression,
     ) {
       return (
@@ -129,8 +133,8 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
 
     function isEquivalentExistingNegation(
       node: TSESTree.LogicalExpression,
-      leftNil: string,
-      rightNil: string,
+      leftNil: "null" | "undefined",
+      rightNil: "null" | "undefined",
     ) {
       const leftExp = checkNegatedExpression(leftNil, node.left);
 
