@@ -12,7 +12,7 @@
     "target": "ESNext",
     "lib": ["esnext"],
     "composite": false,
-    "module": "preserve",
+    "module": "ESNext",
     "moduleResolution": "bundler",
     "sourceMap": true,
     "declaration": true,
