@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { capitalize, includes, isNumber, isString } from "lodash-es";
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
-import type { RemedaMethodVisitors } from "../types";
+import type { ESLintContext, RemedaMethodVisitors } from "../types";
 import astUtil from "./astUtil";
 import * as methodDataUtil from "./methodDataUtil";
 import RemedaContext from "./RemedaContext";
@@ -125,7 +124,10 @@ function isCallToRemedaMethod(
   );
 }
 
-function getRemedaMethodVisitors(context, remedaCallExpVisitor) {
+function getRemedaMethodVisitors(
+  context: ESLintContext,
+  remedaCallExpVisitor: (node: TSESTree.CallExpression) => void,
+) {
   const remedaContext = new RemedaContext(context);
   const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
 
@@ -143,7 +145,7 @@ function getRemedaMethodVisitors(context, remedaCallExpVisitor) {
  * @param context - The context to get the Remeda context for.
  * @returns A RemedaContext for a given context.
  */
-function getRemedaContext(context) {
+function getRemedaContext(context: ESLintContext) {
   return new RemedaContext(context);
 }
 
