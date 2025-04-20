@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { capitalize, includes, isString } from "lodash-es";
+import { capitalize, includes, isNumber, isString } from "lodash-es";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "./astUtil";
@@ -52,7 +52,11 @@ function getRemedaMethodCallExpVisitor(
   reporter: (
     node: TSESTree.CallExpression,
     iteratee: TSESTree.Node,
-    { method, callType }: { method: string; callType: string },
+    {
+      method,
+      callType,
+      remedaContext,
+    }: { method: string; callType: string; remedaContext: RemedaContext },
   ) => void,
 ) {
   return function (node: TSESTree.CallExpression) {
@@ -66,21 +70,26 @@ function getRemedaMethodCallExpVisitor(
       }
 
       iterateeIndex = methodDataUtil.getIterateeIndex(method);
-      reporter(node, node.arguments[iterateeIndex], {
-        callType: "method",
-        method,
-        remedaContext,
-      });
+
+      if (isNumber(iterateeIndex)) {
+        reporter(node, node.arguments[iterateeIndex], {
+          callType: "method",
+          method,
+          remedaContext,
+        });
+      }
     } else {
       const method = remedaContext.getImportedRemedaMethod(node);
 
       if (method) {
         iterateeIndex = methodDataUtil.getIterateeIndex(method);
-        reporter(node, node.arguments[iterateeIndex], {
-          method,
-          callType: "single",
-          remedaContext,
-        });
+        if (isNumber(iterateeIndex)) {
+          reporter(node, node.arguments[iterateeIndex], {
+            method,
+            callType: "single",
+            remedaContext,
+          });
+        }
       }
     }
   };
