@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { capitalize, includes } from "lodash-es";
+import { capitalize, includes, isString } from "lodash-es";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "./astUtil";
@@ -61,7 +61,10 @@ function getRemedaMethodCallExpVisitor(
     if (remedaContext.isRemedaCall(node)) {
       const method = astUtil.getMethodName(node);
 
-      //@ts-expect-error
+      if (!isString(method)) {
+        return;
+      }
+
       iterateeIndex = methodDataUtil.getIterateeIndex(method);
       reporter(node, node.arguments[iterateeIndex], {
         callType: "method",

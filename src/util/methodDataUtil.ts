@@ -42,7 +42,7 @@ function isCollectionMethod(method: string) {
 /**
  * Gets the index of the iteratee of a method when it isn't chained, or -1 if it doesn't have one.
  */
-function getIterateeIndex(method: keyof typeof methodDataCatalog) {
+function getIterateeIndex(method: string) {
   // @ts-expect-error
   const methodData: MethodData | undefined = methodDataCatalog[method];
 
