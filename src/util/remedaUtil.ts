@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { capitalize, includes, isNumber, isString } from "lodash-es";
-import type { TSESTree } from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "./astUtil";
 import * as methodDataUtil from "./methodDataUtil";
@@ -96,22 +96,26 @@ function getRemedaMethodCallExpVisitor(
 }
 
 function isRemedaCallToMethod(
-  node: { type?: string } | null | undefined,
+  node: TSESTree.Node | null | undefined,
   method: string,
   remedaContext: { isRemedaCall: (node: unknown) => boolean },
 ): boolean {
+  if (!node) {
+    return false;
+  }
+
   return remedaContext.isRemedaCall(node) && isCallToMethod(node, method);
 }
 
 function isCallToRemedaMethod(
-  node: { type?: string } | null | undefined,
+  node: TSESTree.Node | null | undefined,
   method: string,
   remedaContext: {
     getImportedRemedaMethod: (node: unknown) => string;
     isRemedaCall: (node: unknown) => boolean;
   },
 ): boolean {
-  if (!node || node.type !== "CallExpression") {
+  if (!node || node.type !== AST_NODE_TYPES.CallExpression) {
     return false;
   }
 
