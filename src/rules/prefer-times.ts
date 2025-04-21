@@ -2,7 +2,7 @@
  * Rule to check if a call to map should be a call to times.
  */
 
-import { get } from "lodash-es";
+import { get } from "remeda";
 import { ESLintUtils } from "@typescript-eslint/utils";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaMethodVisitors } from "../util/remedaUtil";

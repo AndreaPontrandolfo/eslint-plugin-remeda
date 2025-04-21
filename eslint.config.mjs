@@ -3,8 +3,8 @@ import eslintPlugin from "eslint-plugin-eslint-plugin";
 
 const sheriffOptions = {
   react: false,
-  lodash: true,
-  remeda: false,
+  lodash: false,
+  remeda: true,
   next: false,
   astro: false,
   playwright: false,
@@ -35,8 +35,6 @@ export default [
       "func-style": 0,
       "sonarjs/no-duplicate-string": 0,
       "import/no-default-export": 0,
-      "lodash-f/matches-shorthand": 0,
-      "lodash-f/matches-prop-shorthand": 0,
       "vitest/require-hook": 0,
       "@typescript-eslint/explicit-module-boundary-types": 0,
       "@typescript-eslint/naming-convention": 0,

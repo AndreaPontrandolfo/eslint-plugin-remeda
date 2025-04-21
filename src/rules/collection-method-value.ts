@@ -2,13 +2,13 @@
  * Rule to enforce usage of collection method values.
  */
 
-import { includes } from "lodash-es";
+import { isIncludedIn } from "remeda";
 import {
   AST_NODE_TYPES,
   ESLintUtils,
   type TSESTree,
 } from "@typescript-eslint/utils";
-import astUtil from "../util/astUtil";
+import astUtil, { type MethodCallExpression } from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import {
   getSideEffectIterationMethods,
@@ -28,7 +28,7 @@ function parentUsesValue(node: TSESTree.CallExpression) {
 }
 
 function isSideEffectIterationMethod(method: string) {
-  return includes(getSideEffectIterationMethods(), method);
+  return isIncludedIn(method, getSideEffectIterationMethods());
 }
 
 function isParentCommit(node: TSESTree.CallExpression, callType: string) {
@@ -54,7 +54,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
     return getRemedaMethodVisitors(
       context,
       (
-        node: TSESTree.CallExpression,
+        node: MethodCallExpression,
         iteratee: TSESTree.Node,
         { method, callType }: { method: string; callType: string },
       ) => {

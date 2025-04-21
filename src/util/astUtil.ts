@@ -1,16 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-import {
-  flatMap,
-  get,
-  includes,
-  isEqualWith,
-  isMatch,
-  matches,
-  matchesProperty,
-  overEvery,
-  overSome,
-  property,
-} from "lodash-es";
+import { flatMap } from "remeda";
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 
 /**
@@ -33,39 +22,46 @@ const getCaller = (
   return node.callee.object;
 };
 
+export type MethodCallExpression = TSESTree.CallExpression & {
+  callee: TSESTree.MemberExpressionNonComputedName;
+};
+
 /**
  * Gets the name of a method in a CallExpression.
  *
  * @param node - The node to check.
  */
-const getMethodName = property("callee.property.name");
+const getMethodName = (node: MethodCallExpression) => node.callee.property.name;
 
 /**
  * Returns whether the node is a method call.
  *
  * @param node - The node to check.
  */
-const isMethodCall = matches({
-  type: "CallExpression",
-  callee: { type: "MemberExpression" },
-});
+const isMethodCall = (node: TSESTree.Node): node is MethodCallExpression => {
+  return (
+    node.type === "CallExpression" && node.callee.type === "MemberExpression"
+  );
+};
 
-const isFunctionExpression = overSome(
-  matchesProperty("type", "FunctionExpression"),
-  matchesProperty("type", "FunctionDeclaration"),
-);
+const isFunctionExpression = (node: TSESTree.Node) => {
+  return (
+    node.type === "FunctionExpression" || node.type === "FunctionDeclaration"
+  );
+};
+
 /**
  * Returns whether the node is a function declaration that has a block.
  *
  * @param node - The node to check.
  */
-const isFunctionDefinitionWithBlock = overSome(
-  isFunctionExpression,
-  matches({
-    type: "ArrowFunctionExpression",
-    body: { type: "BlockStatement" },
-  }),
-);
+const isFunctionDefinitionWithBlock = (node: TSESTree.Node) => {
+  return (
+    isFunctionExpression(node) ||
+    (node.type === "ArrowFunctionExpression" &&
+      node.body.type === "BlockStatement")
+  );
+};
 
 /**
  * If the node specified is a function, returns the node corresponding with the first statement/expression in that function.
@@ -102,10 +98,9 @@ const getFirstFunctionLine = (
 /**
  * @param node - The node to check.
  */
-const isPropAccess = overSome(
-  matches({ computed: false }),
-  matchesProperty("property.type", "Literal"),
-);
+const isPropAccess = (node: TSESTree.MemberExpression) => {
+  return !node.computed || node.property.type === "Literal";
+};
 
 interface IsMemberExpOfOptions {
   maxLength?: number;

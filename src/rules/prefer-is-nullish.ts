@@ -6,12 +6,20 @@
  * Rule to prefer isNullish over manual checking for undefined or null.
  */
 
-import { cond, find, map, matches, property } from "lodash-es";
-import { ESLintUtils } from "@typescript-eslint/utils";
+import { find, map } from "remeda";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  type TSESTree,
+} from "@typescript-eslint/utils";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaContext, isCallToRemedaMethod } from "../util/remedaUtil";
+
+type ValueOf<T> = T[keyof T];
+
+type nil = "undefined" | "null";
 
 const { isNegationExpression, isEquivalentMemberExp } = astUtil;
 
@@ -41,28 +49,33 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
     const remedaContext = getRemedaContext(context);
 
     function getRemedaTypeCheckedBy(typecheck) {
-      return function (node) {
+      return function (node: TSESTree.Node) {
         return (
-          // @ts-expect-error
           isCallToRemedaMethod(node, typecheck, remedaContext) &&
           node.arguments[0]
         );
       };
     }
 
-    const getTypeofArgument = cond([
-      [
-        matches({ type: "UnaryExpression", operator: "typeof" }),
-        property("argument"),
-      ],
-    ]);
+    const getTypeofArgument = (node: TSESTree.Node) => {
+      if (
+        node.type === AST_NODE_TYPES.UnaryExpression &&
+        node.operator === "typeof"
+      ) {
+        return node.argument;
+      }
 
-    const isUndefinedString = matches({
-      type: "Literal",
-      value: "undefined",
-    });
+      return undefined;
+    };
 
-    function getValueWithTypeofUndefinedComparison(node, operator) {
+    const isUndefinedString = (node: TSESTree.Node) => {
+      return node.type === "Literal" && node.value === "undefined";
+    };
+
+    function getValueWithTypeofUndefinedComparison(
+      node: TSESTree.Node,
+      operator: "===" | "!==",
+    ) {
       return (
         node.type === "BinaryExpression" &&
         node.operator === operator &&
@@ -72,12 +85,17 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
     }
 
     const nilChecksIsValue = {
-      null: matches({ type: "Literal", value: null }),
-      undefined: matches({ type: "Identifier", name: "undefined" }),
+      null: (node: TSESTree.Node) =>
+        node.type === AST_NODE_TYPES.Literal && node.value === null,
+      undefined: (node: TSESTree.Node) => {
+        return (
+          node.type === AST_NODE_TYPES.Identifier && node.name === "undefined"
+        );
+      },
     };
 
-    function getValueComparedTo(nil) {
-      return function (node, operator) {
+    function getValueComparedTo(nil: nil) {
+      return function (node: TSESTree.Node, operator: "===" | "!==") {
         return (
           node.type === "BinaryExpression" &&
           node.operator === operator &&
@@ -96,7 +114,11 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       ],
     };
 
-    function checkExpression(nil, operator, node) {
+    function checkExpression(
+      nil: nil,
+      operator: "===" | "!==",
+      node: TSESTree.Node,
+    ): TSESTree.MemberExpression {
       const mappedValues = map(nilChecksExpressionChecks[nil], (check) =>
         check(node, operator),
       );
@@ -112,7 +134,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       );
     }
 
-    function isEquivalentExistingExpression(node, leftNil, rightNil) {
+    function isEquivalentExistingExpression(node, leftNil: nil, rightNil: nil) {
       const leftExp = checkExpression(leftNil, "===", node.left);
 
       return (
@@ -124,7 +146,11 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       );
     }
 
-    function isEquivalentExistingNegation(node, leftNil, rightNil) {
+    function isEquivalentExistingNegation(
+      node: TSESTree.LogicalExpression,
+      leftNil: nil,
+      rightNil: nil,
+    ) {
       const leftExp = checkNegatedExpression(leftNil, node.left);
 
       return (
@@ -138,7 +164,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
 
     const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
 
-    visitors.LogicalExpression = function (node) {
+    visitors.LogicalExpression = function (node: TSESTree.LogicalExpression) {
       if (node.operator === "||") {
         if (
           isEquivalentExistingExpression(node, "undefined", "null") ||

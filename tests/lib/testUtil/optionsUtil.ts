@@ -1,4 +1,4 @@
-import { isString } from "lodash-es";
+import { isString } from "remeda";
 
 type TestCase = string | { code: string; [key: string]: unknown };
 type TestOptions = Record<string, unknown>;

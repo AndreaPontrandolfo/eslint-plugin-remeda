@@ -2,7 +2,7 @@
  * Rule to check if there's a method in the chain start that can be in the chain.
  */
 
-import { some } from "lodash-es";
+import { some } from "remeda";
 import {
   AST_NODE_TYPES,
   ESLintUtils,

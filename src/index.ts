@@ -1,5 +1,5 @@
 import type { ESLint } from "eslint";
-import { last } from "lodash-es";
+import { last } from "remeda";
 import * as packageJson from "../package.json";
 import { rules } from "./rules";
 

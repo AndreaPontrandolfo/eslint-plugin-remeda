@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { capitalize, includes } from "lodash-es";
+import { capitalize, isIncludedIn } from "remeda";
+import type { TSESTree } from "@typescript-eslint/utils";
 import type { RemedaMethodVisitors } from "../types";
 import astUtil from "./astUtil";
 import * as methodDataUtil from "./methodDataUtil";
@@ -38,7 +36,7 @@ function getIsTypeMethod(name) {
     // "Element",
   ];
 
-  return includes(types, name) ? `is${capitalize(name)}` : null;
+  return isIncludedIn(types, name) ? `is${capitalize(name)}` : null;
 }
 
 /**
@@ -55,7 +53,6 @@ function getRemedaMethodCallExpVisitor(remedaContext, reporter) {
     if (remedaContext.isRemedaCall(node)) {
       const method = astUtil.getMethodName(node);
 
-      //@ts-expect-error
       iterateeIndex = methodDataUtil.getIterateeIndex(method);
       reporter(node, node.arguments[iterateeIndex], {
         callType: "method",
@@ -78,21 +75,18 @@ function getRemedaMethodCallExpVisitor(remedaContext, reporter) {
 }
 
 function isRemedaCallToMethod(
-  node: { type?: string } | null | undefined,
+  node: TSESTree.Node,
   method: string,
-  remedaContext: { isRemedaCall: (node: unknown) => boolean },
+  remedaContext: RemedaContext,
 ): boolean {
   return remedaContext.isRemedaCall(node) && isCallToMethod(node, method);
 }
 
 function isCallToRemedaMethod(
-  node: { type?: string } | null | undefined,
+  node: TSESTree.Node,
   method: string,
-  remedaContext: {
-    getImportedRemedaMethod: (node: unknown) => string;
-    isRemedaCall: (node: unknown) => boolean;
-  },
-): boolean {
+  remedaContext: RemedaContext,
+): node is TSESTree.CallExpression {
   if (!node || node.type !== "CallExpression") {
     return false;
   }

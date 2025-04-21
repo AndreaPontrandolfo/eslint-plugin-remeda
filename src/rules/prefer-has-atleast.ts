@@ -2,7 +2,7 @@
  * Rule to check if array.length comparisons or negated isEmpty calls should be replaced with R.hasAtLeast.
  */
 
-import { isEmpty, isNumber } from "lodash-es";
+import { isEmpty, isNumber } from "remeda";
 import {
   AST_NODE_TYPES,
   ESLintUtils,

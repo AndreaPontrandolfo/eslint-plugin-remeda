@@ -4,7 +4,7 @@
  * Rule to check if a call to R.forEach should be a call to R.map.
  */
 
-import { get, includes } from "lodash-es";
+import { get, includes } from "remeda";
 import { ESLintUtils } from "@typescript-eslint/utils";
 import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";

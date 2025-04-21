@@ -1,4 +1,4 @@
-import { get, has, includes, isObject } from "lodash-es";
+import { get, has, includes, isObject } from "remeda";
 import * as methodDataCatalog from "./methodData";
 
 interface MethodData {
