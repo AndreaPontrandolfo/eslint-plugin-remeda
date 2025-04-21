@@ -134,12 +134,15 @@ function isMemberExpOf(
     if (allowComputed || isPropAccess(currentNode)) {
       if (
         currentNode.type === AST_NODE_TYPES.MemberExpression &&
-        "name" in currentNode.object &&
+        currentNode.object.type === AST_NODE_TYPES.Identifier &&
         currentNode.object.name === objectName
       ) {
         return true;
       }
-      currentNode = "object" in currentNode ? currentNode.object : undefined;
+      currentNode =
+        currentNode.type === AST_NODE_TYPES.MemberExpression
+          ? currentNode.object
+          : undefined;
       depth = depth - 1;
     } else {
       return false;
