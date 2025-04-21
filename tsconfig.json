@@ -4,7 +4,7 @@
   "include": [
     "src/**/*",
     "tests/**/*",
-    "./tsup.config.ts",
+    "./tsdown.config.ts",
     "./vitest.config.ts",
     ".eslint-doc-generatorrc.mjs"
   ],
