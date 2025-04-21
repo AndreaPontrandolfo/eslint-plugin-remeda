@@ -1,4 +1,4 @@
-import sheriff from "eslint-config-sheriff";
+import { sheriff } from "eslint-config-sheriff";
 import eslintPlugin from "eslint-plugin-eslint-plugin";
 
 const sheriffOptions = {
@@ -44,4 +44,5 @@ export default [
       "fsecond/prefer-destructured-optionals": 0,
     },
   },
+  { ignores: [".eslint-doc-generatorrc.mjs"] },
 ];
