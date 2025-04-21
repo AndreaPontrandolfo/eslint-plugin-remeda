@@ -1,4 +1,4 @@
-import { get, has, includes, isObject } from "lodash-es";
+import { has, includes, isObject } from "lodash-es";
 import * as methodDataCatalog from "./methodData";
 
 interface MethodData {
@@ -13,13 +13,16 @@ interface MethodData {
  * Returns whether the node's method call supports using shorthands.
  *
  */
-function methodSupportsShorthand(method: string, shorthandType?: string) {
-  const path = `${method}.shorthand`;
-  const methodShorthandData = get(methodDataCatalog, path);
+function methodSupportsShorthand(
+  method: keyof typeof methodDataCatalog,
+  shorthandType?: string,
+) {
+  const methodShorthandData = methodDataCatalog[method].shorthand;
   const isShorthandObject = isObject(methodShorthandData);
 
   return isShorthandObject
-    ? Boolean(shorthandType && methodShorthandData[shorthandType])
+    ? // @ts-expect-error
+      Boolean(shorthandType && methodShorthandData[shorthandType])
     : Boolean(methodShorthandData);
 }
 
@@ -30,6 +33,7 @@ function methodSupportsShorthand(method: string, shorthandType?: string) {
  */
 function isCollectionMethod(method: string) {
   return (
+    // @ts-expect-error
     methodSupportsShorthand(method) ||
     includes(["reduce", "reduceRight"], method)
   );
@@ -39,6 +43,7 @@ function isCollectionMethod(method: string) {
  * Gets the index of the iteratee of a method when it isn't chained, or -1 if it doesn't have one.
  */
 function getIterateeIndex(method: string) {
+  // @ts-expect-error
   const methodData: MethodData | undefined = methodDataCatalog[method];
 
   if (methodData) {

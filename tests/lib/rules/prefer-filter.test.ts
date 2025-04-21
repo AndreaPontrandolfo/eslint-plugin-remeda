@@ -4,7 +4,7 @@ import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
 const toErrorObject = fromMessage(rule.meta.messages["prefer-filter"]);
 
-run({
+await run({
   name: "prefer-filter",
   rule,
   valid: [

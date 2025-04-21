@@ -4,7 +4,7 @@ import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
 const toErrorObject = fromMessage(rule.meta.messages["prefer-do-nothing"]);
 
-run({
+await run({
   name: "prefer-do-nothing",
   rule,
   valid: [

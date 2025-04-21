@@ -66,7 +66,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       "prefer-filter": MESSAGE,
     },
   },
-  defaultOptions: [{}],
+  defaultOptions: [{ maxPropertyPathLength: 3 }],
   create(context, [options]) {
     const DEFAULT_MAX_PROPERTY_PATH_LENGTH = 3;
     const maxLength =
@@ -109,20 +109,27 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       );
     }
 
-    return getRemedaMethodVisitors(context, (node, iteratee, { method }) => {
-      if (
-        method === "forEach" &&
-        onlyHasSimplifiableIf(
-          iteratee as
-            | TSESTree.FunctionExpression
-            | TSESTree.ArrowFunctionExpression,
-        )
-      ) {
-        context.report({
-          node,
-          messageId: "prefer-filter",
-        });
-      }
-    });
+    return getRemedaMethodVisitors(
+      context,
+      (
+        node: TSESTree.CallExpression,
+        iteratee: TSESTree.Node,
+        { method }: { method: string },
+      ) => {
+        if (
+          method === "forEach" &&
+          onlyHasSimplifiableIf(
+            iteratee as
+              | TSESTree.FunctionExpression
+              | TSESTree.ArrowFunctionExpression,
+          )
+        ) {
+          context.report({
+            node,
+            messageId: "prefer-filter",
+          });
+        }
+      },
+    );
   },
 });

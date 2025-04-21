@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @regru/prefer-early-return/prefer-early-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /**
  * Rule to check if a call to `R.filter` should be a call to `R.find`.
  */
@@ -42,7 +42,11 @@ function isChainedBeforeMethod(
   node: TSESTree.Node,
   method: string,
 ): boolean {
-  return callType === "chained" && isCallToMethod(node.parent?.parent, method);
+  return (
+    callType === "chained" &&
+    node.parent?.parent !== undefined &&
+    isCallToMethod(node.parent.parent, method)
+  );
 }
 
 export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
@@ -64,10 +68,15 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   create(context) {
     return getRemedaMethodVisitors(
       context,
-      (node, iteratee, { method, callType, remedaContext }) => {
+      (
+        node: TSESTree.Node,
+        iteratee: TSESTree.Node,
+        // @ts-expect-error
+        { method, callType, remedaContext },
+      ) => {
         if (method === "filter") {
           if (
-            isZeroIndexAccess(node.parent) ||
+            (node.parent && isZeroIndexAccess(node.parent)) ||
             isCallToRemedaMethod(node.parent, "first", remedaContext) ||
             isChainedBeforeMethod(callType, node, "first")
           ) {

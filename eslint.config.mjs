@@ -1,4 +1,4 @@
-import sheriff from "eslint-config-sheriff";
+import { sheriff } from "eslint-config-sheriff";
 import eslintPlugin from "eslint-plugin-eslint-plugin";
 
 const sheriffOptions = {
@@ -40,7 +40,9 @@ export default [
       "vitest/require-hook": 0,
       "@typescript-eslint/explicit-module-boundary-types": 0,
       "@typescript-eslint/naming-convention": 0,
+      "@typescript-eslint/switch-exhaustiveness-check": 0,
       "fsecond/prefer-destructured-optionals": 0,
     },
   },
+  { ignores: [".eslint-doc-generatorrc.mjs"] },
 ];

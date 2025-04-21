@@ -1,4 +1,5 @@
 export interface RemedaMethodVisitors {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
@@ -10,6 +11,6 @@ export interface ESLintContext {
   };
   ecmaFeatures?: Record<string, boolean>;
   parserOptions?: {
-    ecmaVersion?: number;
+    ecmaVersion?: number | string;
   };
 }

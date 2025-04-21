@@ -1,4 +1,4 @@
-import { defaults, get, isNil } from "lodash-es";
+import { defaults, get } from "lodash-es";
 import type { ESLintContext } from "../types";
 
 interface RemedaSettings {

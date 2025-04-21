@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import {
   AST_NODE_TYPES,
   ESLintUtils,
@@ -33,12 +32,14 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
     },
   },
   defaultOptions: [],
+  // @ts-expect-error
   create(context) {
     const remedaContext = getRemedaContext(context);
 
     return {
       "CallExpression:exit": getRemedaMethodCallExpVisitor(
         remedaContext,
+        // @ts-expect-error
         (
           node,
           iteratee:

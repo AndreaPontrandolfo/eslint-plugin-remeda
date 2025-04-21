@@ -32,7 +32,11 @@ function isSideEffectIterationMethod(method: string) {
 }
 
 function isParentCommit(node: TSESTree.CallExpression, callType: string) {
-  return callType === "chained" && isCallToMethod(node.parent.parent, "commit");
+  return (
+    callType === "chained" &&
+    node.parent.parent &&
+    isCallToMethod(node.parent.parent, "commit")
+  );
 }
 
 export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({

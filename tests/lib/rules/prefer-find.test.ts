@@ -4,7 +4,7 @@ import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
 const toFindError = fromMessage(rule.meta.messages["prefer-find"]);
 
-run({
+await run({
   name: "prefer-find",
   rule,
   valid: [

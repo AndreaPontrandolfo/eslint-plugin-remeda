@@ -27,7 +27,6 @@
     "verbatimModuleSyntax": true,
     "strict": true,
     "incremental": true,
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
-    "noImplicitAny": false
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   }
 }
