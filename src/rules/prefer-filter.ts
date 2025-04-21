@@ -66,7 +66,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       "prefer-filter": MESSAGE,
     },
   },
-  defaultOptions: [{}],
+  defaultOptions: [{ maxPropertyPathLength: 3 }],
   create(context, [options]) {
     const DEFAULT_MAX_PROPERTY_PATH_LENGTH = 3;
     const maxLength =
