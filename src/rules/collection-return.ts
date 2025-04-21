@@ -32,6 +32,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
     },
   },
   defaultOptions: [],
+  // @ts-expect-error
   create(context) {
     const remedaContext = getRemedaContext(context);
 

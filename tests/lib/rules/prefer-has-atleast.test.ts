@@ -7,7 +7,7 @@ const toEmptyErrorObject = fromMessage(
   rule.meta.messages["prefer-has-atleast-over-negated-isempty"],
 );
 
-run({
+await run({
   name: "prefer-has-atleast",
   rule,
   parserOptions: {

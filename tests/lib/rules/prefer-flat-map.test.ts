@@ -4,7 +4,7 @@ import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
 const toErrorObject = fromMessage(rule.meta.messages["prefer-flat-map"]);
 
-run({
+await run({
   name: "prefer-flat-map",
   rule,
   valid: ["t = R.map(a, f);", "t = R.flat(a);", "t = R.flatMap(a, f);"].map(

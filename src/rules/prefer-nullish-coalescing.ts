@@ -33,6 +33,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
     },
   },
   defaultOptions: [],
+  // @ts-expect-error
   create(context) {
     function getTextOfNode(
       node: TSESTree.Node | null | undefined,

@@ -2,7 +2,7 @@ import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/collection-method-value";
 import { fromMessage, withDefaultPragma } from "../testUtil/optionsUtil";
 
-run({
+await run({
   name: "collection-method-value",
   rule,
   valid: [

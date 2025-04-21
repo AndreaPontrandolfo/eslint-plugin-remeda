@@ -2,7 +2,7 @@ import { run } from "eslint-vitest-rule-tester";
 import rule from "../../../src/rules/collection-return";
 import { withDefaultPragma } from "../testUtil/optionsUtil";
 
-run({
+await run({
   name: "collection-return",
   rule,
   parserOptions: {

@@ -47,11 +47,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
         if (
           method === "flat" &&
           (isChainedMapFlatten(node) ||
-            isCallToRemedaMethod(
-              (node as TSESTree.CallExpression).arguments[0],
-              "map",
-              remedaContext,
-            ))
+            isCallToRemedaMethod(node.arguments[0], "map", remedaContext))
         ) {
           context.report({
             node,
