@@ -10,6 +10,6 @@ export interface ESLintContext {
   };
   ecmaFeatures?: Record<string, boolean>;
   parserOptions?: {
-    ecmaVersion?: number;
+    ecmaVersion?: number | string;
   };
 }

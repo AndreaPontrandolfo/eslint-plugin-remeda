@@ -126,7 +126,11 @@ function isCallToRemedaMethod(
 
 function getRemedaMethodVisitors(
   context: ESLintContext,
-  remedaCallExpVisitor: (node: TSESTree.CallExpression) => void,
+  remedaCallExpVisitor: (
+    node: TSESTree.CallExpression,
+    iteratee: TSESTree.Node,
+    { method, callType }: { method: string; callType: string },
+  ) => void,
 ) {
   const remedaContext = new RemedaContext(context);
   const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
