@@ -2,5 +2,5 @@
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "entry": ["src/index.ts", "src/rules/**/*.ts", "tests/lib/rules/*.ts"],
   "ignore": [".eslint-doc-generatorrc.mjs", "tsdown.config.ts"],
-  "ignoreDependencies": ["@sherifforg/cli", "prettier"]
+  "ignoreDependencies": ["prettier"]
 }
