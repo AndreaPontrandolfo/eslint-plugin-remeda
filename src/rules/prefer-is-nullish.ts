@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /**
  * Rule to prefer isNullish over manual checking for undefined or null.
@@ -18,6 +18,13 @@ import { getDocsUrl } from "../util/getDocsUrl";
 import { getRemedaContext, isCallToRemedaMethod } from "../util/remedaUtil";
 
 const { isNegationExpression, isEquivalentMemberExp } = astUtil;
+
+interface ExpressionNode {
+  type: string;
+  operator: unknown;
+  right: unknown;
+  left: unknown;
+}
 
 export const RULE_NAME = "prefer-is-nullish";
 const PREFER_IS_NULLISH_MESSAGE =
@@ -53,7 +60,8 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   create(context) {
     const remedaContext = getRemedaContext(context);
 
-    function getRemedaTypeCheckedBy(typecheck) {
+    function getRemedaTypeCheckedBy(typecheck: string) {
+      // @ts-expect-error
       return function (node) {
         return (
           // @ts-expect-error
@@ -75,7 +83,10 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       value: "undefined",
     });
 
-    function getValueWithTypeofUndefinedComparison(node, operator) {
+    function getValueWithTypeofUndefinedComparison(
+      node: ExpressionNode,
+      operator: unknown,
+    ) {
       return (
         node.type === "BinaryExpression" &&
         node.operator === operator &&
@@ -89,8 +100,8 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       undefined: matches({ type: "Identifier", name: "undefined" }),
     };
 
-    function getValueComparedTo(nil) {
-      return function (node, operator) {
+    function getValueComparedTo(nil: "null" | "undefined") {
+      return function (node: ExpressionNode, operator: unknown) {
         return (
           node.type === "BinaryExpression" &&
           node.operator === operator &&
@@ -112,7 +123,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
     function checkExpression(
       nil: "null" | "undefined",
       operator: string,
-      node: TSESTree.Node,
+      node: { type: string; operator: unknown; right: unknown; left: unknown },
     ) {
       const mappedValues = map(nilChecksExpressionChecks[nil], (check) =>
         check(node, operator),
@@ -127,7 +138,9 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
     ) {
       return (
         (isNegationExpression(node) &&
+          // @ts-expect-error
           checkExpression(nil, "===", node.argument)) ||
+        // @ts-expect-error
         checkExpression(nil, "!==", node)
       );
     }
@@ -140,12 +153,14 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       if (node.type !== AST_NODE_TYPES.LogicalExpression) {
         return false;
       }
+      // @ts-expect-error
       const leftExp = checkExpression(leftNil, "===", node.left);
 
       return (
         leftExp &&
         isEquivalentMemberExp(
           leftExp,
+          // @ts-expect-error
           checkExpression(rightNil, "===", node.right),
         )
       );
@@ -156,12 +171,14 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       leftNil: "null" | "undefined",
       rightNil: "null" | "undefined",
     ) {
+      // @ts-expect-error
       const leftExp = checkNegatedExpression(leftNil, node.left);
 
       return (
         leftExp &&
         isEquivalentMemberExp(
           leftExp,
+          // @ts-expect-error
           checkNegatedExpression(rightNil, node.right),
         )
       );
@@ -169,7 +186,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
 
     const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
 
-    visitors.LogicalExpression = function (node) {
+    visitors.LogicalExpression = function (node: TSESTree.LogicalExpression) {
       if (node.operator === "||") {
         if (
           isEquivalentExistingExpression(node, "undefined", "null") ||
