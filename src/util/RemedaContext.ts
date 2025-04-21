@@ -82,6 +82,7 @@ export default class {
           }
         }
       },
+      // @ts-expect-error
       VariableDeclarator({ init, id }) {
         const required = getNameFromCjsRequire(init);
 
@@ -89,13 +90,15 @@ export default class {
           if (id.type === "Identifier") {
             self.general[id.name] = true;
           } else if (id.type === "ObjectPattern") {
-            id.properties.forEach((prop) => {
-              self.methods[prop.value.name] = prop.key.name;
+            id.properties.forEach(
+              (prop: { value: { name: string }; key: { name: string } }) => {
+                self.methods[prop.value.name] = prop.key.name;
 
-              if (prop.value.name === "chain") {
-                self.general[prop.value.name] = true;
-              }
-            });
+                if (prop.value.name === "chain") {
+                  self.general[prop.value.name] = true;
+                }
+              },
+            );
           }
         } else if (required) {
           const method = getMethodImportFromName(required);
