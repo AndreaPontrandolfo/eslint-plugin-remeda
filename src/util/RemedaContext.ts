@@ -40,7 +40,13 @@ export default class {
     const self = this;
 
     return {
-      ImportDeclaration({ source, specifiers }) {
+      ImportDeclaration({
+        source,
+        specifiers,
+      }: {
+        source: TSESTree.StringLiteral;
+        specifiers: TSESTree.ImportSpecifier[];
+      }) {
         if (isFullRemedaImport(source.value)) {
           specifiers.forEach(
             (
