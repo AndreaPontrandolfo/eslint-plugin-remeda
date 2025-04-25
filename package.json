@@ -45,6 +45,10 @@
   },
   "homepage": "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda",
   "bugs": "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/issues",
+  "dependencies": {
+    "@typescript-eslint/utils": "^8.29.0",
+    "lodash-es": "^4.17.21"
+  },
   "peerDependencies": {
     "eslint": ">=9.0.0"
   },
@@ -53,7 +57,6 @@
     "@sherifforg/cli": "^8.3.0",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.14.0",
-    "@typescript-eslint/utils": "^8.29.0",
     "@vitest/coverage-v8": "^3.1.1",
     "@vitest/ui": "^3.1.1",
     "eslint": "9.24.0",
@@ -62,7 +65,6 @@
     "eslint-plugin-eslint-plugin": "^6.4.0",
     "eslint-vitest-rule-tester": "^2.2.0",
     "knip": "^5.49.0",
-    "lodash-es": "^4.17.21",
     "prettier": "^3.3.2",
     "publint": "^0.3.10",
     "semantic-release": "^24.0.0",
