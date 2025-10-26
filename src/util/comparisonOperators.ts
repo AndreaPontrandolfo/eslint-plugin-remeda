@@ -1,3 +1,3 @@
 const comparisonOperators = ["==", "!=", "===", "!=="];
 
-export default comparisonOperators;
+export { comparisonOperators };

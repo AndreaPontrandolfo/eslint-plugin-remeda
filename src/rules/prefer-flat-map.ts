@@ -4,15 +4,13 @@
  */
 
 import { ESLintUtils, type TSESTree } from "@typescript-eslint/utils";
-import astUtil from "../util/astUtil";
+import { getCaller } from "../util/getCaller";
 import { getDocsUrl } from "../util/getDocsUrl";
 import {
   getRemedaMethodVisitors,
   isCallToMethod,
   isCallToRemedaMethod,
 } from "../util/remedaUtil";
-
-const { getCaller } = astUtil;
 
 export const RULE_NAME = "prefer-flat-map";
 

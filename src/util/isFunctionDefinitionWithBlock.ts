@@ -1,5 +1,5 @@
 import { matches, overSome } from "lodash-es";
-import isFunctionExpression from "./isFunctionExpression";
+import { isFunctionExpression } from "./isFunctionExpression";
 
 /**
  * Returns whether the node is a function declaration that has a block.
@@ -14,4 +14,4 @@ const isFunctionDefinitionWithBlock = overSome(
   }),
 );
 
-export default isFunctionDefinitionWithBlock;
+export { isFunctionDefinitionWithBlock };

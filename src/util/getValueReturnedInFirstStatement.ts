@@ -1,7 +1,7 @@
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
-import getFirstFunctionLine from "./getFirstFunctionLine";
-import isReturnStatement from "./isReturnStatement";
-import isFunctionDefinitionWithBlock from "./isFunctionDefinitionWithBlock";
+import { getFirstFunctionLine } from "./getFirstFunctionLine";
+import { isFunctionDefinitionWithBlock } from "./isFunctionDefinitionWithBlock";
+import { isReturnStatement } from "./isReturnStatement";
 
 /**
  * Returns the node of the value returned in the first line, if any.
@@ -41,4 +41,4 @@ function getValueReturnedInFirstStatement(
   return undefined;
 }
 
-export default getValueReturnedInFirstStatement;
+export { getValueReturnedInFirstStatement };

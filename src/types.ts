@@ -14,3 +14,11 @@ export interface ESLintContext {
     ecmaVersion?: number | string;
   };
 }
+
+export interface MethodData {
+  wrapper: boolean;
+  shorthand: boolean;
+  chainable: boolean;
+  iteratee: boolean;
+  args: number;
+}

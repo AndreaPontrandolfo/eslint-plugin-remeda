@@ -10,4 +10,4 @@ const isMethodCall = matches({
   callee: { type: "MemberExpression" },
 });
 
-export default isMethodCall;
+export { isMethodCall };

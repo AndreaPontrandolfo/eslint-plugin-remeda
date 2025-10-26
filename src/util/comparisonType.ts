@@ -8,4 +8,4 @@ const comparisonType = {
   any: 3,
 };
 
-export default comparisonType;
+export { comparisonType };

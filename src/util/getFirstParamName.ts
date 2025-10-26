@@ -7,4 +7,4 @@ import { property } from "lodash-es";
  */
 const getFirstParamName = property("params[0].name");
 
-export default getFirstParamName;
+export { getFirstParamName };

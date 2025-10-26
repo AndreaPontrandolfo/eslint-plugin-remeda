@@ -10,4 +10,4 @@ const isNegationExpression = matches({
   operator: "!",
 });
 
-export default isNegationExpression;
+export { isNegationExpression };

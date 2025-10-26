@@ -7,11 +7,9 @@ import {
   ESLintUtils,
   type TSESTree,
 } from "@typescript-eslint/utils";
-import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
+import { getExpressionComparedToInt } from "../util/getExpressionComparedToInt";
 import { getRemedaMethodVisitors } from "../util/remedaUtil";
-
-const { getExpressionComparedToInt } = astUtil;
 
 export const RULE_NAME = "prefer-some";
 const MESSAGE = "Prefer R.some over findIndex comparison to -1";

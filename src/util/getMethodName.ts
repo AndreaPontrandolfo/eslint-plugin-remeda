@@ -7,4 +7,4 @@ import { property } from "lodash-es";
  */
 const getMethodName = property("callee.property.name");
 
-export default getMethodName;
+export { getMethodName };

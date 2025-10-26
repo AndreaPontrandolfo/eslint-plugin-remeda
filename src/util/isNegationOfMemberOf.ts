@@ -1,5 +1,5 @@
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
-import isMemberExpOf from "./isMemberExpOf";
+import { isMemberExpOf } from "./isMemberExpOf";
 
 interface IsNegationOfMemberOfOptions {
   maxLength?: number;
@@ -27,4 +27,4 @@ function isNegationOfMemberOf(
   });
 }
 
-export default isNegationOfMemberOf;
+export { isNegationOfMemberOf };

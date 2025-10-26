@@ -16,4 +16,4 @@ function isIdentifierWithName(
   );
 }
 
-export default isIdentifierWithName;
+export { isIdentifierWithName };

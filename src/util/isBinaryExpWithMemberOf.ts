@@ -1,7 +1,7 @@
 import { isMatch } from "lodash-es";
 import { type TSESTree } from "@typescript-eslint/utils";
-import isMemberExpOf from "./isMemberExpOf";
-import isLiteral from "./isLiteral";
+import { isMemberExpOf } from "./isMemberExpOf";
+import { isLiteral } from "./isLiteral";
 
 interface IsBinaryExpWithMemberOfOptions {
   maxLength?: number;
@@ -35,4 +35,4 @@ function isBinaryExpWithMemberOf(
   );
 }
 
-export default isBinaryExpWithMemberOf;
+export { isBinaryExpWithMemberOf };

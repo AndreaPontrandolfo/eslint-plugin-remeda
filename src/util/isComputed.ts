@@ -10,4 +10,4 @@ function isComputed(node: TSESTree.MemberExpression): boolean {
   return get(node, "computed") && node.property.type !== AST_NODE_TYPES.Literal;
 }
 
-export default isComputed;
+export { isComputed };

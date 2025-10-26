@@ -1,5 +1,5 @@
 import { matches, overEvery } from "lodash-es";
-import isMinus from "./isMinus";
+import { isMinus } from "./isMinus";
 
 function getIsValue(value: number) {
   return value < 0
@@ -7,4 +7,4 @@ function getIsValue(value: number) {
     : matches({ value });
 }
 
-export default getIsValue;
+export { getIsValue };

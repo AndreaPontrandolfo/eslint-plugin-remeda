@@ -7,4 +7,4 @@ import { matches } from "lodash-es";
  */
 const isEqEqEq = matches({ type: "BinaryExpression", operator: "===" });
 
-export default isEqEqEq;
+export { isEqEqEq };

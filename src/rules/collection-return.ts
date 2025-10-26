@@ -3,8 +3,8 @@ import {
   ESLintUtils,
   type TSESTree,
 } from "@typescript-eslint/utils";
-import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
+import { isFunctionDefinitionWithBlock } from "../util/isFunctionDefinitionWithBlock";
 import { isCollectionMethod } from "../util/methodDataUtil";
 import {
   getRemedaContext,
@@ -53,7 +53,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
           }
 
           if (
-            !astUtil.isFunctionDefinitionWithBlock(iteratee) ||
+            !isFunctionDefinitionWithBlock(iteratee) ||
             iteratee.async ||
             iteratee.generator
           ) {

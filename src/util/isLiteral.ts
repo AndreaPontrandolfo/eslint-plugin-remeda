@@ -9,4 +9,4 @@ function isLiteral(node: TSESTree.Node | null | undefined) {
   return node?.type === AST_NODE_TYPES.Literal;
 }
 
-export default isLiteral;
+export { isLiteral };

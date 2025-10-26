@@ -1,5 +1,5 @@
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
-import isFunctionDefinitionWithBlock from "./isFunctionDefinitionWithBlock";
+import { isFunctionDefinitionWithBlock } from "./isFunctionDefinitionWithBlock";
 
 /**
  * If the node specified is a function, returns the node corresponding with the first statement/expression in that function.
@@ -33,4 +33,4 @@ const getFirstFunctionLine = (
   return undefined;
 };
 
-export default getFirstFunctionLine;
+export { getFirstFunctionLine };

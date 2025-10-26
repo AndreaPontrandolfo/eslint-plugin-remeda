@@ -5,4 +5,4 @@ const isPropAccess = overSome(
   matchesProperty("property.type", "Literal"),
 );
 
-export default isPropAccess;
+export { isPropAccess };

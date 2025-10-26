@@ -28,4 +28,4 @@ function collectParameterValues(
   }
 }
 
-export default collectParameterValues;
+export { collectParameterValues };

@@ -4,4 +4,4 @@ const isMinus = (node: TSESTree.Node | null | undefined) => {
   return node?.type === AST_NODE_TYPES.UnaryExpression && node.operator === "-";
 };
 
-export default isMinus;
+export { isMinus };

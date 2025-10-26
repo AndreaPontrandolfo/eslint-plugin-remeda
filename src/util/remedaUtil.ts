@@ -1,7 +1,7 @@
 import { capitalize, includes, isNumber, isString } from "lodash-es";
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 import type { ESLintContext, RemedaMethodVisitors } from "../types";
-import astUtil from "./astUtil";
+import { getMethodName } from "./getMethodName";
 import * as methodDataUtil from "./methodDataUtil";
 import RemedaContext from "./RemedaContext";
 
@@ -13,7 +13,7 @@ import RemedaContext from "./RemedaContext";
  * @returns Whether the node is a call to the specified method.
  */
 function isCallToMethod(node: TSESTree.Node, method: string) {
-  return method === astUtil.getMethodName(node);
+  return method === getMethodName(node);
 }
 
 /**
@@ -62,7 +62,7 @@ function getRemedaMethodCallExpVisitor(
     let iterateeIndex;
 
     if (remedaContext.isRemedaCall(node)) {
-      const method = astUtil.getMethodName(node);
+      const method = getMethodName(node);
 
       if (!isString(method)) {
         return;

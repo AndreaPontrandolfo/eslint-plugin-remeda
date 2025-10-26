@@ -1,6 +1,6 @@
 import { includes, isEqualWith } from "lodash-es";
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
-import isComputed from "./isComputed";
+import { isComputed } from "./isComputed";
 
 /**
  * Returns whether the two expressions refer to the same object (e.g. A['b'].c and a.b.c).
@@ -56,4 +56,4 @@ function isEquivalentMemberExp(
   );
 }
 
-export default isEquivalentMemberExp;
+export { isEquivalentMemberExp };

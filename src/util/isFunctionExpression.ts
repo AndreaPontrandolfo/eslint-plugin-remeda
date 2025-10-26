@@ -5,4 +5,4 @@ const isFunctionExpression = overSome(
   matchesProperty("type", "FunctionDeclaration"),
 );
 
-export default isFunctionExpression;
+export { isFunctionExpression };

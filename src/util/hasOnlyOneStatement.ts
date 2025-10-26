@@ -1,5 +1,5 @@
 import { get } from "lodash-es";
-import isFunctionDefinitionWithBlock from "./isFunctionDefinitionWithBlock";
+import { isFunctionDefinitionWithBlock } from "./isFunctionDefinitionWithBlock";
 
 /**
  * Returns whether the node specified has only one statement.
@@ -22,4 +22,4 @@ function hasOnlyOneStatement(func: {
   return false;
 }
 
-export default hasOnlyOneStatement;
+export { hasOnlyOneStatement };

@@ -8,15 +8,13 @@ import {
   ESLintUtils,
   type TSESTree,
 } from "@typescript-eslint/utils";
-import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
+import { getMethodName } from "../util/getMethodName";
 import {
   getSideEffectIterationMethods,
   isCollectionMethod,
 } from "../util/methodDataUtil";
 import { getRemedaMethodVisitors, isCallToMethod } from "../util/remedaUtil";
-
-const { getMethodName } = astUtil;
 
 export const RULE_NAME = "collection-method-value";
 

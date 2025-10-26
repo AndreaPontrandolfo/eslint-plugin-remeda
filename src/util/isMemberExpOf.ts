@@ -1,5 +1,5 @@
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
-import isPropAccess from "./isPropAccess";
+import { isPropAccess } from "./isPropAccess";
 
 interface IsMemberExpOfOptions {
   maxLength?: number;
@@ -46,4 +46,4 @@ function isMemberExpOf(
   return false;
 }
 
-export default isMemberExpOf;
+export { isMemberExpOf };

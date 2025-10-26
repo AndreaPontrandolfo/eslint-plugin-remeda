@@ -13,4 +13,4 @@ function isObjectOfMethodCall(node: TSESTree.Node | null | undefined) {
   );
 }
 
-export default isObjectOfMethodCall;
+export { isObjectOfMethodCall };

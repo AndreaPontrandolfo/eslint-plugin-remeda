@@ -1,13 +1,6 @@
 import { has, includes, isObject } from "lodash-es";
+import type { MethodData } from "../types";
 import * as methodDataCatalog from "./methodData";
-
-interface MethodData {
-  wrapper: boolean;
-  shorthand: boolean;
-  chainable: boolean;
-  iteratee: boolean;
-  args: number;
-}
 
 export const methods = Object.keys(
   methodDataCatalog,

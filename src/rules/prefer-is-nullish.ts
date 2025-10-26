@@ -13,11 +13,10 @@ import {
   type TSESTree,
 } from "@typescript-eslint/utils";
 import type { RemedaMethodVisitors } from "../types";
-import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
+import { isEquivalentMemberExp } from "../util/isEquivalentMemberExp";
+import { isNegationExpression } from "../util/isNegationExpression";
 import { getRemedaContext, isCallToRemedaMethod } from "../util/remedaUtil";
-
-const { isNegationExpression, isEquivalentMemberExp } = astUtil;
 
 interface ExpressionNode {
   type: string;
@@ -32,15 +31,6 @@ const PREFER_IS_NULLISH_MESSAGE =
 
 type MessageIds = "prefer-is-nullish";
 type Options = [];
-
-// function isLogicalOrUnaryExpression(
-//   node: TSESTree.Node,
-// ): node is TSESTree.LogicalExpression | TSESTree.UnaryExpression {
-//   return (
-//     node.type === AST_NODE_TYPES.LogicalExpression ||
-//     node.type === AST_NODE_TYPES.UnaryExpression
-//   );
-// }
 
 export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   name: RULE_NAME,

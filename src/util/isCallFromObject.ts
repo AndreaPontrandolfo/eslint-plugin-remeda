@@ -19,4 +19,4 @@ function isCallFromObject(
   );
 }
 
-export default isCallFromObject;
+export { isCallFromObject };

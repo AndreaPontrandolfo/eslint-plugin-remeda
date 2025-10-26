@@ -20,4 +20,4 @@ const getCaller = (
   return node.callee.object;
 };
 
-export default getCaller;
+export { getCaller };

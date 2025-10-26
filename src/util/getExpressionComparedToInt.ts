@@ -1,7 +1,7 @@
 import { includes } from "lodash-es";
 import { type TSESTree } from "@typescript-eslint/utils";
-import getIsValue from "./getIsValue";
-import comparisonOperators from "./comparisonOperators";
+import { getIsValue } from "./getIsValue";
+import { comparisonOperators } from "./comparisonOperators";
 
 /**
  * Returns the expression compared to the value in a binary expression, or undefined if there isn't one.
@@ -49,4 +49,4 @@ function getExpressionComparedToInt(
   }
 }
 
-export default getExpressionComparedToInt;
+export { getExpressionComparedToInt };
