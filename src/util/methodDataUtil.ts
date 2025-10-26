@@ -9,15 +9,28 @@ interface MethodData {
   args: number;
 }
 
+export const methods = Object.keys(
+  methodDataCatalog,
+) as (keyof typeof methodDataCatalog)[];
+
+export const isKnownMethod = (
+  method: string,
+): method is keyof typeof methodDataCatalog => {
+  return methods.includes(method as keyof typeof methodDataCatalog);
+};
+
 /**
  * Returns whether the node's method call supports using shorthands.
  *
  */
-function methodSupportsShorthand(
-  method: keyof typeof methodDataCatalog,
-  shorthandType?: string,
-) {
-  const methodShorthandData = methodDataCatalog[method].shorthand;
+function methodSupportsShorthand(method: string, shorthandType?: string) {
+  if (!isKnownMethod(method)) {
+    return false;
+  }
+
+  const methodData = methodDataCatalog[method];
+
+  const methodShorthandData = methodData.shorthand;
   const isShorthandObject = isObject(methodShorthandData);
 
   return isShorthandObject
@@ -33,7 +46,6 @@ function methodSupportsShorthand(
  */
 function isCollectionMethod(method: string) {
   return (
-    // @ts-expect-error
     methodSupportsShorthand(method) ||
     includes(["reduce", "reduceRight"], method)
   );
