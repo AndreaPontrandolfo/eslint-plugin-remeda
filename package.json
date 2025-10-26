@@ -45,9 +45,6 @@
   },
   "homepage": "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda",
   "bugs": "https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/issues",
-  "dependencies": {
-    "remeda": "^2.32.0"
-  },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
     "@sherifforg/cli": "^8.7.0",
@@ -88,5 +85,8 @@
     "fp"
   ],
   "license": "MIT",
-  "sideEffects": false
+  "sideEffects": false,
+  "dependencies": {
+    "lodash-es": "^4.17.21"
+  }
 }

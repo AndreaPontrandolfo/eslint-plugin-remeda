@@ -8,9 +8,9 @@ importers:
 
   .:
     dependencies:
-      remeda:
-        specifier: ^2.32.0
-        version: 2.32.0
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
     devDependencies:
       '@arethetypeswrong/cli':
         specifier: ^0.18.2
