@@ -2,7 +2,6 @@
 export const allPass = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: true,
   args: 2,
 };
@@ -10,7 +9,6 @@ export const allPass = {
 export const anyPass = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: true,
   args: 2,
 };
@@ -18,7 +16,6 @@ export const anyPass = {
 export const some = {
   wrapper: false,
   shorthand: true,
-  chainable: false,
   iteratee: true,
   args: 2,
 };
@@ -26,7 +23,6 @@ export const some = {
 export const every = {
   wrapper: false,
   shorthand: true,
-  chainable: false,
   iteratee: true,
   args: 2,
 };
@@ -34,7 +30,6 @@ export const every = {
 export const chunk = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -42,7 +37,6 @@ export const chunk = {
 export const concat = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -50,7 +44,6 @@ export const concat = {
 export const countBy = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -58,7 +51,6 @@ export const countBy = {
 export const difference = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -66,7 +58,6 @@ export const difference = {
 export const differenceWith = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 3,
 };
@@ -74,7 +65,6 @@ export const differenceWith = {
 export const drop = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -82,7 +72,6 @@ export const drop = {
 export const dropFirstBy = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 3,
 };
@@ -90,7 +79,6 @@ export const dropFirstBy = {
 export const dropLast = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -98,7 +86,6 @@ export const dropLast = {
 export const dropLastWhile = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -106,7 +93,6 @@ export const dropLastWhile = {
 export const dropWhile = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -114,7 +100,6 @@ export const dropWhile = {
 export const filter = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -122,7 +107,6 @@ export const filter = {
 export const find = {
   wrapper: false,
   shorthand: true,
-  chainable: false,
   iteratee: true,
   args: 2,
 };
@@ -130,7 +114,6 @@ export const find = {
 export const findIndex = {
   wrapper: false,
   shorthand: true,
-  chainable: false,
   iteratee: true,
   args: 2,
 };
@@ -138,7 +121,6 @@ export const findIndex = {
 export const findLast = {
   wrapper: false,
   shorthand: true,
-  chainable: false,
   iteratee: true,
   args: 2,
 };
@@ -146,7 +128,6 @@ export const findLast = {
 export const findLastIndex = {
   wrapper: false,
   shorthand: true,
-  chainable: false,
   iteratee: true,
   args: 2,
 };
@@ -154,7 +135,6 @@ export const findLastIndex = {
 export const first = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -162,7 +142,6 @@ export const first = {
 export const flat = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -170,7 +149,6 @@ export const flat = {
 export const flatMap = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -178,7 +156,6 @@ export const flatMap = {
 export const forEach = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: true,
   args: 2,
 };
@@ -186,7 +163,6 @@ export const forEach = {
 export const groupBy = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -194,7 +170,6 @@ export const groupBy = {
 export const groupByProp = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -202,7 +177,6 @@ export const groupByProp = {
 export const hasAtLeast = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -210,7 +184,6 @@ export const hasAtLeast = {
 export const indexBy = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -218,7 +191,6 @@ export const indexBy = {
 export const intersection = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -226,7 +198,6 @@ export const intersection = {
 export const intersectionWith = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 3,
 };
@@ -234,7 +205,6 @@ export const intersectionWith = {
 export const join = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -242,7 +212,6 @@ export const join = {
 export const last = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -250,7 +219,6 @@ export const last = {
 export const length = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -258,7 +226,6 @@ export const length = {
 export const map = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -266,7 +233,6 @@ export const map = {
 export const mapToObj = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -274,7 +240,6 @@ export const mapToObj = {
 export const mapWithFeedback = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -282,7 +247,6 @@ export const mapWithFeedback = {
 export const meanBy = {
   wrapper: false,
   shorthand: true,
-  chainable: false,
   iteratee: true,
   args: 2,
 };
@@ -290,7 +254,6 @@ export const meanBy = {
 export const mergeAll = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 1,
 };
@@ -298,7 +261,6 @@ export const mergeAll = {
 export const nthBy = {
   wrapper: false,
   shorthand: true,
-  chainable: false,
   iteratee: true,
   args: 3,
 };
@@ -306,7 +268,6 @@ export const nthBy = {
 export const only = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -314,7 +275,6 @@ export const only = {
 export const partition = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -322,7 +282,6 @@ export const partition = {
 export const range = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 3,
 };
@@ -330,7 +289,6 @@ export const range = {
 export const rankBy = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 3,
 };
@@ -338,7 +296,6 @@ export const rankBy = {
 export const reduce = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: true,
   args: 3,
 };
@@ -346,7 +303,6 @@ export const reduce = {
 export const reduceRight = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: true,
   args: 3,
 };
@@ -354,7 +310,6 @@ export const reduceRight = {
 export const reverse = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 1,
 };
@@ -362,7 +317,6 @@ export const reverse = {
 export const sample = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -370,7 +324,6 @@ export const sample = {
 export const shuffle = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 1,
 };
@@ -378,7 +331,6 @@ export const shuffle = {
 export const sort = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -388,7 +340,6 @@ export const sortBy = {
   shorthand: {
     prop: true,
   },
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -396,7 +347,6 @@ export const sortBy = {
 export const sortedIndex = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -404,7 +354,6 @@ export const sortedIndex = {
 export const sortedIndexBy = {
   wrapper: false,
   shorthand: true,
-  chainable: false,
   iteratee: false,
   iterateeIndex: 2,
   args: 3,
@@ -413,7 +362,6 @@ export const sortedIndexBy = {
 export const sortedIndexWith = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 3,
 };
@@ -421,7 +369,6 @@ export const sortedIndexWith = {
 export const sortedLastIndex = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -429,7 +376,6 @@ export const sortedLastIndex = {
 export const sortedLastIndexBy = {
   wrapper: false,
   shorthand: true,
-  chainable: false,
   iteratee: false,
   iterateeIndex: 2,
   args: 3,
@@ -438,7 +384,6 @@ export const sortedLastIndexBy = {
 export const splice = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 4,
 };
@@ -446,7 +391,6 @@ export const splice = {
 export const splitAt = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -454,7 +398,6 @@ export const splitAt = {
 export const splitWhen = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -462,7 +405,6 @@ export const splitWhen = {
 export const sumBy = {
   wrapper: false,
   shorthand: true,
-  chainable: false,
   iteratee: true,
   args: 2,
 };
@@ -470,7 +412,6 @@ export const sumBy = {
 export const swapIndices = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 3,
 };
@@ -478,7 +419,6 @@ export const swapIndices = {
 export const take = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -486,7 +426,6 @@ export const take = {
 export const takeFirstBy = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 3,
 };
@@ -494,7 +433,6 @@ export const takeFirstBy = {
 export const takeLast = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -502,7 +440,6 @@ export const takeLast = {
 export const takeLastWhile = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -510,7 +447,6 @@ export const takeLastWhile = {
 export const takeWhile = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -518,7 +454,6 @@ export const takeWhile = {
 export const times = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: true,
   args: 2,
 };
@@ -526,7 +461,6 @@ export const times = {
 export const unique = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 1,
 };
@@ -534,7 +468,6 @@ export const unique = {
 export const uniqueBy = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -542,7 +475,6 @@ export const uniqueBy = {
 export const uniqueWith = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -550,7 +482,6 @@ export const uniqueWith = {
 export const zip = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -558,7 +489,6 @@ export const zip = {
 export const zipWith = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 3,
 };
@@ -567,7 +497,6 @@ export const zipWith = {
 export const conditional = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 3,
 };
@@ -575,7 +504,6 @@ export const conditional = {
 export const constant = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 1,
 };
@@ -583,7 +511,6 @@ export const constant = {
 export const debounce = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 3,
 };
@@ -591,7 +518,6 @@ export const debounce = {
 export const doNothing = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 0,
 };
@@ -599,7 +525,6 @@ export const doNothing = {
 export const funnel = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -607,7 +532,6 @@ export const funnel = {
 export const identity = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -615,7 +539,6 @@ export const identity = {
 export const once = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 1,
 };
@@ -623,7 +546,6 @@ export const once = {
 export const partialBind = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -631,7 +553,6 @@ export const partialBind = {
 export const partialLastBind = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -639,7 +560,6 @@ export const partialLastBind = {
 export const pipe = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 1,
 };
@@ -647,7 +567,6 @@ export const pipe = {
 export const piped = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -655,7 +574,6 @@ export const piped = {
 export const purry = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -663,7 +581,6 @@ export const purry = {
 export const when = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 3,
 };
@@ -672,7 +589,6 @@ export const when = {
 export const hasSubObject = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -680,7 +596,6 @@ export const hasSubObject = {
 export const isArray = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -688,7 +603,6 @@ export const isArray = {
 export const isBigInt = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -696,7 +610,6 @@ export const isBigInt = {
 export const isBoolean = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -704,7 +617,6 @@ export const isBoolean = {
 export const isDate = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -712,7 +624,6 @@ export const isDate = {
 export const isDeepEqual = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -720,7 +631,6 @@ export const isDeepEqual = {
 export const isDefined = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -728,7 +638,6 @@ export const isDefined = {
 export const isEmpty = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -736,7 +645,6 @@ export const isEmpty = {
 export const isEmptyish = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -744,7 +652,6 @@ export const isEmptyish = {
 export const isError = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -752,7 +659,6 @@ export const isError = {
 export const isFunction = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -760,7 +666,6 @@ export const isFunction = {
 export const isIncludedIn = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -768,7 +673,6 @@ export const isIncludedIn = {
 export const isNonNull = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -776,7 +680,6 @@ export const isNonNull = {
 export const isNonNullish = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -784,7 +687,6 @@ export const isNonNullish = {
 export const isNot = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -792,7 +694,6 @@ export const isNot = {
 export const isNullish = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -800,7 +701,6 @@ export const isNullish = {
 export const isNumber = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -808,7 +708,6 @@ export const isNumber = {
 export const isObjectType = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -816,7 +715,6 @@ export const isObjectType = {
 export const isPlainObject = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -824,7 +722,6 @@ export const isPlainObject = {
 export const isPromise = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -832,7 +729,6 @@ export const isPromise = {
 export const isShallowEqual = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -840,7 +736,6 @@ export const isShallowEqual = {
 export const isStrictEqual = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -848,7 +743,6 @@ export const isStrictEqual = {
 export const isString = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -856,7 +750,6 @@ export const isString = {
 export const isSymbol = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -864,7 +757,6 @@ export const isSymbol = {
 export const isTruthy = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -873,7 +765,6 @@ export const isTruthy = {
 export const add = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -881,7 +772,6 @@ export const add = {
 export const ceil = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -889,7 +779,6 @@ export const ceil = {
 export const clamp = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 3,
 };
@@ -897,7 +786,6 @@ export const clamp = {
 export const divide = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -905,7 +793,6 @@ export const divide = {
 export const floor = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -913,7 +800,6 @@ export const floor = {
 export const mean = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -921,7 +807,6 @@ export const mean = {
 export const median = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -929,7 +814,6 @@ export const median = {
 export const multiply = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -937,7 +821,6 @@ export const multiply = {
 export const product = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -945,7 +828,6 @@ export const product = {
 export const randomBigInt = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -953,7 +835,6 @@ export const randomBigInt = {
 export const randomInteger = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -961,7 +842,6 @@ export const randomInteger = {
 export const round = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -969,7 +849,6 @@ export const round = {
 export const subtract = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -977,7 +856,6 @@ export const subtract = {
 export const sum = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -986,7 +864,6 @@ export const sum = {
 export const addProp = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 3,
 };
@@ -994,7 +871,6 @@ export const addProp = {
 export const clone = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -1002,7 +878,6 @@ export const clone = {
 export const entries = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 1,
 };
@@ -1010,7 +885,6 @@ export const entries = {
 export const evolve = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -1018,7 +892,6 @@ export const evolve = {
 export const forEachObj = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: true,
   args: 2,
 };
@@ -1026,7 +899,6 @@ export const forEachObj = {
 export const fromEntries = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 1,
 };
@@ -1034,7 +906,6 @@ export const fromEntries = {
 export const fromKeys = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -1042,7 +913,6 @@ export const fromKeys = {
 export const invert = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 1,
 };
@@ -1050,7 +920,6 @@ export const invert = {
 export const keys = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 1,
 };
@@ -1058,7 +927,6 @@ export const keys = {
 export const mapKeys = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -1066,7 +934,6 @@ export const mapKeys = {
 export const mapValues = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -1074,7 +941,6 @@ export const mapValues = {
 export const merge = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -1082,7 +948,6 @@ export const merge = {
 export const mergeDeep = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -1090,7 +955,6 @@ export const mergeDeep = {
 export const objOf = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -1098,7 +962,6 @@ export const objOf = {
 export const omit = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -1106,7 +969,6 @@ export const omit = {
 export const omitBy = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -1114,7 +976,6 @@ export const omitBy = {
 export const pathOr = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 3,
 };
@@ -1122,7 +983,6 @@ export const pathOr = {
 export const pick = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -1130,7 +990,6 @@ export const pick = {
 export const pickBy = {
   wrapper: false,
   shorthand: true,
-  chainable: true,
   iteratee: true,
   args: 2,
 };
@@ -1138,7 +997,6 @@ export const pickBy = {
 export const prop = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -1146,7 +1004,6 @@ export const prop = {
 export const pullObject = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 2,
 };
@@ -1154,7 +1011,6 @@ export const pullObject = {
 export const set = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 3,
 };
@@ -1162,7 +1018,6 @@ export const set = {
 export const setPath = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 3,
 };
@@ -1170,7 +1025,6 @@ export const setPath = {
 export const swapProps = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 3,
 };
@@ -1178,7 +1032,6 @@ export const swapProps = {
 export const values = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 1,
 };
@@ -1187,7 +1040,6 @@ export const values = {
 export const capitalize = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -1195,7 +1047,6 @@ export const capitalize = {
 export const endsWith = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -1203,7 +1054,6 @@ export const endsWith = {
 export const randomString = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -1211,7 +1061,6 @@ export const randomString = {
 export const sliceString = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 3,
 };
@@ -1219,7 +1068,6 @@ export const sliceString = {
 export const split = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -1227,7 +1075,6 @@ export const split = {
 export const startsWith = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -1235,7 +1082,6 @@ export const startsWith = {
 export const toCamelCase = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -1243,7 +1089,6 @@ export const toCamelCase = {
 export const toKebabCase = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -1251,7 +1096,6 @@ export const toKebabCase = {
 export const toLowerCase = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -1259,7 +1103,6 @@ export const toLowerCase = {
 export const toSnakeCase = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -1267,7 +1110,6 @@ export const toSnakeCase = {
 export const toTitleCase = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -1275,7 +1117,6 @@ export const toTitleCase = {
 export const toUpperCase = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -1283,7 +1124,6 @@ export const toUpperCase = {
 export const truncate = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 2,
 };
@@ -1291,7 +1131,6 @@ export const truncate = {
 export const uncapitalize = {
   wrapper: false,
   shorthand: false,
-  chainable: false,
   iteratee: false,
   args: 1,
 };
@@ -1300,7 +1139,6 @@ export const uncapitalize = {
 export const stringToPath = {
   wrapper: false,
   shorthand: false,
-  chainable: true,
   iteratee: false,
   args: 1,
 };
