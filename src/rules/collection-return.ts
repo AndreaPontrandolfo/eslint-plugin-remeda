@@ -1,3 +1,4 @@
+import { includes } from "lodash-es";
 import {
   AST_NODE_TYPES,
   ESLintUtils,
@@ -5,7 +6,10 @@ import {
 } from "@typescript-eslint/utils";
 import { getDocsUrl } from "../util/getDocsUrl";
 import { isFunctionDefinitionWithBlock } from "../util/isFunctionDefinitionWithBlock";
-import { isCollectionMethod } from "../util/methodDataUtil";
+import {
+  getSideEffectIterationMethods,
+  isCollectionMethod,
+} from "../util/methodDataUtil";
 import {
   getRemedaContext,
   getRemedaMethodCallExpVisitor,
@@ -49,6 +53,11 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
           { method },
         ) => {
           if (!isCollectionMethod(method)) {
+            return;
+          }
+
+          // Side-effect methods like forEach don't need to return values
+          if (includes(getSideEffectIterationMethods(), method)) {
             return;
           }
 

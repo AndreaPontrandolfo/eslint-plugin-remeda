@@ -17,8 +17,9 @@ export interface ESLintContext {
 
 export interface MethodData {
   wrapper: boolean;
-  shorthand: boolean;
+  shorthand: boolean | Record<string, boolean>;
   chainable: boolean;
   iteratee: boolean;
   args: number;
+  iterateeIndex?: number;
 }

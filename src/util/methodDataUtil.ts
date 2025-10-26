@@ -38,9 +38,16 @@ function methodSupportsShorthand(method: string, shorthandType?: string) {
  * @param method - The method to check.
  */
 function isCollectionMethod(method: string) {
+  if (!isKnownMethod(method)) {
+    return false;
+  }
+
+  const methodData = methodDataCatalog[method];
+
   return (
     methodSupportsShorthand(method) ||
-    includes(["reduce", "reduceRight"], method)
+    includes(["reduce", "reduceRight"], method) ||
+    Boolean(methodData.iteratee)
   );
 }
 
@@ -65,11 +72,7 @@ function getIterateeIndex(method: string) {
 
 const sideEffectIterationMethods = [
   "forEach",
-  "forEachRight",
-  "forIn",
-  "forInRight",
-  "forOwn",
-  "forOwnRight",
+  // Note: Remeda only has forEach, not the Right/In variants that Lodash had
 ];
 
 /**
