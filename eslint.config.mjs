@@ -3,8 +3,8 @@ import eslintPlugin from "eslint-plugin-eslint-plugin";
 
 const sheriffOptions = {
   react: false,
-  lodash: false,
-  remeda: true,
+  lodash: true,
+  remeda: false,
   next: false,
   astro: false,
   playwright: false,
@@ -28,6 +28,8 @@ export default [
       "@typescript-eslint/explicit-module-boundary-types": 0,
       "@typescript-eslint/naming-convention": 0,
       "@typescript-eslint/switch-exhaustiveness-check": 0,
+      "@typescript-eslint/no-unnecessary-type-conversion": 0,
+      "@typescript-eslint/no-unnecessary-condition": 0,
       "fsecond/prefer-destructured-optionals": 0,
       "fsecond/no-inline-interfaces": 0,
       "eslint-plugin/require-meta-docs-recommended": 0,

@@ -2,11 +2,11 @@ import { has, includes, isObject } from "lodash-es";
 import type { MethodData } from "../types";
 import * as methodDataCatalog from "./methodData";
 
-export const methods = Object.keys(
+const methods = Object.keys(
   methodDataCatalog,
 ) as (keyof typeof methodDataCatalog)[];
 
-export const isKnownMethod = (
+const isKnownMethod = (
   method: string,
 ): method is keyof typeof methodDataCatalog => {
   return methods.includes(method as keyof typeof methodDataCatalog);

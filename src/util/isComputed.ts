@@ -1,5 +1,5 @@
-import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 import { get } from "lodash-es";
+import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 
 /**
  * Returns whether the node is actually computed (x['ab'] does not count, x['a' + 'b'] does.

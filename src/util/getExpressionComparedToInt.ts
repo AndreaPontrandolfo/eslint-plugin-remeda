@@ -1,7 +1,7 @@
 import { includes } from "lodash-es";
-import { type TSESTree } from "@typescript-eslint/utils";
-import { getIsValue } from "./getIsValue";
+import type { TSESTree } from "@typescript-eslint/utils";
 import { comparisonOperators } from "./comparisonOperators";
+import { getIsValue } from "./getIsValue";
 
 /**
  * Returns the expression compared to the value in a binary expression, or undefined if there isn't one.
