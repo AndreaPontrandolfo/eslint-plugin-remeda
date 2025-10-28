@@ -16,6 +16,7 @@ jobs:
       contents: write # to be able to publish a GitHub release
       issues: write # to be able to comment on released issues
       pull-requests: write # to be able to comment on released pull requests
+      id-token: write # to be able to publish to npm using OIDC
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,10 +29,11 @@ jobs:
         with:
           node-version-file: package.json
           cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
       - name: Install dependencies
         run: pnpm install
       - name: Release
         run: pnpm semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
