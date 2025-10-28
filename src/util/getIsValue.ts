@@ -6,6 +6,7 @@ type GetIsValueReturn = (node: TSESTree.Node) => boolean;
 
 export const getIsValue = (value: number): GetIsValueReturn => {
   return value < 0
-    ? overEvery(isMinus, matches({ argument: { value: -value } }))
+    ? // eslint-disable-next-line
+      overEvery(isMinus, matches({ argument: { value: -value } }))
     : matches({ value });
 };

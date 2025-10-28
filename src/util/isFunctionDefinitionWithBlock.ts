@@ -8,6 +8,7 @@ import { isFunctionExpression } from "./isFunctionExpression";
  */
 const isFunctionDefinitionWithBlock = overSome(
   isFunctionExpression,
+  // eslint-disable-next-line
   matches({
     type: "ArrowFunctionExpression",
     body: { type: "BlockStatement" },
