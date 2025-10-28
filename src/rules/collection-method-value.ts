@@ -8,15 +8,13 @@ import {
   ESLintUtils,
   type TSESTree,
 } from "@typescript-eslint/utils";
-import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
+import { getMethodName } from "../util/getMethodName";
 import {
   getSideEffectIterationMethods,
   isCollectionMethod,
 } from "../util/methodDataUtil";
 import { getRemedaMethodVisitors, isCallToMethod } from "../util/remedaUtil";
-
-const { getMethodName } = astUtil;
 
 export const RULE_NAME = "collection-method-value";
 
@@ -62,13 +60,8 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
         iteratee: TSESTree.Node,
         { method, callType }: { method: string; callType: string },
       ) => {
-        if (isCollectionMethod(method) && !parentUsesValue(node)) {
-          context.report({
-            node,
-            messageId: "useReturnValueId",
-            data: { method },
-          });
-        } else if (
+        // Check side-effect methods first (like forEach)
+        if (
           isSideEffectIterationMethod(method) &&
           parentUsesValue(node) &&
           !isParentCommit(node, callType)
@@ -77,6 +70,17 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
             node,
             messageId: "dontUseReturnValueId",
             data: { method: getMethodName(node) },
+          });
+        } else if (
+          isCollectionMethod(method) &&
+          !isSideEffectIterationMethod(method) &&
+          !parentUsesValue(node)
+        ) {
+          // Then check other collection methods (like map, filter, etc.)
+          context.report({
+            node,
+            messageId: "useReturnValueId",
+            data: { method },
           });
         }
       },

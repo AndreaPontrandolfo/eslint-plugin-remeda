@@ -3,10 +3,8 @@ import {
   ESLintUtils,
   type TSESTree,
 } from "@typescript-eslint/utils";
-import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
-
-const { getFirstFunctionLine } = astUtil;
+import { getFirstFunctionLine } from "../util/getFirstFunctionLine";
 
 export const RULE_NAME = "prefer-do-nothing";
 const MESSAGE =

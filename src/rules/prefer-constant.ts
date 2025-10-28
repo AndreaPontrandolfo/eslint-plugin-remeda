@@ -7,10 +7,8 @@ import {
   ESLintUtils,
   type TSESTree,
 } from "@typescript-eslint/utils";
-import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
-
-const { getValueReturnedInFirstStatement } = astUtil;
+import { getValueReturnedInFirstStatement } from "../util/getValueReturnedInFirstStatement";
 
 export const RULE_NAME = "prefer-constant";
 const MESSAGE_ID = "prefer-constant";

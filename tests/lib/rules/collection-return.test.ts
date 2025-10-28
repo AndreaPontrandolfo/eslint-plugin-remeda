@@ -48,13 +48,3 @@ await run({
     },
   ].map(withDefaultPragma),
 });
-
-// .concat([
-//   {
-//     code: 'import m from "remeda/map"; m(arr, x => {})',
-//     errors: [{ message: "Do not use _.map without returning a value" }],
-//     parserOptions: {
-//       sourceType: "module",
-//     },
-//   },
-// ]),

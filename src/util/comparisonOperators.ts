@@ -1,0 +1,3 @@
+const comparisonOperators = ["==", "!=", "===", "!=="];
+
+export { comparisonOperators };

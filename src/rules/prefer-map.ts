@@ -8,17 +8,13 @@ import {
   ESLintUtils,
   type TSESTree,
 } from "@typescript-eslint/utils";
-import astUtil from "../util/astUtil";
+import { collectParameterValues } from "../util/collectParameterValues";
 import { getDocsUrl } from "../util/getDocsUrl";
+import { getFirstFunctionLine } from "../util/getFirstFunctionLine";
+import { getMethodName } from "../util/getMethodName";
+import { hasOnlyOneStatement } from "../util/hasOnlyOneStatement";
+import { isFunctionDefinitionWithBlock } from "../util/isFunctionDefinitionWithBlock";
 import { getRemedaMethodVisitors } from "../util/remedaUtil";
-
-const {
-  getFirstFunctionLine,
-  hasOnlyOneStatement,
-  getMethodName,
-  isFunctionDefinitionWithBlock,
-  collectParameterValues,
-} = astUtil;
 
 export const RULE_NAME = "prefer-map";
 type MessageIds = "prefer-map";

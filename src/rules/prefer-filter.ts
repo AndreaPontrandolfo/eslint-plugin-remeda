@@ -7,20 +7,18 @@ import {
   ESLintUtils,
   type TSESTree,
 } from "@typescript-eslint/utils";
-import astUtil from "../util/astUtil";
 import { getDocsUrl } from "../util/getDocsUrl";
+import { getFirstFunctionLine } from "../util/getFirstFunctionLine";
+import { getFirstParamName } from "../util/getFirstParamName";
+import { hasOnlyOneStatement } from "../util/hasOnlyOneStatement";
+import { isBinaryExpWithMemberOf } from "../util/isBinaryExpWithMemberOf";
+import { isIdentifierWithName } from "../util/isIdentifierWithName";
+import { isMemberExpOf } from "../util/isMemberExpOf";
+import { isNegationOfMemberOf } from "../util/isNegationOfMemberOf";
 import { getRemedaMethodVisitors } from "../util/remedaUtil";
 
-const {
-  isIdentifierWithName,
-  isMemberExpOf,
-  isNegationOfMemberOf,
-  isEqEqEqToMemberOf,
-  isNotEqEqToMemberOf,
-  getFirstFunctionLine,
-  hasOnlyOneStatement,
-  getFirstParamName,
-} = astUtil;
+const isEqEqEqToMemberOf = isBinaryExpWithMemberOf.bind(null, "===");
+const isNotEqEqToMemberOf = isBinaryExpWithMemberOf.bind(null, "!==");
 
 export const RULE_NAME = "prefer-filter";
 const MESSAGE =

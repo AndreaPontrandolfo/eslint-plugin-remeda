@@ -1,23 +1,29 @@
 import { has, includes, isObject } from "lodash-es";
+import type { MethodData } from "../types";
 import * as methodDataCatalog from "./methodData";
 
-interface MethodData {
-  wrapper: boolean;
-  shorthand: boolean;
-  chainable: boolean;
-  iteratee: boolean;
-  args: number;
-}
+const methods = Object.keys(
+  methodDataCatalog,
+) as (keyof typeof methodDataCatalog)[];
+
+const isKnownMethod = (
+  method: string,
+): method is keyof typeof methodDataCatalog => {
+  return methods.includes(method as keyof typeof methodDataCatalog);
+};
 
 /**
  * Returns whether the node's method call supports using shorthands.
  *
  */
-function methodSupportsShorthand(
-  method: keyof typeof methodDataCatalog,
-  shorthandType?: string,
-) {
-  const methodShorthandData = methodDataCatalog[method].shorthand;
+function methodSupportsShorthand(method: string, shorthandType?: string) {
+  if (!isKnownMethod(method)) {
+    return false;
+  }
+
+  const methodData = methodDataCatalog[method];
+
+  const methodShorthandData = methodData.shorthand;
   const isShorthandObject = isObject(methodShorthandData);
 
   return isShorthandObject
@@ -32,10 +38,16 @@ function methodSupportsShorthand(
  * @param method - The method to check.
  */
 function isCollectionMethod(method: string) {
+  if (!isKnownMethod(method)) {
+    return false;
+  }
+
+  const methodData = methodDataCatalog[method];
+
   return (
-    // @ts-expect-error
     methodSupportsShorthand(method) ||
-    includes(["reduce", "reduceRight"], method)
+    includes(["reduce", "reduceRight"], method) ||
+    Boolean(methodData.iteratee)
   );
 }
 
@@ -60,11 +72,7 @@ function getIterateeIndex(method: string) {
 
 const sideEffectIterationMethods = [
   "forEach",
-  "forEachRight",
-  "forIn",
-  "forInRight",
-  "forOwn",
-  "forOwnRight",
+  // Note: Remeda only has forEach, not the Right/In variants that Lodash had
 ];
 
 /**

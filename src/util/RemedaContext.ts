@@ -4,15 +4,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 import type { ESLintContext } from "../types";
-import astUtil from "./astUtil";
+import { getCaller } from "./getCaller";
+import { getSettings } from "./getSettings";
 import {
   getMethodImportFromName,
   getNameFromCjsRequire,
   isFullRemedaImport,
 } from "./importUtil";
-import { getSettings } from "./settingsUtil";
-
-const { isMethodCall, isCallFromObject, getCaller } = astUtil;
+import { isCallFromObject } from "./isCallFromObject";
+import { isMethodCall } from "./isMethodCall";
 
 /* Class representing remeda data for a given context */
 export default class {
