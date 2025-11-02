@@ -73,11 +73,14 @@
     "eslint": ">=9.0.0"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "packageManager": "pnpm@9.9.0",
   "publishConfig": {
-    "access": "public"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public",
+    "tag": "latest",
+    "provenance": true
   },
   "keywords": [
     "eslint",
