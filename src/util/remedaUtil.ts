@@ -1,9 +1,10 @@
-import { capitalize, includes, isNumber, isString } from "lodash-es";
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 import type { ESLintContext, RemedaMethodVisitors } from "../types";
 import { getMethodName } from "./getMethodName";
 import * as methodDataUtil from "./methodDataUtil";
 import RemedaContext from "./RemedaContext";
+
+const capitalize = (string: string) => { return `${string.charAt(0).toUpperCase()}${string.slice(1)}` }
 
 /**
  * Returns whether the node is a call to the specified method.
@@ -36,7 +37,9 @@ function getIsTypeMethod(name: string) {
     // "Element",
   ];
 
-  return includes(types, name) ? `is${capitalize(name)}` : null;
+  return types.includes(name)
+    ? `is${capitalize(name)}`
+    : null;
 }
 
 /**
@@ -64,13 +67,13 @@ function getRemedaMethodCallExpVisitor(
     if (remedaContext.isRemedaCall(node)) {
       const method = getMethodName(node);
 
-      if (!isString(method)) {
+      if (typeof method !== "string") {
         return;
       }
 
       iterateeIndex = methodDataUtil.getIterateeIndex(method);
 
-      if (isNumber(iterateeIndex)) {
+      if (typeof iterateeIndex === "number") {
         reporter(node, node.arguments[iterateeIndex], {
           callType: "method",
           method,
@@ -82,7 +85,7 @@ function getRemedaMethodCallExpVisitor(
 
       if (method) {
         iterateeIndex = methodDataUtil.getIterateeIndex(method);
-        if (isNumber(iterateeIndex)) {
+        if (typeof iterateeIndex === "number") {
           reporter(node, node.arguments[iterateeIndex], {
             method,
             callType: "single",
@@ -95,24 +98,17 @@ function getRemedaMethodCallExpVisitor(
 }
 
 function isRemedaCallToMethod(
-  node: TSESTree.Node | null | undefined,
+  node: TSESTree.Node,
   method: string,
-  remedaContext: { isRemedaCall: (node: unknown) => boolean },
-): boolean {
-  if (!node) {
-    return false;
-  }
-
+  remedaContext: RemedaContext,
+) {
   return remedaContext.isRemedaCall(node) && isCallToMethod(node, method);
 }
 
 function isCallToRemedaMethod(
   node: TSESTree.Node | null | undefined,
   method: string,
-  remedaContext: {
-    getImportedRemedaMethod: (node: unknown) => string;
-    isRemedaCall: (node: unknown) => boolean;
-  },
+  remedaContext: RemedaContext,
 ): boolean {
   if (!node || node.type !== AST_NODE_TYPES.CallExpression) {
     return false;

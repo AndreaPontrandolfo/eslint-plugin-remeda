@@ -2,7 +2,6 @@
  * Rule to enforce usage of collection method values.
  */
 
-import { includes } from "lodash-es";
 import {
   AST_NODE_TYPES,
   ESLintUtils,
@@ -26,7 +25,7 @@ function parentUsesValue(node: TSESTree.CallExpression) {
 }
 
 function isSideEffectIterationMethod(method: string) {
-  return includes(getSideEffectIterationMethods(), method);
+  return getSideEffectIterationMethods().includes(method);
 }
 
 function isParentCommit(node: TSESTree.CallExpression, callType: string) {

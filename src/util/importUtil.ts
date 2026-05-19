@@ -1,15 +1,15 @@
-import { get } from "lodash-es";
+import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 
-interface RequireCall {
-  callee: { name: string };
-  arguments: { type: string; value: string }[];
-}
-
-function getNameFromCjsRequire(init: RequireCall): string | undefined {
+function getNameFromCjsRequire(
+  init: TSESTree.Node | null | undefined,
+): string | undefined {
   if (
-    get(init, "callee.name") === "require" &&
-    get(init, "arguments.length") === 1 &&
-    init.arguments[0].type === "Literal"
+    init?.type === AST_NODE_TYPES.CallExpression &&
+    init.callee.type === AST_NODE_TYPES.Identifier &&
+    init.callee.name === "require" &&
+    init.arguments.length === 1 &&
+    init.arguments[0].type === AST_NODE_TYPES.Literal &&
+    typeof init.arguments[0].value === "string"
   ) {
     return init.arguments[0].value;
   }

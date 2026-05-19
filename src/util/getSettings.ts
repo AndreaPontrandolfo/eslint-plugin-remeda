@@ -1,4 +1,3 @@
-import { defaults, get } from "lodash-es";
 import type { ESLintContext } from "../types";
 
 interface RemedaSettings {
@@ -7,7 +6,7 @@ interface RemedaSettings {
 }
 
 export function getSettings(context: ESLintContext): RemedaSettings {
-  return defaults(get(context, "settings.remeda", {}), {
-    version: 4,
-  });
+  const remedaSettings = context.settings?.remeda;
+  
+  return { ...remedaSettings, version: remedaSettings?.version ?? 4 };  
 }

@@ -1,59 +1,57 @@
-import { includes, isEqualWith } from "lodash-es";
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 import { isComputed } from "./isComputed";
 
+function isEquivalentLeaf(a: TSESTree.Node, b: TSESTree.Node): boolean {
+  if (
+    a.type === AST_NODE_TYPES.Identifier &&
+    b.type === a.type
+  ) {
+    return a.name === b.name;
+  }
+
+  if (
+    a.type === AST_NODE_TYPES.Literal &&
+    b.type === a.type
+  ) {
+    return a.value === b.value;
+  }
+
+  return false;
+}
+
 /**
- * Returns whether the two expressions refer to the same object (e.g. A['b'].c and a.b.c).
+ * Returns whether the two expressions structurally refer to the same value
+ * (e.g. `a['b'].c` and `a.b.c`, or two identical identifiers / literals).
+ * Handles MemberExpression chains, Identifier names, Literal values, and ThisExpression.
+ * Source positions and parent links are ignored.
  *
  * @param a - The first expression to check.
  * @param b - The second expression to check.
  */
-function isEquivalentMemberExp(
-  a: TSESTree.MemberExpression,
-  b: TSESTree.MemberExpression,
-) {
-  return isEqualWith(
-    a,
-    b,
-    (
-      left: TSESTree.Node | undefined,
-      right: TSESTree.Node | undefined,
-      key: PropertyKey | undefined,
-    ) => {
-      if (!left || !right || !key) {
-        return undefined;
-      }
-      if (
-        includes(["loc", "range", "computed", "start", "end", "parent"], key)
-      ) {
-        return true;
-      }
-      if (
-        isComputed(left as TSESTree.MemberExpression) ||
-        isComputed(right as TSESTree.MemberExpression)
-      ) {
-        return false;
-      }
-      if (key === "property") {
-        if (
-          left.type === AST_NODE_TYPES.Identifier &&
-          right.type === AST_NODE_TYPES.Identifier
-        ) {
-          return left.name === right.name;
-        }
-        if (
-          left.type === AST_NODE_TYPES.Literal &&
-          right.type === AST_NODE_TYPES.Literal
-        ) {
-          return left.value === right.value;
-        }
+function isEquivalentMemberExp(a: TSESTree.Node, b: TSESTree.Node): boolean {
+  if (a.type !== b.type) {
+    return false;
+  }
 
-        return false;
-      }
+  if (
+    a.type === AST_NODE_TYPES.MemberExpression &&
+    b.type === AST_NODE_TYPES.MemberExpression
+  ) {
+    if (isComputed(a) || isComputed(b)) {
+      return false;
+    }
 
-      return undefined;
-    },
-  );
+    return (
+      isEquivalentLeaf(a.property, b.property) &&
+      isEquivalentMemberExp(a.object, b.object)
+    );
+  }
+  
+  if (a.type === AST_NODE_TYPES.ThisExpression) {
+    return true;
+  }
+
+  return isEquivalentLeaf(a, b);
 }
 
 export { isEquivalentMemberExp };

@@ -1,4 +1,4 @@
-import { get } from "lodash-es";
+import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 import { isFunctionDefinitionWithBlock } from "./isFunctionDefinitionWithBlock";
 
 /**
@@ -6,20 +6,14 @@ import { isFunctionDefinitionWithBlock } from "./isFunctionDefinitionWithBlock";
  *
  * @param func - The function to check.
  */
-function hasOnlyOneStatement(func: {
-  type: string;
-  body: { body?: unknown };
-}): boolean {
+const hasOnlyOneStatement = (func: TSESTree.ArrowFunctionExpression
+  | TSESTree.FunctionDeclaration
+  | TSESTree.FunctionExpression) => {
   if (isFunctionDefinitionWithBlock(func)) {
-    const body = get(func, "body.body");
-
-    return Array.isArray(body) && body.length === 1;
-  }
-  if (func.type === "ArrowFunctionExpression") {
-    return !get(func, "body.body");
+    return func.body.body.length === 1;
   }
 
-  return false;
-}
+  return func.type === AST_NODE_TYPES.ArrowFunctionExpression;
+};
 
 export { hasOnlyOneStatement };

@@ -3,7 +3,7 @@ import eslintPlugin from "eslint-plugin-eslint-plugin";
 
 const sheriffOptions = {
   react: false,
-  lodash: true,
+  lodash: false,
   remeda: false,
   next: false,
   astro: false,

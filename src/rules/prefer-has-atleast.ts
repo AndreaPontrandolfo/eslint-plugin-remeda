@@ -2,7 +2,6 @@
  * Rule to check if array.length comparisons or negated isEmpty calls should be replaced with R.hasAtLeast.
  */
 
-import { isEmpty, isNumber } from "lodash-es";
 import {
   AST_NODE_TYPES,
   ESLintUtils,
@@ -32,13 +31,15 @@ function isArrayLengthProperty(
   );
 }
 
-function isNumberLiteral(node: TSESTree.Node): node is TSESTree.Literal {
-  return node.type === AST_NODE_TYPES.Literal && isNumber(node.value);
+function isNumberLiteral(node: TSESTree.Node) {
+  return (
+    node.type === AST_NODE_TYPES.Literal && typeof node.value === "number"
+  );
 }
 
 function getNumberValue(node: TSESTree.Node): number | null {
   if (isNumberLiteral(node)) {
-    return node.value as number;
+    return node.value;
   }
 
   return null;
@@ -70,7 +71,6 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
     ): node is TSESTree.CallExpression {
       return (
         node.type === AST_NODE_TYPES.CallExpression &&
-        // @ts-expect-error
         isCallToRemedaMethod(node, "isEmpty", remedaContext)
       );
     }
@@ -172,7 +172,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
             isEmptyCall = node.right;
           }
 
-          if (isEmptyCall && !isEmpty(isEmptyCall.arguments)) {
+          if (isEmptyCall && isEmptyCall.arguments.length > 0) {
             // Only report if it's a negated comparison (isEmpty === false or isEmpty !== true)
             const isNegated =
               (node.operator === "===" &&
@@ -210,7 +210,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
 
         const isEmptyCall = node.argument;
 
-        if (isEmpty(isEmptyCall.arguments)) {
+        if (isEmptyCall.arguments.length === 0) {
           return;
         }
 

@@ -1,4 +1,3 @@
-import { isMatch } from "lodash-es";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { isLiteral } from "./isLiteral";
 import { isMemberExpOf } from "./isMemberExpOf";
@@ -22,7 +21,7 @@ function isBinaryExpWithMemberOf(
     onlyLiterals,
   }: IsBinaryExpWithMemberOfOptions = {},
 ) {
-  if (!isMatch(exp, { type: "BinaryExpression", operator })) {
+  if (exp.operator !== operator) {
     return false;
   }
   const [left, right] = [exp.left, exp.right].map((side) =>

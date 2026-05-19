@@ -2,9 +2,12 @@
  * Rule to check if a call to map should be a call to times.
  */
 
-import { get } from "lodash-es";
-import { ESLintUtils, type TSESTree } from "@typescript-eslint/utils";
+import {
+  ESLintUtils,
+  type TSESTree,
+} from "@typescript-eslint/utils";
 import { getDocsUrl } from "../util/getDocsUrl";
+import { isFunctionDefinition } from "../util/isFunctionDefinition";
 import { getRemedaMethodVisitors } from "../util/remedaUtil";
 
 export const RULE_NAME = "prefer-times";
@@ -34,7 +37,11 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
         iteratee: TSESTree.Node,
         { method }: { method: string },
       ) => {
-        if (method === "map" && get(iteratee, "params.length") === 0) {
+        if (
+          method === "map" &&
+          isFunctionDefinition(iteratee) &&
+          iteratee.params.length === 0
+        ) {
           context.report({
             node,
             messageId: "prefer-times",

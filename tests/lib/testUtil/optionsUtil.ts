@@ -1,5 +1,3 @@
-import { isString } from "lodash-es";
-
 type TestCase = string | { code: string; [key: string]: unknown };
 type TestOptions = Record<string, unknown>;
 interface TestCaseResult {
@@ -11,7 +9,7 @@ function fromOptions(
   options: TestOptions,
 ): (testCase: TestCase) => TestCaseResult {
   return function (testCase: TestCase): TestCaseResult {
-    if (isString(testCase)) {
+    if (typeof testCase === "string") {
       return { code: testCase, ...options };
     }
 

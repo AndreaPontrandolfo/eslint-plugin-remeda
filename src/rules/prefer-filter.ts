@@ -89,7 +89,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       const firstLine = getFirstFunctionLine(func) as
         | TSESTree.IfStatement
         | undefined;
-      const paramName = getFirstParamName(func) as string | undefined;
+      const paramName = getFirstParamName(func);
       const hasOneStatement =
         func.type === AST_NODE_TYPES.ArrowFunctionExpression
           ? func.body.type !== AST_NODE_TYPES.BlockStatement

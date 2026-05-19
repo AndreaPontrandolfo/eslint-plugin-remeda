@@ -1,4 +1,3 @@
-import { has, includes, isObject } from "lodash-es";
 import type { MethodData } from "../types";
 import * as methodDataCatalog from "./methodData";
 
@@ -24,7 +23,8 @@ function methodSupportsShorthand(method: string, shorthandType?: string) {
   const methodData = methodDataCatalog[method];
 
   const methodShorthandData = methodData.shorthand;
-  const isShorthandObject = isObject(methodShorthandData);
+  const isShorthandObject =
+    typeof methodShorthandData === "object" && methodShorthandData !== null;
 
   return isShorthandObject
     ? // @ts-expect-error
@@ -46,7 +46,8 @@ function isCollectionMethod(method: string) {
 
   return (
     methodSupportsShorthand(method) ||
-    includes(["reduce", "reduceRight"], method) ||
+    method === "reduce" ||
+    method === "reduceRight" ||
     Boolean(methodData.iteratee)
   );
 }
@@ -59,7 +60,7 @@ function getIterateeIndex(method: string) {
   const methodData: MethodData | undefined = methodDataCatalog[method];
 
   if (methodData) {
-    if (has(methodData, "iterateeIndex")) {
+    if (Object.hasOwn(methodData, "iterateeIndex")) {
       return methodData.iterateeIndex;
     }
     if (methodData.iteratee) {

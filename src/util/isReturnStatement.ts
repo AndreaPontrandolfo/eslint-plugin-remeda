@@ -1,5 +1,7 @@
-import { matchesProperty } from "lodash-es";
+import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 
-const isReturnStatement = matchesProperty("type", "ReturnStatement");
+const isReturnStatement = (node: TSESTree.Node) => {
+  return node.type === AST_NODE_TYPES.ReturnStatement;
+};
 
 export { isReturnStatement };

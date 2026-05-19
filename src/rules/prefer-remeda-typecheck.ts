@@ -2,7 +2,6 @@
  * Rule to check if there's a method in the chain start that can be in the chain.
  */
 
-import { some } from "lodash-es";
 import {
   AST_NODE_TYPES,
   ESLintUtils,
@@ -52,7 +51,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       const scope = sourceCode.getScope(node);
       const definedVariables = scope.variables;
 
-      return some(definedVariables, { name: node.name });
+      return definedVariables.some((v) => v.name === node.name);
     }
 
     function getValueForSide(

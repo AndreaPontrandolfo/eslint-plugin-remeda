@@ -1,4 +1,3 @@
-import { flatMap } from "lodash-es";
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 
 /**
@@ -15,12 +14,14 @@ function collectParameterValues(
       return [node.name];
     }
     case AST_NODE_TYPES.ObjectPattern: {
-      return flatMap(node.properties, (prop) =>
-        collectParameterValues(prop.value),
-      );
+      return node.properties.flatMap((prop) => {
+        return prop.type === AST_NODE_TYPES.Property
+          ? collectParameterValues(prop.value)
+          : [];
+      });
     }
     case AST_NODE_TYPES.ArrayPattern: {
-      return flatMap(node.elements, collectParameterValues);
+      return node.elements.flatMap(collectParameterValues);
     }
     default: {
       return [];

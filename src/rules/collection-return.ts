@@ -1,4 +1,3 @@
-import { includes } from "lodash-es";
 import {
   AST_NODE_TYPES,
   ESLintUtils,
@@ -57,7 +56,7 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
           }
 
           // Side-effect methods like forEach don't need to return values
-          if (includes(getSideEffectIterationMethods(), method)) {
+          if (getSideEffectIterationMethods().includes(method)) {
             return;
           }
 

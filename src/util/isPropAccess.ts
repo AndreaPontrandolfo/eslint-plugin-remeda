@@ -1,9 +1,10 @@
-import { matches, matchesProperty, overSome } from "lodash-es";
+import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 
-const isPropAccess = overSome(
-  matches({ computed: false }),
-  // eslint-disable-next-line
-  matchesProperty("property.type", "Literal"),
-);
+const isPropAccess = (node: TSESTree.Node) => {
+  return (
+    node.type === AST_NODE_TYPES.MemberExpression &&
+    (!node.computed || node.property.type === AST_NODE_TYPES.Literal)
+  );
+};
 
 export { isPropAccess };

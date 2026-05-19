@@ -1,4 +1,3 @@
-import { includes } from "lodash-es";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { comparisonOperators } from "./comparisonOperators";
 import { getIsValue } from "./getIsValue";
@@ -17,7 +16,7 @@ function getExpressionComparedToInt(
 ): TSESTree.Node | undefined {
   const isValue = getIsValue(value);
 
-  if (includes(comparisonOperators, node.operator)) {
+  if (comparisonOperators.includes(node.operator)) {
     if (isValue(node.right)) {
       return node.left;
     }

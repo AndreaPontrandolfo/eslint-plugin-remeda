@@ -1,5 +1,4 @@
 import type { ESLint } from "eslint";
-import { last } from "lodash-es";
 import packageJson from "../package.json";
 import { rules } from "./rules";
 
@@ -11,7 +10,8 @@ const plugin = {
   processors: {},
 } satisfies ESLint.Plugin;
 
-const pluginShortName = last(plugin.meta.name.split("-")) as string;
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const pluginShortName = plugin.meta.name.split("-").at(-1)!;
 
 const configs = {
   recommended: {

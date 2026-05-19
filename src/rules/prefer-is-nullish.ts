@@ -1,12 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /**
  * Rule to prefer isNullish over manual checking for undefined or null.
  */
 
-import { cond, find, map, matches, property } from "lodash-es";
 import {
   AST_NODE_TYPES,
   ESLintUtils,
@@ -18,19 +13,75 @@ import { isEquivalentMemberExp } from "../util/isEquivalentMemberExp";
 import { isNegationExpression } from "../util/isNegationExpression";
 import { getRemedaContext, isCallToRemedaMethod } from "../util/remedaUtil";
 
-interface ExpressionNode {
-  type: string;
-  operator: unknown;
-  right: unknown;
-  left: unknown;
-}
-
 export const RULE_NAME = "prefer-is-nullish";
 const PREFER_IS_NULLISH_MESSAGE =
   "Prefer isNullish over checking for undefined or null.";
 
 type MessageIds = "prefer-is-nullish";
 type Options = [];
+
+type Nil = "null" | "undefined";
+
+type ExpressionCheck = (
+  node: TSESTree.Node,
+  operator: string,
+) => TSESTree.Node | false | undefined;
+
+const getTypeofArgument = (node: TSESTree.Node) => {
+  return node.type === AST_NODE_TYPES.UnaryExpression &&
+    node.operator === "typeof"
+    ? node.argument
+    : undefined;
+};
+
+const isUndefinedString = (node: TSESTree.Node) => {
+  return node.type === AST_NODE_TYPES.Literal && node.value === "undefined";
+};
+
+const getValueWithTypeofUndefinedComparison: ExpressionCheck = (
+  node,
+  operator,
+) => {
+  if (
+    node.type !== AST_NODE_TYPES.BinaryExpression ||
+    node.operator !== operator
+  ) {
+    return undefined;
+  }
+
+  return (
+    (isUndefinedString(node.right) && getTypeofArgument(node.left)) ||
+    (isUndefinedString(node.left) && getTypeofArgument(node.right))
+  );
+};
+
+const nilChecksIsValue: Record<Nil, (node: TSESTree.Node) => boolean> = {
+  null: (node) =>
+    node.type === AST_NODE_TYPES.Literal && node.value === null,
+  undefined: (node) =>
+    node.type === AST_NODE_TYPES.Identifier && node.name === "undefined",
+};
+
+const getValueComparedTo = (nil: Nil): ExpressionCheck => {
+  return (node, operator) => {
+    if (
+      node.type !== AST_NODE_TYPES.BinaryExpression ||
+      node.operator !== operator
+    ) {
+      return undefined;
+    }
+
+    if (nilChecksIsValue[nil](node.right)) {
+      return node.left;
+    }
+    
+    if (nilChecksIsValue[nil](node.left)) {
+      return node.right;
+    }
+
+    return undefined;
+  };
+};
 
 export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   name: RULE_NAME,
@@ -50,58 +101,20 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
   create(context) {
     const remedaContext = getRemedaContext(context);
 
-    function getRemedaTypeCheckedBy(typecheck: string) {
-      // @ts-expect-error
-      return function (node) {
-        return (
-          // @ts-expect-error
-          isCallToRemedaMethod(node, typecheck, remedaContext) &&
-          node.arguments[0]
-        );
+    function getRemedaTypeCheckedBy(typecheck: string): ExpressionCheck {
+      return (node) => {
+        if (
+          node.type !== AST_NODE_TYPES.CallExpression ||
+          !isCallToRemedaMethod(node, typecheck, remedaContext)
+        ) {
+          return undefined;
+        }
+
+        return node.arguments[0];
       };
     }
 
-    const getTypeofArgument = cond([
-      [
-        matches({ type: "UnaryExpression", operator: "typeof" }),
-        property("argument"),
-      ],
-    ]);
-
-    const isUndefinedString = matches({
-      type: "Literal",
-      value: "undefined",
-    });
-
-    function getValueWithTypeofUndefinedComparison(
-      node: ExpressionNode,
-      operator: unknown,
-    ) {
-      return (
-        node.type === "BinaryExpression" &&
-        node.operator === operator &&
-        ((isUndefinedString(node.right) && getTypeofArgument(node.left)) ||
-          (isUndefinedString(node.left) && getTypeofArgument(node.right)))
-      );
-    }
-
-    const nilChecksIsValue = {
-      null: matches({ type: "Literal", value: null }),
-      undefined: matches({ type: "Identifier", name: "undefined" }),
-    };
-
-    function getValueComparedTo(nil: "null" | "undefined") {
-      return function (node: ExpressionNode, operator: unknown) {
-        return (
-          node.type === "BinaryExpression" &&
-          node.operator === operator &&
-          ((nilChecksIsValue[nil](node.right) && node.left) ||
-            (nilChecksIsValue[nil](node.left) && node.right))
-        );
-      };
-    }
-
-    const nilChecksExpressionChecks = {
+    const nilChecksExpressionChecks: Record<Nil, ExpressionCheck[]> = {
       null: [getRemedaTypeCheckedBy("isNull"), getValueComparedTo("null")],
       undefined: [
         getRemedaTypeCheckedBy("isUndefined"),
@@ -110,68 +123,58 @@ export default ESLintUtils.RuleCreator(getDocsUrl)<Options, MessageIds>({
       ],
     };
 
-    function checkExpression(
-      nil: "null" | "undefined",
-      operator: string,
-      node: { type: string; operator: unknown; right: unknown; left: unknown },
-    ) {
-      const mappedValues = map(nilChecksExpressionChecks[nil], (check) =>
-        check(node, operator),
-      );
+    function checkExpression(nil: Nil, operator: string, node: TSESTree.Node) {
+      for (const check of nilChecksExpressionChecks[nil]) {
+        const result = check(node, operator);
 
-      return find(mappedValues);
+        if (result) {
+          return result;
+        }
+      }
+
+      return undefined;
     }
 
-    function checkNegatedExpression(
-      nil: "null" | "undefined",
-      node: TSESTree.LogicalExpression | TSESTree.UnaryExpression,
-    ) {
-      return (
-        (isNegationExpression(node) &&
-          // @ts-expect-error
-          checkExpression(nil, "===", node.argument)) ||
-        // @ts-expect-error
-        checkExpression(nil, "!==", node)
-      );
+    function checkNegatedExpression(nil: Nil, node: TSESTree.Node) {
+      if (isNegationExpression(node)) {
+        const inner = checkExpression(nil, "===", node.argument);
+
+        if (inner) {
+          return inner;
+        }
+      }
+
+      return checkExpression(nil, "!==", node);
     }
 
     function isEquivalentExistingExpression(
-      node: TSESTree.LogicalExpression | TSESTree.UnaryExpression,
-      leftNil: "null" | "undefined",
-      rightNil: "null" | "undefined",
+      node: TSESTree.LogicalExpression,
+      leftNil: Nil,
+      rightNil: Nil,
     ) {
-      if (node.type !== AST_NODE_TYPES.LogicalExpression) {
+      const leftExp = checkExpression(leftNil, "===", node.left);
+      const rightExp = checkExpression(rightNil, "===", node.right);
+
+      if (!leftExp || !rightExp) {
         return false;
       }
-      // @ts-expect-error
-      const leftExp = checkExpression(leftNil, "===", node.left);
 
-      return (
-        leftExp &&
-        isEquivalentMemberExp(
-          leftExp,
-          // @ts-expect-error
-          checkExpression(rightNil, "===", node.right),
-        )
-      );
+      return isEquivalentMemberExp(leftExp, rightExp);
     }
 
     function isEquivalentExistingNegation(
-      node: TSESTree.LogicalExpression | TSESTree.UnaryExpression,
-      leftNil: "null" | "undefined",
-      rightNil: "null" | "undefined",
+      node: TSESTree.LogicalExpression,
+      leftNil: Nil,
+      rightNil: Nil,
     ) {
-      // @ts-expect-error
       const leftExp = checkNegatedExpression(leftNil, node.left);
+      const rightExp = checkNegatedExpression(rightNil, node.right);
 
-      return (
-        leftExp &&
-        isEquivalentMemberExp(
-          leftExp,
-          // @ts-expect-error
-          checkNegatedExpression(rightNil, node.right),
-        )
-      );
+      if (!leftExp || !rightExp) {
+        return false;
+      }
+
+      return isEquivalentMemberExp(leftExp, rightExp);
     }
 
     const visitors: RemedaMethodVisitors = remedaContext.getImportVisitors();
