@@ -33,6 +33,7 @@ export default [
       "fsecond/prefer-destructured-optionals": 0,
       "fsecond/no-inline-interfaces": 0,
       "eslint-plugin/require-meta-docs-recommended": 0,
+      "@typescript-eslint/prefer-optional-chain": 0,
     },
   },
   { ignores: [".eslint-doc-generatorrc.mjs"] },
